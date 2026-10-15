@@ -24,7 +24,9 @@ finitas + Newton). Foco atual: capítulo 3 e as suas validações; o modelo subs
 | `dissertation/` | ponte com a dissertação, fora do simulador: `extract.py` (Apêndice A → CSV), `data/` (tabelas transcritas, CSV). |
 | `references/` | o PDF e as figuras digitalizadas (`figures/`, JSON + sobreposições). |
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
-| `tests/` | rotina (`uv run pytest`) e noturna (`-m nightly`); `reference` = precisa da biblioteca `thermo` (oráculo). `tests/golden/` só por `tools/golden_generate.py --rebaseline --note`. |
+| `tests/` | rotina (`uv run pytest`, ~4 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
+| `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
+| `tools/` | `make_nb.py` (fontes → notebooks). |
 | `docs/` | o estudo (README + 01–06), `issues/NNN-*.md` + `INDEX.md`. |
 
 ## Comandos
@@ -48,6 +50,9 @@ uv run python -m dissertation.extract          # Apêndice A -> CSV
 7. **Cada alteração atómica** ao modelo ou ao solver ganha um ficheiro em `docs/issues/` e uma linha no `INDEX.md`.
 8. Cada passo fecha com rotina verde, `black` limpo, docs atualizados e commit com `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` (git na raiz de `research-factory/`).
 9. Um único tubo com parâmetros que variam axialmente (`pipe.profile`); sem grafo por agora.
+10. **Um notebook por secção do capítulo 5** (`notebooks_src/thesis/nb_5_X_*.py`), que reproduz
+    todas as figuras e tabelas da secção sem simular (lê `runs/`, `references/figures/data/`,
+    `dissertation/data/`); `uv run cmfsim nb fonte.py --execute`. O 5.7 vem com o substituto.
 
 ## Estado (2026-10-15)
 

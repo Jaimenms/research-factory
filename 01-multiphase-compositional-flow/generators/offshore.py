@@ -34,10 +34,24 @@ def noslip_case(dx_out=50.0) -> dict:
         "fluid": fluid_block("table19_offshore"),
         "pipe": {"profile": profile()},
         "boundary": {"inlet": {"P": 170.0e5, "T": 353.15, "m": 10.0}},
-        "model": {"type": "noslip", "friction": "homogeneous", "derivatives": "autodiff", "regime": {"regime": "automatic"}},
-        "solver": {"type": "march", "integrator": "rk45", "rtol": 1e-7, "atol": 1e-7, "first_step": 5.0, "backend": "jax"},
+        "model": {
+            "type": "noslip",
+            "friction": "homogeneous",
+            "derivatives": "autodiff",
+            "regime": {"regime": "automatic"},
+        },
+        "solver": {
+            "type": "march",
+            "integrator": "rk45",
+            "rtol": 1e-7,
+            "atol": 1e-7,
+            "first_step": 5.0,
+            "backend": "jax",
+        },
         "outputs": {"dx_out": dx_out},
-        "meta": {"source": "dissertação §5.5, Tabelas 19–22; alvos: Figuras 32–37 (references/figures/data/fig_32..37.json)"},
+        "meta": {
+            "source": "dissertação §5.5, Tabelas 19–22; alvos: Figuras 32–37 (references/figures/data/fig_32..37.json)"
+        },
     }
 
 
@@ -48,7 +62,16 @@ def mechanistic_case(n=78) -> dict:
         "name": "offshore_5_5_slip",
         "description": "Variante com escorregamento (§3.2): diferenças finitas com Newton, padrão automático.",
         "model": {"type": "mechanistic", "mass_split": "algebraic", "regime": {"regime": "automatic"}},
-        "solver": {"type": "fd", "n": n, "initial_guess": "march_noslip", "rtol": 1e-7, "atol": 1e-7, "first_step": 5.0, "backend": "jax", "newton": {"max_iter": 40, "tol": 1e-9}},
+        "solver": {
+            "type": "fd",
+            "n": n,
+            "initial_guess": "march_noslip",
+            "rtol": 1e-7,
+            "atol": 1e-7,
+            "first_step": 5.0,
+            "backend": "jax",
+            "newton": {"max_iter": 40, "tol": 1e-9},
+        },
     }
 
 

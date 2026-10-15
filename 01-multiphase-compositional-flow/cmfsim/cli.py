@@ -1,5 +1,5 @@
 """Linha de comando: `cmfsim run caso.json [--out corrida.npz] [--backend jax] [--set caminho=valor]`,
-`cmfsim validate casos...`, `cmfsim batch lote.json`."""
+`cmfsim validate casos...`, `cmfsim batch lote.json`, `cmfsim nb fonte.py [--execute]`."""
 
 from __future__ import annotations
 
@@ -57,6 +57,14 @@ def cmd_batch(a):
             print(f"FALHOU {r['name']}: {type(e).__name__}: {e}")
 
 
+def cmd_nb(a):
+    import subprocess
+
+    root = Path(__file__).resolve().parents[1]
+    cmd = [sys.executable, str(root / "tools" / "make_nb.py"), a.src] + (["--execute"] if a.execute else [])
+    sys.exit(subprocess.run(cmd, cwd=root).returncode)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="cmfsim", description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -74,6 +82,10 @@ def main(argv=None):
     p.add_argument("--force", action="store_true")
     p.add_argument("--only", nargs="*")
     p.set_defaults(fn=cmd_batch)
+    p = sub.add_parser("nb", help="constrói (e executa) um notebook a partir de notebooks_src/**/*.py")
+    p.add_argument("src")
+    p.add_argument("--execute", action="store_true")
+    p.set_defaults(fn=cmd_nb)
     a = ap.parse_args(argv)
     a.fn(a)
 

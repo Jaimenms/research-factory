@@ -1,0 +1,10 @@
+{
+ "out_dir": "runs/performance",
+ "runs": [
+  {"name": "perf_march_numpy", "case": "cases/offshore/offshore_5_5_noslip.json", "backend": "numpy", "set": ["model.derivatives=finite_difference"]},
+  {"name": "perf_march_jax", "case": "cases/offshore/offshore_5_5_noslip.json", "backend": "jax"},
+  {"name": "perf_fd_jax_n12", "case": "cases/offshore/offshore_5_5_slip.json", "backend": "jax", "set": ["solver.n=12"]},
+  {"name": "perf_fd_jax_n30", "case": "cases/offshore/offshore_5_5_slip.json", "backend": "jax", "set": ["solver.n=30"]},
+  {"name": "perf_fd_jax_n78", "case": "cases/offshore/offshore_5_5_slip.json", "backend": "jax", "set": ["solver.n=78"]}
+ ]
+}

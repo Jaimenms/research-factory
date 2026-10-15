@@ -36,6 +36,43 @@ Jacobiana analítica, com holdup e flash aninhados no resíduo; relata problemas
 - **Parâmetros como argumentos**: tubo, entrada e malha vão em `params`; uma compilação por
   estrutura (fluido, opções, n) serve os 200 casos do Apêndice A.
 
+## Apêndice A (§5.4): 100 linhas horizontais e 100 verticais (2026-10-15, Nc_eff do C7+ = 20)
+
+| orientação | modelo | mediana do desvio à coluna «Dissertação» | < 10 % | < 25 % | dentro da faixa dos modelos do HYSYS |
+|---|---|---|---|---|---|
+| vertical | mecanicista (3.2) | +3,1 % | 72 % | 94 % | 88 % (dissertação: 96 %) |
+| vertical | não escorregamento (3.1) | −14 % | 37 % | 72 % | — |
+| horizontal | mecanicista (3.2) | −61 % | 0 % | 0 % | 5 % (dissertação: 63 %) |
+| horizontal | não escorregamento (3.1) | −54 % | 0 % | 16 % | — |
+
+Vertical reproduzido (a perda de carga é gravítica e o holdup mecanicista está certo). Horizontal
+sistematicamente a ≈ 0,4× da dissertação, em todos os 100 casos, com o estratificado ou o
+intermitente identificados pelo critério de Taitel & Dukler; a perda de carga da dissertação
+coincide, a baixa vazão, com o nosso **fechamento anular** (110–133 % nos casos 2 e 26), o que
+sugere que a identificação de padrão da dissertação (sigmoides de ganho não documentado) pesou
+o anular nessas condições. Testado e rejeitado: atrito de Darcy como impresso (×4: mediana
++81 % no horizontal e caso 5 vertical a +471 %), D_G como impresso, viscosidade do líquido
+(Nc_eff 39,9 → 20 não muda a mediana horizontal). Sem o código não se fecha; o teste noturno
+guarda os valores medidos como regressão.
+
+## Caso offshore com escorregamento (§5.5, Figuras 32–37)
+
+Três troços (poço vertical, linha horizontal, riser), 81 nós, Newton em 3 iterações (|F| 3e-14,
+68 s em JAX com compilação). Contra a curva «Modelo» da dissertação:
+
+| ponto | P cmfsim / dissertação (bar) | T (°C) | H_L | padrão cmfsim / dissertação |
+|---|---|---|---|---|
+| topo do poço (1500 m) | 115,6 / 120,3 | 65,5 / 63,8 | 0,38 / 0,34 | anular / anular |
+| base do riser (7500 m) | 102,3 / 115,3 | 41,2 / 40,0 | 0,33 / 0,40 | **anular / estratificado** |
+| topo do riser (7800 m) | 91,5 / — | 38,0 / — | 0,45 / — | anular / anular |
+
+A diferença está na linha horizontal: a 117 bar o gás é denso (ρ_G ≈ 100 kg/m³) e o critério de
+Kelvin–Helmholtz (32) com v_G real ou com v_SG dá «não estratificado» (v_G ≈ 2,8–3,8 m/s contra
+v_KH ≈ 0,7–0,9 m/s), e com h/D < 0,5 segue-se anular, com 2,7× a perda de carga que a dissertação
+mostra para o seu estratificado. A classificação «estratificado» da dissertação nesse troço não é
+reprodutível com o critério de Taitel & Dukler tal como publicado; fica em aberto (o modelo
+TULSA do HYSYS também dá estratificado ali, com outro critério).
+
 ## Benefício (consistência medida em 2026-10-15)
 
 Padrão de bolhas fixo com C₀ = 1 no horizontal é, por construção, o modelo de não escorregamento:
