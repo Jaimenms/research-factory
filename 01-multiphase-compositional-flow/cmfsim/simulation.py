@@ -260,3 +260,48 @@ def simulate(case: Case, backend=None, progress=True) -> Results:
     else:
         raise NotImplementedError(f"modelo {case.model_type} com solver {case.solver_type}")
     return Results(x=x, P=P, T=T, profiles=prof, info=info, case_dict=case.raw)
+
+
+def march_many(case: Case, variations: dict, backend="jax"):
+    """Muitos casos com a mesma estrutura numa só chamada compilada e vetorizada (`vmap`): base
+    `case` e `variations` = dict de arrays (N,) com chaves `D`, `roughness`, `U`, `T_amb` (por troço:
+    forma (N, n_troços) ou (N,) para um tubo de um troço), `m`, `P_in`, `T_in`. Devolve (x_out,
+    U (N, n_out, 2), info). É o caminho para gerar dados de treino: o custo é o do caso mais lento
+    do lote, não a soma."""
+    import jax
+    import jax.numpy as jnp
+
+    bk = get_backend(backend)
+    xp = bk.xp
+    model, params0 = build_noslip(case, bk)
+    x_out = case.pipe.output_grid(case.dx_out)
+    segs = case.pipe.interval_segments(x_out)
+    N = len(next(iter(variations.values())))
+    ns = case.pipe.n_segments
+
+    def expand(key, default):
+        v = variations.get(key)
+        if v is None:
+            return jnp.broadcast_to(jnp.asarray(default)[None], (N,) + jnp.asarray(default).shape)
+        v = jnp.asarray(v, float)
+        return jnp.broadcast_to(v[:, None], (N, ns)) if (ns > 1 and v.ndim == 1) or ns == 1 and v.ndim == 1 else v
+
+    params = {k: expand(k, params0[k]) for k in ("D", "roughness", "theta", "U", "T_amb")}
+    params["m"] = jnp.asarray(variations.get("m", np.full(N, case.inlet["m"])), float)
+    P_in = jnp.asarray(variations.get("P_in", np.full(N, case.inlet["P"])), float)
+    T_in = jnp.asarray(variations.get("T_in", np.full(N, case.inlet["T"])), float)
+    u0 = jnp.stack([P_in, T_in], axis=1)
+    xo, sg = xp.asarray(x_out), xp.asarray(segs)
+    scale = xp.asarray([1e5, 1.0])
+    key = ("march_many", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes())
+    run = _COMPILED.get(key)
+    if run is None:
+        single = lambda u, p: integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,))
+        run = jax.jit(jax.vmap(single))
+        _COMPILED[key] = run
+    t0 = time.time()
+    U, info = run(u0, params)
+    jax.block_until_ready(U)
+    info = {k: np.asarray(v) for k, v in info.items()}
+    info["cpu"] = time.time() - t0
+    return x_out, np.asarray(U), info
