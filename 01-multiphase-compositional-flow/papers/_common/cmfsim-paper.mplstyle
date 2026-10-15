@@ -1,0 +1,32 @@
+# Estilo matplotlib das figuras de artigo: letras legíveis a 90 mm de largura (Elsevier), marcas finas,
+# grelha discreta, sem título por cima (a legenda da figura vai no LaTeX), fontes embebidas como Type 42.
+figure.dpi: 100
+savefig.dpi: 300
+savefig.bbox: tight
+savefig.pad_inches: 0.02
+font.family: serif
+font.serif: DejaVu Serif, Times New Roman, Times
+mathtext.fontset: dejavuserif
+font.size: 8
+axes.labelsize: 8
+axes.titlesize: 8
+legend.fontsize: 7
+xtick.labelsize: 7
+ytick.labelsize: 7
+axes.linewidth: 0.6
+xtick.major.width: 0.6
+ytick.major.width: 0.6
+xtick.direction: in
+ytick.direction: in
+lines.linewidth: 1.0
+lines.markersize: 3
+grid.alpha: 0.3
+grid.linewidth: 0.4
+legend.frameon: False
+legend.handlelength: 2.2
+axes.spines.top: False
+axes.spines.right: False
+pdf.fonttype: 42
+ps.fonttype: 42
+# ordem categórica fixa (Okabe–Ito): azul, vermelhão, verde, laranja, roxo, azul-céu
+axes.prop_cycle: cycler('color', ['0072B2', 'D55E00', '009E73', 'E69F00', 'CC79A7', '56B4E9'])

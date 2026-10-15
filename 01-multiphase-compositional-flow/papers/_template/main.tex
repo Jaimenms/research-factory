@@ -1,0 +1,99 @@
+%% @@SLUG@@ — esqueleto Elsevier CAS (cas-sc). Construção: `make` nesta pasta (ver ../README.md).
+%% Guia de autores da revista alvo: ver ../00-escolha-da-revista.md (citações autor–ano, resumo <= 250 palavras,
+%% 3–5 highlights <= 85 caracteres, 1–7 palavras-chave, SI, figuras vetoriais, declarações e CRediT no fim).
+
+\documentclass[a4paper,fleqn]{cas-sc}
+%\documentclass[a4paper,fleqn,review]{cas-sc}   % revisão: espaçamento largo e números de linha
+
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{lipsum}  % texto de preenchimento; remover quando houver conteúdo
+
+\graphicspath{{figures/generated/}{figures/static/}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{@@TITLE@@}
+\shortauthors{A. Author et~al.}
+
+\title[mode = title]{@@TITLE@@}
+
+\author[1]{First Author}
+\cormark[1]
+\ead{corresponding.author@example.org}  % TODO
+\credit{Conceptualization, Methodology, Software, Writing -- original draft}
+
+\affiliation[1]{organization={Instituto de Qu\'imica, Universidade do Estado do Rio de Janeiro},
+                city={Rio de Janeiro},
+                postcode={20550-900},
+                state={RJ},
+                country={Brazil}}
+
+\cortext[1]{Corresponding author.}
+
+\begin{abstract}
+% texto literal: a classe CAS não expande \lipsum aqui
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque.
+\end{abstract}
+
+\begin{highlights}
+\item Highlight 1 (max. 85 characters)
+\item Highlight 2
+\item Highlight 3
+\end{highlights}
+
+\begin{keywords}
+keyword1 \sep keyword2 \sep keyword3
+\end{keywords}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+\lipsum[2]
+See \citet{carvalho2022} and \citep{peng1976}.
+
+\section{Methods}\label{sec:methods}
+\lipsum[3]
+
+\section{Results and discussion}\label{sec:results}
+Fig.~\ref{fig:example} is produced by \texttt{figures/make\_figures.py}. \lipsum[4]
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{example}
+\caption{Example figure.}\label{fig:example}
+\end{figure}
+
+\section{Conclusions}\label{sec:conclusions}
+\lipsum[5]
+
+\section*{Acknowledgements}
+\lipsum[6][1-2]
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+During the preparation of this work the authors used AI-assisted tools for language editing and code assistance. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
+\section*{Data availability}
+The simulator, the case definitions and the scripts that produce every figure in this article are available in a public repository.
+
+%% Apêndices: \appendix e, a seguir, renumerar Eq. (A.1), Tabela A.1, Fig. A.1:
+%\appendix
+%\setcounter{equation}{0}\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
+%\setcounter{table}{0}\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+%\setcounter{figure}{0}\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+%\section{Appendix title}\label{app:a}
+
+\printcredits
+
+\bibliographystyle{cas-model2-names}
+\bibliography{../_common/references,refs}
+
+\end{document}

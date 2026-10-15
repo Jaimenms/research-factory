@@ -26,7 +26,8 @@ finitas + Newton). Foco atual: capítulo 3 e as suas validações; o modelo subs
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
 | `tests/` | rotina (`uv run pytest`, ~4 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
 | `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
-| `tools/` | `make_nb.py` (fontes → notebooks). |
+| `tools/` | `make_nb.py` (fontes → notebooks), `new_paper.py` (artigo novo a partir de `papers/_template`). |
+| `papers/` | artigos para revistas, um por pasta `NN-<slug>/` (LaTeX Elsevier CAS, `make` com tectonic ou latexmk, figuras geradas por código a partir de `runs/`); escolha da revista e guia de autores em `papers/00-escolha-da-revista.md`; regras em `papers/README.md`. |
 | `docs/` | o estudo (README + 01–06), `issues/NNN-*.md` + `INDEX.md`. |
 
 ## Comandos
@@ -37,6 +38,7 @@ uv run pytest                                  # rotina
 uv run pytest -m nightly                       # noturna
 uv run black --check cmfsim tests tools generators dissertation
 uv run python -m dissertation.extract          # Apêndice A -> CSV
+make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (build/main.pdf)
 ```
 
 ## Regras acordadas com o dono (não negociar sem perguntar)

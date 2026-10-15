@@ -1,0 +1,233 @@
+%% Artigo 01 do tema 01 — esqueleto com texto de preenchimento (lipsum) até haver conteúdo.
+%%
+%% Revista alvo: Geoenergy Science and Engineering (Elsevier; ex-Journal of Petroleum Science and Engineering).
+%% Pesquisa e justificação: ../00-escolha-da-revista.md. Construção: `make` nesta pasta (ver ../README.md).
+%%
+%% Modelo: Elsevier CAS, classe cas-sc (coluna única), o que o guia de autores da revista indica.
+%% Regras do guia já embutidas aqui:
+%%   - citações autor–ano (natbib authoryear + cas-model2-names): \citet{} -> Autor (ano), \citep{} -> (Autor, ano)
+%%   - resumo <= 250 palavras, sem referências; 3–5 highlights <= 85 caracteres cada (na submissão também vão
+%%     num ficheiro à parte com «highlights» no nome); 1–7 palavras-chave
+%%   - secções numeradas 1, 1.1, 1.1.1; equações numeradas pela ordem de citação; apêndices A, B com Eq. (A.1)
+%%   - unidades SI; variáveis em itálico; figuras vetoriais (PDF) produzidas por figures/make_figures.py
+%%   - agradecimentos, declarações (conflito de interesses, IA generativa, dados) e CRediT antes das referências
+%% Opção `review` da classe: espaçamento largo e números de linha, para a revisão por pares.
+
+\documentclass[a4paper,fleqn]{cas-sc}
+%\documentclass[a4paper,fleqn,review]{cas-sc}
+
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{lipsum}  % texto de preenchimento; remover quando houver conteúdo
+
+\graphicspath{{figures/generated/}{figures/static/}}
+
+% Macros do artigo
+\newcommand{\mdot}{\dot{m}}
+\newcommand{\dd}{\mathrm{d}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Compositional steady-state gas--liquid flow in pipelines}
+\shortauthors{G.A. Carvalho et~al.}
+
+\title[mode = title]{Steady-state compositional simulation of gas--liquid flow in production pipelines with exact Jacobians by automatic differentiation}
+
+% Autores e afiliações. TODO: confirmar afiliações, moradas e o e-mail do autor correspondente.
+\author[1]{Gustavo Alves de Carvalho}
+\credit{Conceptualization, Methodology, Software, Investigation, Writing -- original draft}
+
+\author[1]{Andr\'e Luiz Hemerly Costa}
+\credit{Conceptualization, Methodology, Supervision, Writing -- review \& editing}
+
+\author[1]{Giovani Cavalcanti Nunes}
+\credit{Conceptualization, Supervision, Writing -- review \& editing}
+
+\author[1]{Jaime Neiva Miranda de Souza}
+\cormark[1]
+\ead{corresponding.author@example.org}  % TODO
+\credit{Conceptualization, Software, Validation, Writing -- review \& editing}
+
+\affiliation[1]{organization={Programa de P\'os-Gradua\c{c}\~ao em Engenharia Qu\'imica, Instituto de Qu\'imica, Universidade do Estado do Rio de Janeiro},
+                addressline={Rua S\~ao Francisco Xavier 524},
+                city={Rio de Janeiro},
+                postcode={20550-900},
+                state={RJ},
+                country={Brazil}}
+
+\cortext[1]{Corresponding author.}
+
+\begin{abstract}
+% <= 250 palavras, autocontido, sem referências. (A classe CAS grava o resumo num ficheiro auxiliar: usar texto
+% literal, não \lipsum, que aqui sai como «[1]».)
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus, nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque.
+\end{abstract}
+
+% Resumo gráfico (opcional): figura separada, ver o guia.
+%\begin{graphicalabstract}
+%\includegraphics{graphical_abstract}
+%\end{graphicalabstract}
+
+% 3 a 5 pontos, no máximo 85 caracteres cada (contando espaços).
+\begin{highlights}
+\item Steady-state compositional two-phase pipe flow model with Peng--Robinson flash
+\item Exact Jacobians of flash, closures and flow equations by automatic differentiation
+\item Newton with sparse exact Jacobian converges in 2--4 iterations across phase changes
+\item Validated on 200 pressure-drop cases and an offshore well--flowline--riser system
+\end{highlights}
+
+% 1 a 7 palavras-chave, de preferência de uma palavra.
+\begin{keywords}
+multiphase flow \sep compositional simulation \sep mechanistic model \sep automatic differentiation \sep pipelines \sep surrogate models
+\end{keywords}
+
+\maketitle
+% Nota: o aviso «Overfull \hbox ... at line \maketitle» vem da página de highlights que a classe gera (linha
+% dos autores sem quebras); essa página não vai na submissão (os highlights vão em ficheiro à parte).
+% ORCID: \author[1]{Nome}[orcid=0000-0000-0000-0000]
+
+\section*{Nomenclature}
+\begin{tabular}{@{}ll@{}}
+$A$ & pipe cross-sectional area (\si{\metre\squared}) \\
+$D$ & internal diameter (\si{\metre}) \\
+$g$ & gravitational acceleration (\si{\metre\per\second\squared}) \\
+$h_k$ & specific enthalpy of phase $k$ (\si{\joule\per\kilogram}) \\
+$H_L$ & liquid holdup (--) \\
+$\mdot_k$ & mass flow rate of phase $k$ (\si{\kilogram\per\second}) \\
+$P$ & pressure (\si{\pascal}) \\
+$T$ & temperature (\si{\kelvin}) \\
+$U$ & overall heat-transfer coefficient (\si{\watt\per\metre\squared\per\kelvin}) \\
+$v_k$ & velocity of phase $k$ (\si{\metre\per\second}) \\
+$x$ & axial coordinate (\si{\metre}) \\
+$\lambda_L$ & no-slip liquid volume fraction (--) \\
+$\rho_k$ & density of phase $k$ (\si{\kilogram\per\metre\cubed}) \\
+$\theta$ & pipe inclination from the horizontal (\si{\radian}) \\
+\end{tabular}
+
+\section{Introduction}\label{sec:intro}
+% Contexto, lacuna, contribuição. Exemplos de citação autor–ano:
+\lipsum[2]
+Mechanistic flow-pattern-based models \citep{taitel1976,taitel1980,xiao1990,gomez2000} remain the workhorse of steady-state pipeline design, and the compositional formulation of \citet{carvalho2022} couples them to a cubic equation of state \citep{peng1976}. \lipsum[3]
+
+\section{Mathematical model}\label{sec:model}
+
+\subsection{Conservation equations}\label{sec:conservation}
+\lipsum[4]
+The mixture momentum balance along the pipe axis reads
+\begin{equation}\label{eq:momentum}
+-\frac{\dd P}{\dd x} = \left(\frac{\dd P}{\dd x}\right)_{\!f} + \rho_m g \sin\theta + \frac{\dd}{\dd x}\left(\rho_G \alpha_G v_G^2 + \rho_L H_L v_L^2\right),
+\end{equation}
+and the mixture energy balance, with heat exchanged with the surroundings at temperature $T_\mathrm{amb}$, is
+\begin{equation}\label{eq:energy}
+\frac{\dd}{\dd x}\left[\mdot_G\left(h_G + \tfrac{1}{2}v_G^2 + g z\right) + \mdot_L\left(h_L + \tfrac{1}{2}v_L^2 + g z\right)\right] = -\pi D\, U\,(T - T_\mathrm{amb}).
+\end{equation}
+\lipsum[5]
+
+\subsection{Thermodynamic model}\label{sec:thermo}
+The Peng--Robinson equation of state \citep{peng1976},
+\begin{equation}\label{eq:pr}
+P = \frac{RT}{v - b} - \frac{a\,\alpha(T)}{v(v + b) + b(v - b)},
+\end{equation}
+is combined with the isothermal flash of \citet{michelsen1982a,michelsen1982b}. \lipsum[6]
+
+\subsection{Flow pattern and closure relations}\label{sec:closures}
+The in situ holdup follows from the slip ratio $S = v_G/v_L$ and the no-slip fraction $\lambda_L$ given by the flash,
+\begin{equation}\label{eq:holdup}
+H_L = \frac{S\lambda_L}{1 - \lambda_L + S\lambda_L}.
+\end{equation}
+\lipsum[7]
+
+\section{Numerical approach}\label{sec:numerics}
+
+\subsection{No-slip model as an initial-value problem}\label{sec:ivp}
+\lipsum[8]
+The marching integrator is an embedded Runge--Kutta pair \citep{dormand1980}. \lipsum[9]
+
+\subsection{Mechanistic model by finite differences and Newton's method}\label{sec:newton}
+At each Newton iteration $k$ the linear system
+\begin{equation}\label{eq:newton}
+\mathbf{J}(\mathbf{u}^{k})\,\delta\mathbf{u} = -\mathbf{R}(\mathbf{u}^{k}), \qquad \mathbf{u}^{k+1} = \mathbf{u}^{k} + \omega\,\delta\mathbf{u},
+\end{equation}
+is assembled with the exact sparse Jacobian obtained by forward-mode automatic differentiation \citep{jax2018}. \lipsum[10]
+
+\subsection{Implementation}\label{sec:implementation}
+\lipsum[11]
+
+\section{Results and discussion}\label{sec:results}
+
+\subsection{Pressure drop in horizontal and vertical lines}\label{sec:dp}
+Table~\ref{tab:grid} lists the case grid and Fig.~\ref{fig:dp_parity} compares the computed pressure drops with the reference values. \lipsum[12]
+
+\begin{table}[htbp]
+\caption{Case grid of the pressure-drop comparison (placeholder values to be filled from the batch definition).}\label{tab:grid}
+\begin{tabular*}{\tblwidth}{@{}LLLL@{}}
+\toprule
+Parameter & Symbol & Range & Unit \\
+\midrule
+Internal diameter & $D$ & -- & in \\
+Inlet pressure & $P_\mathrm{in}$ & -- & \si{\bar} \\
+Mass flow rate & $\mdot$ & -- & \si{\kilogram\per\second} \\
+Pipe length & $L$ & 100 & \si{\metre} \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{dp_parity}
+\caption{Pressure-drop parity between this work and the reference solution for the (a) horizontal and (b) vertical lines; dotted lines mark $\pm$\SI{25}{\percent}.}\label{fig:dp_parity}
+\end{figure}
+
+\subsection{Offshore production system}\label{sec:offshore}
+Fig.~\ref{fig:offshore} shows the pressure, temperature and holdup profiles along the well, flowline and riser. \lipsum[13]
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{offshore_profiles}
+\caption{Profiles of (a) pressure, (b) temperature and (c) liquid holdup along the well--flowline--riser system for the no-slip and mechanistic models (solid lines) against the reference curves (dotted lines).}\label{fig:offshore}
+\end{figure}
+
+\subsection{Gas-condensate pipeline}\label{sec:condensate}
+\lipsum[14]
+
+\section{Conclusions}\label{sec:conclusions}
+\lipsum[15]
+
+\section*{Acknowledgements}
+% TODO: bolsa PRH/ANP e outras fontes de financiamento.
+\lipsum[16][1-2]
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+% Obrigatória na submissão; ajustar ao uso real.
+During the preparation of this work the authors used AI-assisted tools for language editing and code assistance. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
+\section*{Data availability}
+% TODO: DOI do repositório (Zenodo) ou endereço público do código e dos casos.
+The simulator, the case definitions and the scripts that produce every figure in this article are available in a public repository.
+
+\appendix
+% O guia pede Eq. (A.1), Tabela A.1 e Fig. A.1 nos apêndices; a classe não renumera sozinha.
+\setcounter{equation}{0}\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
+\setcounter{table}{0}\renewcommand{\thetable}{\Alph{section}.\arabic{table}}
+\setcounter{figure}{0}\renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+\section{Equation-of-state parameters}\label{app:eos}
+The attractive and covolume parameters of Eq.~\eqref{eq:pr} are
+\begin{equation}\label{eq:pr_ab}
+a = \Omega_a \frac{R^2 T_c^2}{P_c}, \qquad b = \Omega_b \frac{R T_c}{P_c},
+\end{equation}
+with $\Omega_a = 0.45724$ and $\Omega_b = 0.0778$. \lipsum[17][1-3]
+
+\printcredits
+
+\bibliographystyle{cas-model2-names}
+\bibliography{../_common/references,refs}
+
+\end{document}

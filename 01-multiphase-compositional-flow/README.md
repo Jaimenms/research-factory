@@ -24,6 +24,7 @@ uv run python -m generators.dp_comparison && uv run cmfsim batch batches/dp_comp
 uv run python notebooks_src/thesis/nb_5_6_condensate.py        # comparação com as Figuras 38–40 (lê runs/)
 uv run python notebooks_src/thesis/nb_5_4_dp_comparison.py     # comparação com o Apêndice A
 uv run python -m dissertation.extract                          # regenera os CSV do Apêndice A a partir do PDF
+make -C papers/01-compositional-steady-state                   # artigo 1: figuras (de runs/) + PDF em build/main.pdf
 ```
 
 ## Notebooks de reprodução (um por secção do capítulo 5)
@@ -49,6 +50,10 @@ Um caso é um ficheiro JSON `cmfsim-case/1` autocontido (fluido com as proprieda
 tubo único com perfil axial, condições de entrada, modelo, solver); variantes herdam com `$extends`
 e `--set caminho=valor` varia sem ficheiro novo. Uma corrida gravada (`runs/*.npz`) traz os perfis e
 o caso completo (`cmfsim.load_run`).
+
+Os artigos para revistas ficam em [papers/](papers/README.md), um por pasta, construídos com `make`
+(LaTeX Elsevier CAS, figuras geradas por código a partir das corridas); a revista escolhida e o seu guia de
+autores estão em [papers/00-escolha-da-revista.md](papers/00-escolha-da-revista.md).
 
 ## Estado
 
