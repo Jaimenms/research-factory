@@ -1,0 +1,23 @@
+{
+ "_source": "Tabelas 7, 8 e 9 (Smith et al. 2018) e Tabela 20 (pseudocomponente C7+, HYSYS) da dissertação; unidades: MW kg/kmol, Pc Pa, Tc K, Tb K, Hf J/kmol (298.15 K), Cp ideal em Cp/R = A + B T + C T^2 + D T^-2 (B, C, D já multiplicados: B*1e-3, C*1e-6, D*1e5)",
+ "_assumptions": {
+  "C3.cp_B": "a dissertação imprime 28,758; Smith et al. (2018) dá 28,785 — usado o valor de Smith (issue a abrir)",
+  "C7plus.cp": "não dado na dissertação (B1 em docs/05): extrapolação linear da tendência dos n-alcanos C4–C8 da Tabela 8 até Nc = 40 (MW 560): A = 21.4, B = 340e-3, C = -108.6e-6, D = 0",
+  "C7plus.Hf": "Tabela 20 dá -1023 kJ/kg; x 560 kg/kmol = -5.7288e8 J/kmol",
+  "Nc_eff": "número de carbonos efetivo de Allan & Teja (B3 em docs/05): n-alcanos = n; CO2, N2, H2S assumidos 1 (presença residual no líquido); C7+ = (MW - 2)/14 = 39.9"
+ },
+ "components": {
+  "CO2":    {"MW": 44.0,  "Pc": 7.37e6,  "Tc": 304.1, "omega": 0.2389, "Tb": 194.5, "Hf": -393790.0e3, "cp": [5.457, 1.045e-3, 0.0, -1.157e5], "Nc_eff": 1.0},
+  "N2":     {"MW": 28.0,  "Pc": 3.39e6,  "Tc": 126.2, "omega": 0.04,   "Tb": 77.3,  "Hf": 0.0,          "cp": [3.28, 0.593e-3, 0.0, 0.04e5],    "Nc_eff": 1.0},
+  "H2S":    {"MW": 34.1,  "Pc": 8.96e6,  "Tc": 373.5, "omega": 0.094,  "Tb": 212.8, "Hf": -20630.0e3,  "cp": [3.931, 1.49e-3, 0.0, -0.232e5],  "Nc_eff": 1.0},
+  "C1":     {"MW": 16.0,  "Pc": 4.60e6,  "Tc": 190.6, "omega": 0.012,  "Tb": 111.4, "Hf": -74900.0e3,  "cp": [1.702, 9.081e-3, -2.164e-6, 0.0], "Nc_eff": 1.0},
+  "C2":     {"MW": 30.1,  "Pc": 4.88e6,  "Tc": 305.4, "omega": 0.0986, "Tb": 184.6, "Hf": -84738.0e3,  "cp": [1.131, 19.225e-3, -5.561e-6, 0.0], "Nc_eff": 2.0},
+  "C3":     {"MW": 44.1,  "Pc": 4.25e6,  "Tc": 369.8, "omega": 0.152,  "Tb": 231.1, "Hf": -103890.0e3, "cp": [1.213, 28.785e-3, -8.824e-6, 0.0], "Nc_eff": 3.0},
+  "nC4":    {"MW": 58.1,  "Pc": 3.80e6,  "Tc": 425.1, "omega": 0.2,    "Tb": 272.7, "Hf": -126190.0e3, "cp": [1.935, 36.915e-3, -11.402e-6, 0.0], "Nc_eff": 4.0},
+  "nC5":    {"MW": 72.2,  "Pc": 3.37e6,  "Tc": 469.7, "omega": 0.252,  "Tb": 309.2, "Hf": -146490.0e3, "cp": [2.464, 45.351e-3, -14.111e-6, 0.0], "Nc_eff": 5.0},
+  "nC6":    {"MW": 86.2,  "Pc": 3.03e6,  "Tc": 507.9, "omega": 0.3007, "Tb": 341.9, "Hf": -167290.0e3, "cp": [3.025, 53.722e-3, -16.791e-6, 0.0], "Nc_eff": 6.0},
+  "nC7":    {"MW": 100.2, "Pc": 2.74e6,  "Tc": 540.2, "omega": 0.35,   "Tb": 371.6, "Hf": -187890.0e3, "cp": [3.57, 62.127e-3, -19.486e-6, 0.0], "Nc_eff": 7.0},
+  "nC8":    {"MW": 114.2, "Pc": 2.49e6,  "Tc": 568.7, "omega": 0.4,    "Tb": 398.8, "Hf": -208590.0e3, "cp": [4.108, 70.567e-3, -22.208e-6, 0.0], "Nc_eff": 8.0},
+  "C7plus": {"MW": 560.0, "Pc": 8.379e5, "Tc": 991.4, "omega": 1.32,   "Tb": 841.9, "Hf": -5.7288e8,   "cp": [21.4, 340.0e-3, -108.6e-6, 0.0], "Nc_eff": 39.9, "rho_liquid_ref": 950.0}
+ }
+}

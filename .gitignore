@@ -1,0 +1,10 @@
+# ambientes e caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+# saídas de corridas (fixadas por manifesto quando necessário)
+01-multiphase-compositional-flow/runs/
+01-multiphase-compositional-flow/notebooks/*.ipynb

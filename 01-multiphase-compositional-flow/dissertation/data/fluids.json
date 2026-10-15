@@ -1,0 +1,9 @@
+{
+ "_source": "composições molares (fração) das Tabelas 6, 17, 19 e 23 da dissertação",
+ "fluids": {
+  "table6_validation":  {"CO2": 0.009, "N2": 0.007, "H2S": 0.001, "C1": 0.384, "C2": 0.016, "C3": 0.026, "nC4": 0.030, "nC5": 0.026, "nC6": 0.024, "nC7": 0.034, "nC8": 0.443},
+  "table17_dp_comparison": {"C1": 0.70, "C7plus": 0.30},
+  "table19_offshore": {"CO2": 0.007, "N2": 0.011, "C1": 0.696, "C2": 0.103, "C3": 0.049, "nC4": 0.032, "nC5": 0.022, "nC6": 0.007, "C7plus": 0.073},
+  "table23_rich_gas": {"C1": 0.714, "C2": 0.152, "C3": 0.078, "nC4": 0.039, "nC5": 0.017}
+ }
+}
