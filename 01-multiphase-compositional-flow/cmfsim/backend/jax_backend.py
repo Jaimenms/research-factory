@@ -116,3 +116,13 @@ def _register_containers():
 
 
 _register_containers()
+
+
+def _register_closure_containers():
+    from ..closures.common import ClosureResult, FlowInputs
+
+    for cls in (FlowInputs, ClosureResult):
+        JAX.register_container(cls)
+
+
+_register_closure_containers()
