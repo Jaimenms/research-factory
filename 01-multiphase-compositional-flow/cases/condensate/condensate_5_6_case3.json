@@ -1,0 +1,28 @@
+{
+ "schema": "cmfsim-case/1",
+ "$extends": "condensate_5_6_base.json",
+ "name": "condensate_5_6_case3",
+ "description": "Caso 3 da Tabela 25: T_in = 60 °C, U = 6 W/(m²K).",
+ "pipe": {
+  "profile": [
+   {
+    "x": 0.0,
+    "D": 0.3048,
+    "roughness": 4.57e-05,
+    "angle_deg": 0.0,
+    "U": 6.0,
+    "T_amb": 298.15
+   },
+   {
+    "x": 8000.0
+   }
+  ]
+ },
+ "boundary": {
+  "inlet": {
+   "P": 7000000.0,
+   "T": 333.15,
+   "m": 15.0
+  }
+ }
+}

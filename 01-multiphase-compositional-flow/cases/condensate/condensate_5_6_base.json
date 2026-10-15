@@ -1,0 +1,146 @@
+{
+ "schema": "cmfsim-case/1",
+ "name": "condensate_5_6_base",
+ "description": "Gasoduto de 8 km e 12 in com gás rico (Tabela 23), 70 bar e 15 kg/s na entrada, T_amb 25 °C (Tabela 24); modelo de não escorregamento por marcha em x (§3.1, §5.6).",
+ "fluid": {
+  "type": "compositional",
+  "components": [
+   {
+    "id": "C1",
+    "z": 0.714,
+    "MW": 16.0,
+    "Pc": 4600000.0,
+    "Tc": 190.6,
+    "omega": 0.012,
+    "Tb": 111.4,
+    "Hf": -74900000.0,
+    "cp": [
+     1.702,
+     0.009081,
+     -2.164e-06,
+     0.0
+    ],
+    "Nc_eff": 1.0
+   },
+   {
+    "id": "C2",
+    "z": 0.152,
+    "MW": 30.1,
+    "Pc": 4880000.0,
+    "Tc": 305.4,
+    "omega": 0.0986,
+    "Tb": 184.6,
+    "Hf": -84738000.0,
+    "cp": [
+     1.131,
+     0.019225,
+     -5.561e-06,
+     0.0
+    ],
+    "Nc_eff": 2.0
+   },
+   {
+    "id": "C3",
+    "z": 0.078,
+    "MW": 44.1,
+    "Pc": 4250000.0,
+    "Tc": 369.8,
+    "omega": 0.152,
+    "Tb": 231.1,
+    "Hf": -103890000.0,
+    "cp": [
+     1.213,
+     0.028785,
+     -8.824e-06,
+     0.0
+    ],
+    "Nc_eff": 3.0
+   },
+   {
+    "id": "nC4",
+    "z": 0.039,
+    "MW": 58.1,
+    "Pc": 3800000.0,
+    "Tc": 425.1,
+    "omega": 0.2,
+    "Tb": 272.7,
+    "Hf": -126190000.0,
+    "cp": [
+     1.935,
+     0.036915,
+     -1.1402e-05,
+     0.0
+    ],
+    "Nc_eff": 4.0
+   },
+   {
+    "id": "nC5",
+    "z": 0.017,
+    "MW": 72.2,
+    "Pc": 3370000.0,
+    "Tc": 469.7,
+    "omega": 0.252,
+    "Tb": 309.2,
+    "Hf": -146490000.0,
+    "cp": [
+     2.464,
+     0.045351,
+     -1.4111e-05,
+     0.0
+    ],
+    "Nc_eff": 5.0
+   }
+  ],
+  "kij": "zero",
+  "eos": {
+   "type": "peng_robinson",
+   "constants": "thesis"
+  }
+ },
+ "pipe": {
+  "profile": [
+   {
+    "x": 0.0,
+    "D": 0.3048,
+    "roughness": 4.57e-05,
+    "angle_deg": 0.0,
+    "U": 1.0,
+    "T_amb": 298.15
+   },
+   {
+    "x": 8000.0
+   }
+  ]
+ },
+ "boundary": {
+  "inlet": {
+   "P": 7000000.0,
+   "T": 333.15,
+   "m": 15.0
+  }
+ },
+ "model": {
+  "type": "noslip",
+  "friction": "homogeneous",
+  "derivatives": "autodiff",
+  "dP": 1000.0,
+  "dT": 0.01,
+  "regime": {
+   "regime": "automatic"
+  }
+ },
+ "solver": {
+  "type": "march",
+  "integrator": "rk45",
+  "rtol": 1e-08,
+  "atol": 1e-08,
+  "first_step": 10.0,
+  "backend": "numpy"
+ },
+ "outputs": {
+  "dx_out": 100.0
+ },
+ "meta": {
+  "source": "dissertação §5.6, Tabelas 23–25; alvos: Figuras 38–40 (references/figures/data/fig_38..40.json), Tabela 26"
+ }
+}

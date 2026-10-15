@@ -1,0 +1,128 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "cmfsim-case/1",
+ "title": "Caso do cmfsim",
+ "type": "object",
+ "required": ["schema", "fluid", "pipe", "boundary", "model", "solver"],
+ "properties": {
+  "schema": {"const": "cmfsim-case/1"},
+  "name": {"type": "string"},
+  "description": {"type": "string"},
+  "$extends": {"oneOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}]},
+  "meta": {"type": "object"},
+  "fluid": {
+   "type": "object",
+   "required": ["type", "components"],
+   "properties": {
+    "type": {"const": "compositional"},
+    "components": {
+     "type": "array", "minItems": 1,
+     "items": {
+      "type": "object",
+      "required": ["id", "z", "MW", "Pc", "Tc", "omega", "Tb", "Hf", "cp"],
+      "properties": {
+       "id": {"type": "string"}, "z": {"type": "number", "minimum": 0},
+       "MW": {"type": "number", "exclusiveMinimum": 0}, "Pc": {"type": "number", "exclusiveMinimum": 0},
+       "Tc": {"type": "number", "exclusiveMinimum": 0}, "omega": {"type": "number"}, "Tb": {"type": "number", "exclusiveMinimum": 0},
+       "Hf": {"type": "number"}, "cp": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "number"}},
+       "Nc_eff": {"type": "number", "minimum": 0}, "rho_liquid_ref": {"type": "number"}
+      },
+      "additionalProperties": false
+     }
+    },
+    "kij": {"oneOf": [{"const": "zero"}, {"type": "array", "items": {"type": "array", "items": {"type": "number"}}}]},
+    "eos": {"type": "object", "properties": {"type": {"const": "peng_robinson"}, "constants": {"enum": ["thesis", "exact"]}}, "additionalProperties": false},
+    "flash": {
+     "type": "object",
+     "properties": {
+      "tol": {"type": "number", "exclusiveMinimum": 0}, "max_iter": {"type": "integer", "minimum": 1},
+      "rr_tol": {"type": "number"}, "rr_max_iter": {"type": "integer"},
+      "polish_iter": {"type": "integer", "minimum": 0}, "polish_tol": {"type": "number"}, "fd_step": {"type": "number"},
+      "stability_test": {"type": "boolean"}, "stability_iter": {"type": "integer", "minimum": 1}
+     },
+     "additionalProperties": false
+    }
+   },
+   "additionalProperties": false
+  },
+  "pipe": {
+   "type": "object",
+   "required": ["profile"],
+   "properties": {
+    "profile": {
+     "type": "array", "minItems": 2,
+     "items": {
+      "type": "object",
+      "required": ["x"],
+      "properties": {
+       "x": {"type": "number", "minimum": 0}, "D": {"type": "number", "exclusiveMinimum": 0},
+       "roughness": {"type": "number", "minimum": 0}, "angle_deg": {"type": "number", "minimum": -90, "maximum": 90},
+       "U": {"type": "number", "minimum": 0}, "T_amb": {"type": "number", "exclusiveMinimum": 0}
+      },
+      "additionalProperties": false
+     }
+    },
+    "n": {"type": "integer", "minimum": 2}
+   },
+   "additionalProperties": false
+  },
+  "boundary": {
+   "type": "object",
+   "required": ["inlet"],
+   "properties": {
+    "inlet": {
+     "type": "object",
+     "required": ["P", "T", "m"],
+     "properties": {"P": {"type": "number", "exclusiveMinimum": 0}, "T": {"type": "number", "exclusiveMinimum": 0}, "m": {"type": "number", "exclusiveMinimum": 0}},
+     "additionalProperties": false
+    },
+    "outlet": {"type": "object", "properties": {"P": {"type": "number"}, "m": {"type": "number"}}, "additionalProperties": false}
+   },
+   "additionalProperties": false
+  },
+  "model": {
+   "type": "object",
+   "required": ["type"],
+   "properties": {
+    "type": {"enum": ["noslip", "mechanistic"]},
+    "friction": {"enum": ["homogeneous"]},
+    "derivatives": {"enum": ["autodiff", "finite_difference"]},
+    "dP": {"type": "number", "exclusiveMinimum": 0}, "dT": {"type": "number", "exclusiveMinimum": 0},
+    "kinetic_energy": {"type": "boolean"},
+    "mass_split": {"enum": ["ode", "algebraic"]},
+    "regime": {
+     "type": "object",
+     "properties": {
+      "regime": {"enum": ["automatic", "stratified", "annular", "bubble", "intermittent"]},
+      "k_switch": {"type": ["number", "null"]}, "vertical_angle_deg": {"type": "number"}, "blend_deg": {"type": "number", "minimum": 0},
+      "stratified_interfacial": {"enum": ["xiao_const", "taitel_dukler", "andritsos_hanratty"]}, "stratified_fi_const": {"type": "number"},
+      "stratified_DG": {"enum": ["taitel_dukler", "as_printed"]}, "annular_entrainment": {"enum": ["wallis", "none"]},
+      "bubble_C0": {"type": "number"}, "intermittent_fi_const": {"type": "number"},
+      "dispersed_density": {"enum": ["taitel", "as_printed"]}, "bubble_slug": {"enum": ["taitel", "as_printed"]},
+      "bubble_existence": {"enum": ["as_printed", "taitel"]}, "dispersed_max_void": {"type": ["number", "null"]},
+      "n_bisect": {"type": "integer"}, "n_newton": {"type": "integer"}
+     },
+     "additionalProperties": false
+    }
+   },
+   "additionalProperties": false
+  },
+  "solver": {
+   "type": "object",
+   "required": ["type"],
+   "properties": {
+    "type": {"enum": ["march", "fd"]},
+    "integrator": {"enum": ["rk45"]},
+    "rtol": {"type": "number", "exclusiveMinimum": 0}, "atol": {"type": "number", "exclusiveMinimum": 0},
+    "first_step": {"type": "number", "exclusiveMinimum": 0}, "max_step": {"type": ["number", "null"]},
+    "max_steps_per_interval": {"type": "integer"}, "safety": {"type": "number"},
+    "backend": {"enum": ["numpy", "jax"]},
+    "n": {"type": "integer", "minimum": 2}, "root": {"enum": ["newton_exact", "newton_colored", "scipy_hybr"]},
+    "initial_guess": {"enum": ["flat", "march_noslip"]}, "edge_order": {"enum": [1, 2]}
+   },
+   "additionalProperties": false
+  },
+  "outputs": {"type": "object", "properties": {"dx_out": {"type": "number", "exclusiveMinimum": 0}}, "additionalProperties": false}
+ },
+ "additionalProperties": false
+}

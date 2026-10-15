@@ -1,0 +1,11 @@
+{
+ "out_dir": "runs/dissertation",
+ "runs": [
+  {"name": "condensate_5_6_case1", "case": "cases/condensate/condensate_5_6_case1.json"},
+  {"name": "condensate_5_6_case2", "case": "cases/condensate/condensate_5_6_case2.json"},
+  {"name": "condensate_5_6_case3", "case": "cases/condensate/condensate_5_6_case3.json"},
+  {"name": "condensate_5_6_case4", "case": "cases/condensate/condensate_5_6_case4.json"},
+  {"name": "condensate_5_6_case5", "case": "cases/condensate/condensate_5_6_case5.json"},
+  {"name": "condensate_5_6_case6", "case": "cases/condensate/condensate_5_6_case6.json"}
+ ]
+}

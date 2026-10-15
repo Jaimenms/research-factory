@@ -27,6 +27,13 @@ Com `polish_iter = 0` fica a dissertação tal e qual.
 O polimento é um Newton amortecido (melhor de s = 1, 1/2, 1/4 em |G|²) em laço até
 `polish_tol` (1e-26) ou `polish_iter` (10), aplicado só onde o flash negativo tem raiz genuína.
 
+Duas correções descobertas na validação: (1) a iteração das substituições sucessivas usa o β do
+flash negativo **sem truncar** (dentro dos limites de Rachford–Rice as composições são positivas);
+com β truncado o critério (123) ficava inconsistente e a iteração parava cedo com β fora de [0, 1]
+(o gás rico a 25 °C e 69 bar dava fase única entre dois estados bifásicos); (2) `stability_test`
+(Michelsen, TPD com duas fases de tentativa, opção) força fase única quando z é estável e parte do K
+da tentativa quando é instável.
+
 ## Benefício (medido em 2026-10-15, fluido da Tabela 19 com C7+, 8 estados)
 
 - Substituições sucessivas a 1e-12 sem polimento: até 200 iterações sem convergir em dois estados

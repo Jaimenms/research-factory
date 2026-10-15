@@ -34,6 +34,8 @@ class FlashOptions:
     polish_iter: int = 10  # máximo de iterações de Newton amortecido no sistema completo (0 = só a dissertação)
     polish_tol: float = 1e-26  # paragem do polimento (mesmo critério 123)
     fd_step: float = 1e-7  # passo relativo das diferenças finitas da Jacobiana (backend sem AD)
+    stability_test: bool = False  # teste de estabilidade de Michelsen (TPD) antes do flash: melhoria com bandeira
+    stability_iter: int = 40
 
 
 def wilson_K(T, P, cs: ComponentSet, bk=NUMPY):
@@ -98,13 +100,18 @@ def rachford_rice(z, K, bk=NUMPY, tol=1e-14, max_iter=60):
     return beta
 
 
-def phase_compositions(z, K, beta, bk=NUMPY):
-    """x, y (116–117) com beta truncado a [0, 1]; a fase ausente recebe a composição incipiente
-    normalizada (beta <= 0: y ~ K z; beta >= 1: x ~ z/K)."""
+def phase_compositions(z, K, beta, bk=NUMPY, clamp=True):
+    """x, y (116–117). Com `clamp`, beta é truncado a [0, 1] e a fase ausente recebe a composição
+    incipiente normalizada (beta <= 0: y ~ K z; beta >= 1: x ~ z/K). Sem `clamp` (iteração do flash
+    negativo) usa-se o beta tal qual: dentro dos limites de Rachford–Rice as composições são
+    positivas; fora deles (sem raiz) são truncadas a um piso antes de normalizar."""
     xp = bk.xp
-    bc = xp.clip(beta, 0.0, 1.0)[:, None]
-    x = z / (1.0 + bc * (K - 1.0))
+    b = (xp.clip(beta, 0.0, 1.0) if clamp else beta)[:, None]
+    den = 1.0 + b * (K - 1.0)
+    x = z / xp.where(xp.abs(den) < 1e-300, 1e-300, den)
     y = K * x
+    x = xp.maximum(x, 1e-300)
+    y = xp.maximum(y, 1e-300)
     x = x / xp.sum(x, axis=1, keepdims=True)
     y = y / xp.sum(y, axis=1, keepdims=True)
     return x, y
@@ -146,6 +153,39 @@ def _jacobian_dirs(G, u, bk, fd_step):
     return xp.stack(cols, axis=2)
 
 
+def stability_tpd(T, P, z, cs: ComponentSet, opts: FlashOptions, bk=NUMPY):
+    """Teste de estabilidade de Michelsen (1982): duas fases de tentativa (vapor W = K z, líquido
+    W = z/K, com K de Wilson) iteradas por substituições sucessivas na forma não normalizada
+    ln W_i = ln z_i + ln phi_i(z) - ln phi_i(w). Devolve o tpd* mínimo (n,) (negativo = z instável,
+    duas fases) e a estimativa de K da tentativa mais instável (n, nc)."""
+    xp = bk.xp
+    lnK0 = xp.log(wilson_K(T, P, cs, bk))
+    d_V = ln_phi(T, P, z, cs, "vapor", bk)
+    d_L = ln_phi(T, P, z, cs, "liquid", bk)
+    lnz = xp.log(xp.maximum(z, 1e-300))
+
+    def trial(lnW0, phase_W, d_ref):
+        def body(i, lnW):
+            W = xp.exp(lnW)
+            w = W / xp.sum(W, axis=1, keepdims=True)
+            return lnz + d_ref - ln_phi(T, P, w, cs, phase_W, bk)
+
+        lnW = bk.fori_loop(0, opts.stability_iter, body, lnW0)
+        W = xp.exp(lnW)
+        w = W / xp.sum(W, axis=1, keepdims=True)
+        # tpd* = 1 + sum W_i (ln W_i + ln phi_i(w) - ln z_i - ln phi_i(z) - 1)
+        tpd = 1.0 + xp.sum(W * (lnW + ln_phi(T, P, w, cs, phase_W, bk) - lnz - d_ref - 1.0), axis=1)
+        return tpd, lnW
+
+    tpd_v, lnW_v = trial(lnz + lnK0, "vapor", d_L)  # tentativa vapor contra z como líquido
+    tpd_l, lnW_l = trial(lnz - lnK0, "liquid", d_V)  # tentativa líquido contra z como vapor
+    use_v = tpd_v <= tpd_l
+    tpd = xp.where(use_v, tpd_v, tpd_l)
+    lnK = xp.where(use_v[:, None], lnW_v - lnz, lnz - lnW_l)
+    lnK = xp.where(xp.isfinite(lnK), lnK, lnK0)
+    return tpd, lnK
+
+
 def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=NUMPY):
     """Flash P-T. T, P (n,), z (n, nc). Devolve dict com K (n, nc), beta_raw (não truncado), beta
     (truncado), x, y (n, nc), two_phase (n,) 0/1, iterations (n,), residual (n,) (critério 123)."""
@@ -155,11 +195,17 @@ def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=
     z = xp.asarray(z, float)
     nc = cs.n
     lnK0 = xp.log(wilson_K(T, P, cs, bk))
+    if opts.stability_test:
+        # z instável: parte do K da fase de tentativa (converge para a solução bifásica certa);
+        # z estável: fica com Wilson e o flash negativo decide a fase
+        tpd, lnK_st = stability_tpd(T, P, z, cs, opts, bk)
+        unstable = tpd < -1e-8
+        lnK0 = xp.where(unstable[:, None], lnK_st, lnK0)
 
     def ss_step(lnK):
         K = xp.exp(lnK)
         beta = rachford_rice(z, K, bk, opts.rr_tol, opts.rr_max_iter)
-        x, y = phase_compositions(z, K, beta, bk)
+        x, y = phase_compositions(z, K, beta, bk, clamp=False)  # flash negativo: beta tal qual
         lphiL = ln_phi(T, P, x, cs, "liquid", bk)
         lphiV = ln_phi(T, P, y, cs, "vapor", bk)
         ratio = xp.exp(lphiL - lnK - lphiV)  # f_L/f_V com o K usado em x, y
@@ -239,6 +285,10 @@ def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=
     K = xp.exp(lnK)
     beta = xp.where(xp.isfinite(beta), beta, 0.5)
     two_phase_b = xp.logical_and(beta > 0.0, beta < 1.0)
+    if opts.stability_test:
+        # a estabilidade manda: z estável -> fase única mesmo que o flash negativo tenha raiz em (0, 1)
+        two_phase_b = xp.logical_and(two_phase_b, unstable)
+        beta = xp.where(unstable, beta, xp.where(beta >= 0.5, 1.0, 0.0))
     # rótulo da fase única: pelo sinal do flash negativo, exceto quando as substituições
     # colapsaram na solução trivial (K ~ 1: puros e misturas supercríticas), em que decide a
     # temperatura pseudocrítica de Kay (T > sum z_i Tc_i: vapor denso)

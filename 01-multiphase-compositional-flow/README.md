@@ -15,18 +15,27 @@ decisões estão em [docs/README.md](docs/README.md). O guia de sessão é [CLAU
 
 ```bash
 uv sync
-uv run pytest
-uv run python -m dissertation.extract      # regenera os CSV do Apêndice A a partir do PDF
+uv run pytest                                                  # rotina (~2 min)
+uv run python -m generators.condensate                         # casos JSON de §5.6
+uv run cmfsim validate cases/condensate/*.json
+uv run cmfsim run cases/condensate/condensate_5_6_case2.json --out runs/case2.npz --backend jax
+uv run cmfsim batch batches/dissertation.json                  # lote -> runs/dissertation
+uv run python -m dissertation.extract                          # regenera os CSV do Apêndice A a partir do PDF
 ```
+
+Um caso é um ficheiro JSON `cmfsim-case/1` autocontido (fluido com as propriedades dos componentes,
+tubo único com perfil axial, condições de entrada, modelo, solver); variantes herdam com `$extends`
+e `--set caminho=valor` varia sem ficheiro novo. Uma corrida gravada (`runs/*.npz`) traz os perfis e
+o caso completo (`cmfsim.load_run`).
 
 ## Estado
 
 | fase | conteúdo | estado |
 |---|---|---|
-| 0 | rede de segurança: git (raiz do monorepo), `uv`, esqueleto, backend copiado, Apêndice A e tabelas em `dissertation/data`, figuras digitalizadas em `references/figures` | em curso (2026-10-15) |
-| 1 | `cmfsim/thermo`: PR, flash, propriedades, derivadas exatas em JAX; validação contra a biblioteca `thermo` | em curso |
-| 2 | padrões e fechamentos | — |
-| 3 | modelo de não escorregamento + marcha em x (integrador próprio) | — |
+| 0 | rede de segurança: git (raiz do monorepo), `uv`, esqueleto, backend copiado, Apêndice A e tabelas em `dissertation/data`, figuras digitalizadas em `references/figures` | feito (2026-10-15) |
+| 1 | `cmfsim/thermo`: PR, flash, propriedades, derivadas exatas em JAX; validação contra a biblioteca `thermo` | feito (issues 001–002) |
+| 2 | padrões e fechamentos | feito (issue 003) |
+| 3 | modelo de não escorregamento + marcha em x (integrador próprio); caso 5.6 contra as Figuras 38–40 | feito (issue 004); achado térmico em aberto |
 | 4 | modelo com escorregamento + diferenças finitas + Newton (Apêndice A) | — |
 | 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave) | — |
 | 6 | notebooks, goldens, síntese | — |
