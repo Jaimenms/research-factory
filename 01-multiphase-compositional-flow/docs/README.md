@@ -94,7 +94,26 @@ axialmente; estudo da coluna Beggs & Brill; sem objetivo de reaproveitamento no 
 termo cinético e pressão interfacial como opções. Sem acesso ao autor, as ambiguidades do
 texto decidem-se por estudo e ficam como issues.
 
-## Próximo passo
+## Estado da implementação (2026-10-15, mesmo dia)
 
-Fase 0 do [plano](04-plano-de-reproducao.md) quando o dono mandar avançar; a digitalização
-das figuras (A7) já está feita.
+O dono mandou avançar e as fases 0–4 do [plano](04-plano-de-reproducao.md) ficaram feitas no
+mesmo dia; o registo vivo está no [README do projeto](../README.md), no
+[CLAUDE.md](../CLAUDE.md) e nas issues [001–006](issues/INDEX.md). Resumo do que se aprendeu:
+
+- **Termodinâmica** (fase 1): PR + flash reproduzem a biblioteca `thermo` a 1e-7; o polimento de
+  Newton dá derivadas exatas por AD; num estado a `thermo` falha e o cmfsim acerta (issue 002).
+- **Padrões** (fase 2): os mapas ar–água das Figuras 22–23 reproduzem-se a 91 % e 95 % ponto a
+  ponto; a dissertação usou o limite de vazio 0,52 de Taitel (omitido no texto), σ = 0,072 e a
+  forma de Taitel em (34) (issue 003).
+- **Não escorregamento** (fase 3): o caso offshore (§5.5) bate as curvas no-slip da dissertação
+  (119,98 contra 119,97 bar no topo do poço; T a 1,5 °C; anular em todo o percurso). No gasoduto
+  (§5.6) o ponto de orvalho coincide (33–34 °C) mas os perfis térmicos da dissertação arrefecem
+  2,7× mais depressa do que o balanço de energia permite; fica como achado em aberto (issue 004).
+- **Com escorregamento** (fase 4): diferenças finitas + Newton com Jacobiana colorida convergem
+  em 2–4 iterações; o que travava a dissertação (fases que aparecem e desaparecem) tem duas
+  causas identificadas e resolvidas (issue 005). Apêndice A: vertical com mediana +3 % e 75 % dos
+  casos a menos de 10 %; horizontal sistematicamente abaixo (sensível à viscosidade do líquido do
+  C7+, hipótese B3 revista para Nc_eff = 20).
+- **Desempenho** (issue 006): 175 ms por marcha compilada, uma compilação por estrutura,
+  `march_many` por `vmap`; o próximo ganho é o arranque quente do flash ao longo de x.
+- **Adiado**: modelo substituto (cap. 4, §5.7); `vmap` eficiente em CPU; grafo de rede.

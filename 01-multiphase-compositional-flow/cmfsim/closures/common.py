@@ -28,7 +28,9 @@ class FlowInputs:
     sigma: np.ndarray
     v_SL: np.ndarray
     v_SG: np.ndarray
-    f_wall_mult: np.ndarray = None  # multiplicador dos fatores de Churchill: 1 (Fanning) ou 4 (Darcy como impresso em (50))
+    f_wall_mult: np.ndarray = (
+        None  # multiplicador dos fatores de Churchill: 1 (Fanning) ou 4 (Darcy como impresso em (50))
+    )
 
     @property
     def A(self):

@@ -106,6 +106,7 @@
       "bubble_C0": {"type": "number"}, "intermittent_fi_const": {"type": "number"},
       "dispersed_density": {"enum": ["taitel", "as_printed"]}, "bubble_slug": {"enum": ["taitel", "as_printed"]},
       "bubble_existence": {"enum": ["as_printed", "taitel"]}, "dispersed_max_void": {"type": ["number", "null"]},
+      "kh_velocity": {"enum": ["actual", "superficial_as_printed"]},
       "n_bisect": {"type": "integer"}, "n_newton": {"type": "integer"},
       "wall_friction": {"enum": ["fanning", "darcy_as_printed"]}
      },

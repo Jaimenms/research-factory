@@ -27,7 +27,8 @@ def horizontal_weights(inp: FlowInputs, hD_eq, opts, bk=NUMPY, **strat_kw):
     v_kh = (1.0 - hD_eq) * bk.safe_sqrt(
         (inp.rho_L - inp.rho_G) * G * cos_t * t["AG"] / (inp.rho_G * xp.maximum(t["SI"], 1e-12 * inp.D))
     )
-    w_ns = smooth_step(vabs(t["vG"], bk) / xp.maximum(v_kh, 1e-300) - 1.0, k, bk)
+    v_gas = t["vG"] if opts.kh_velocity == "actual" else inp.v_SG
+    w_ns = smooth_step(vabs(v_gas, bk) / xp.maximum(v_kh, 1e-300) - 1.0, k, bk)
     # (33) h_L/D < 0,5: anular (senão intermitente ou bolhas)
     w_ann = smooth_step((0.5 - hD_eq) / 0.5, k, bk)
     # (34) bolhas dispersas

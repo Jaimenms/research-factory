@@ -45,6 +45,25 @@ sensível à viscosidade do líquido (issue 001, Nc_eff do C7+).
 L_S (87) não afeta nem o holdup nem a perda de carga (as razões L_S/L_U e L_F/L_U não dependem de
 L_S), logo a ambiguidade de unidades de (87) é inócua.
 
+## Decisões pelas Figuras 22–23 digitalizadas (2026-10-15)
+
+Classificação ponto a ponto dos mapas ar–água de 2,5 cm (395 pontos no horizontal, 398 no
+vertical; `references/figures/data/fig_22.json`, `fig_23.json`) com o `ClosureOptions` em degraus duros:
+
+| opção | acerto horizontal | acerto vertical | decisão |
+|---|---|---|---|
+| base (KH com v_G real, (34) de Taitel, D_G Taitel–Dukler, f_i 0,0142, σ 0,072) | 91,4 % | 83,2 % | — |
+| + `dispersed_max_void = 0.52` (limite de Taitel 1980, omitido no texto) | 91,4 % | **95,5 %** | **default** |
+| `bubble_existence = "taitel"` (≥ 4,36) | 91,4 % | 86,4 % | fica «como impresso» |
+| σ = 0,0072 (Tabela 13 como impressa) | 91,4 % | 93,0 % | a dissertação usou 0,072 |
+| (34) com ρ_G/ρ_L como impresso | 79 % (intermitente 0 %) | — | fica Taitel |
+| KH com v_SG («se o gás escoasse sozinho», p. 53) | 88 % (intermitente 42 %) | — | fica v_G real |
+| D_G como impresso (S_L + S_G) | 92,7 % | — | diferença dentro do ruído; fica Taitel–Dukler |
+| f_i = f_G (Taitel & Dukler) | 93,2 % | — | idem; fica 0,0142 (explícito no texto) |
+
+O erro restante no horizontal está na fronteira intermitente/anular (h/D < 0,5 avaliado no
+equilíbrio estratificado): 73–76 % dos pontos intermitentes da dissertação.
+
 ## Benefício
 
 Mapas ar–água de 2,5 cm com a estrutura de Taitel–Dukler e Taitel (`tests/test_closures.py`): estratificado a

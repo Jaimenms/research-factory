@@ -35,8 +35,15 @@ class ClosureOptions:
     dispersed_density: str = "taitel"  # eq. (34): taitel ((rho_L - rho_G)/rho_L) | as_printed (rho_G/rho_L)
     bubble_slug: str = "taitel"  # eq. (36): taitel | as_printed
     bubble_existence: str = "as_printed"  # eq. (37): as_printed (<= 4,36) | taitel (>= 4,36)
-    dispersed_max_void: Optional[float] = None  # eq. (38): None como impresso; 0.52 = limite de Taitel et al. (1980)
-    wall_friction: str = "fanning"  # eqs. (49–50): fanning (tau = f_F rho v|v|/2) | darcy_as_printed (f de (50) como impresso: 4x)
+    dispersed_max_void: Optional[float] = (
+        0.52  # eq. (38): limite de Taitel et al. (1980); None = como impresso (a Figura 23 só se reproduz com 0,52: 95 % contra 83 %)
+    )
+    kh_velocity: str = (
+        "actual"  # eq. (32): actual (v_G no equilíbrio estratificado, Taitel & Dukler) | superficial_as_printed (v_SG, «se o gás escoasse sozinho», p. 53)
+    )
+    wall_friction: str = (
+        "fanning"  # eqs. (49–50): fanning (tau = f_F rho v|v|/2) | darcy_as_printed (f de (50) como impresso: 4x)
+    )
     n_bisect: int = 30
     n_newton: int = 3
 
