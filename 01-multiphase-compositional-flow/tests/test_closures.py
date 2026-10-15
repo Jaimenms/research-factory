@@ -45,11 +45,14 @@ def test_equilibria_are_roots():
         assert np.allclose(r.v_L * r.H_L, inp.v_SL, rtol=1e-9) or p in ("annular", "intermittent")
 
 
-def test_bubble_without_root_falls_to_zero_holdup():
-    # lambda_G > 1/C_0: (79) não tem raiz em (0, 1); o extremo sensato é H_L -> 0
-    inp = inputs([0.05], [5.0], theta=0.0)
-    r = pattern_results(inp)["bubble"]
-    assert r.H_L[0] < 1e-5
+def test_scalar_solver_without_sign_change_returns_best_endpoint():
+    from cmfsim.closures.scalar import solve_bracketed
+
+    # f(h) = h + 2 > 0 em todo o [0, 1]: sem raiz, devolve o extremo com menor |f| (h = 0);
+    # f(h) = h - 0.3: raiz em 0,3 a precisão de máquina
+    lo, hi = np.zeros(2), np.ones(2)
+    h = solve_bracketed(lambda h: np.where(np.arange(2) == 0, h + 2.0, h - 0.3), lo, hi)
+    assert h[0] == 0.0 and abs(h[1] - 0.3) < 1e-12
 
 
 def test_bubble_horizontal_closed_form():
