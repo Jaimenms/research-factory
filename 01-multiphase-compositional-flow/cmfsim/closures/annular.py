@@ -36,10 +36,13 @@ def annular_terms(delta, inp: FlowInputs, bk=NUMPY, entrainment_model="wallis"):
     vF = inp.v_SL * (1.0 - FE) * A / AF
     vC = (inp.v_SG + inp.v_SL * FE) * A / AC
     DF = 4.0 * AF / SF
+    fm = 1.0 if inp.f_wall_mult is None else inp.f_wall_mult
     fF, _ = fanning(vF, inp.rho_L, inp.mu_L, DF, inp.eps, bk=bk)
+    fF = fF * fm
     tauF = fF * inp.rho_L * vF * vabs(vF, bk) / 2.0
     vCS = inp.v_SG + inp.v_SL * FE
     fCS, _ = fanning(vCS, rhoC, muC, D, inp.eps, bk=bk)
+    fCS = fCS * fm
     ReLS = inp.rho_L * vabs(inp.v_SL, bk) * D / inp.mu_L
     ReGS = inp.rho_G * vabs(inp.v_SG, bk) * D / inp.mu_G
     nuL = inp.mu_L / inp.rho_L

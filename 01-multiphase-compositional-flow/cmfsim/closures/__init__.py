@@ -36,6 +36,7 @@ class ClosureOptions:
     bubble_slug: str = "taitel"  # eq. (36): taitel | as_printed
     bubble_existence: str = "as_printed"  # eq. (37): as_printed (<= 4,36) | taitel (>= 4,36)
     dispersed_max_void: Optional[float] = None  # eq. (38): None como impresso; 0.52 = limite de Taitel et al. (1980)
+    wall_friction: str = "fanning"  # eqs. (49–50): fanning (tau = f_F rho v|v|/2) | darcy_as_printed (f de (50) como impresso: 4x)
     n_bisect: int = 30
     n_newton: int = 3
 

@@ -1,0 +1,2005 @@
+{
+ "out_dir": "runs/dp_comparison_darcy",
+ "runs": [
+  {
+   "name": "dp_horizontal_mechanistic_001",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_002",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_003",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_004",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_005",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_006",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_007",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_008",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_009",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_010",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_011",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_012",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_013",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_014",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_015",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_016",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_017",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_018",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_019",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_020",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_021",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_022",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_023",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_024",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_025",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_026",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_027",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_028",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_029",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_030",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_031",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_032",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_033",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_034",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_035",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_036",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_037",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_038",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_039",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_040",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_041",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_042",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_043",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_044",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_045",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_046",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_047",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_048",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_049",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_050",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_051",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_052",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_053",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_054",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_055",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_056",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_057",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_058",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_059",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_060",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_061",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_062",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_063",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_064",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_065",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_066",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_067",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_068",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_069",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_070",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_071",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_072",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_073",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_074",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_075",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_076",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_077",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_078",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_079",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_080",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_081",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_082",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_083",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_084",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_085",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_086",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_087",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_088",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_089",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_090",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_091",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_092",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_093",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_094",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_095",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_096",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_097",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_098",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_099",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_horizontal_mechanistic_100",
+   "case": "cases/dp/dp_horizontal_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_001",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_002",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_003",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_004",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_005",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_006",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_007",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_008",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_009",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_010",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_011",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_012",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_013",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_014",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_015",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_016",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_017",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_018",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_019",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_020",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_021",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_022",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_023",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_024",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_025",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.1016",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_026",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_027",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_028",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_029",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_030",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_031",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_032",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_033",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_034",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_035",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_036",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_037",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_038",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_039",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_040",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_041",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_042",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_043",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_044",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_045",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_046",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_047",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_048",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_049",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_050",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.15239999999999998",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_051",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_052",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_053",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_054",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_055",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_056",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_057",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_058",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_059",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_060",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_061",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_062",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_063",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_064",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_065",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_066",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_067",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_068",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_069",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_070",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_071",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_072",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_073",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_074",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_075",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.2032",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_076",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_077",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_078",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_079",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_080",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=2000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_081",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_082",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_083",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_084",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_085",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=5500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_086",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_087",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_088",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_089",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_090",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=9000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_091",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_092",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_093",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_094",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_095",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=12500000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_096",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=2.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_097",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=4.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_098",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=6.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_099",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=8.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  },
+  {
+   "name": "dp_vertical_mechanistic_100",
+   "case": "cases/dp/dp_vertical_mechanistic_base.json",
+   "set": [
+    "pipe.profile.0.D=0.254",
+    "boundary.inlet.P=16000000.0",
+    "boundary.inlet.m=10.0",
+    "model.regime.wall_friction=darcy_as_printed"
+   ]
+  }
+ ]
+}

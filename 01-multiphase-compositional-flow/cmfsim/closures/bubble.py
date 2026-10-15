@@ -39,7 +39,9 @@ def bubble(inp: FlowInputs, bk=NUMPY, n_bisect=30, n_newton=3, C0=1.15, **kw) ->
     vL = inp.v_SL / HL
     rhoM = inp.rho_G * (1.0 - HL) + inp.rho_L * HL
     muM = inp.mu_G * (1.0 - HL) + inp.mu_L * HL
+    fm = 1.0 if inp.f_wall_mult is None else inp.f_wall_mult
     fM, _ = fanning(inp.v_M, rhoM, muM, inp.D, inp.eps, bk=bk)
+    fM = fM * fm
     tauM = fM * rhoM * inp.v_M * vabs(inp.v_M, bk) / 2.0
     F_fric = tauM * 4.0 / inp.D
     F_grav = rhoM * G * xp.sin(inp.theta)

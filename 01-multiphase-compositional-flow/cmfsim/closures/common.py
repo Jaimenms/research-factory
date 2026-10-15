@@ -28,6 +28,7 @@ class FlowInputs:
     sigma: np.ndarray
     v_SL: np.ndarray
     v_SG: np.ndarray
+    f_wall_mult: np.ndarray = None  # multiplicador dos fatores de Churchill: 1 (Fanning) ou 4 (Darcy como impresso em (50))
 
     @property
     def A(self):
@@ -45,6 +46,7 @@ class FlowInputs:
         """Constrói com arrays do backend, difundindo escalares para a forma de `v_SL`."""
         xp = bk.xp
         n = xp.asarray(kw["v_SL"], float).shape[0]
+        kw.setdefault("f_wall_mult", 1.0)
         return cls(**{f.name: xp.broadcast_to(xp.asarray(kw[f.name], float), (n,)) for f in fields(cls)})
 
 
@@ -73,6 +75,9 @@ class ClosureResult:
         for f in fields(cls):
             out[f.name] = sum(w * getattr(r, f.name) for r, w in zip(results, weights))
         return cls(**out)
+
+
+WALL_FRICTION_MULT = {"fanning": 1.0, "darcy_as_printed": 4.0}
 
 
 def smooth_step(x, k, bk=NUMPY):

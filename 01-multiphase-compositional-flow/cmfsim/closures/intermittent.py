@@ -48,8 +48,11 @@ def film_terms(HLF, inp: FlowInputs, HLS, vTB, vLS, bk=NUMPY, fi_const=0.0142):
     SI = inp.D * xp.sin(alpha / 2.0)
     DF = 4.0 * AF / xp.maximum(SF, 1e-12 * inp.D)
     DG = 4.0 * AG / xp.maximum(SG + SI, 1e-12 * inp.D)
+    fm = 1.0 if inp.f_wall_mult is None else inp.f_wall_mult
     fF, _ = fanning(vLF, inp.rho_L, inp.mu_L, DF, inp.eps, bk=bk)
     fG, _ = fanning(vGF, inp.rho_G, inp.mu_G, DG, inp.eps, bk=bk)
+    fF = fF * fm
+    fG = fG * fm
     tauF = fF * inp.rho_L * vLF * vabs(vLF, bk) / 2.0
     tauG = fG * inp.rho_G * vGF * vabs(vGF, bk) / 2.0
     dv = vGF - vLF
@@ -94,7 +97,9 @@ def intermittent(
     HL = HLS * LS_LU + HLF * LF_LU  # (99)
     rhoS = inp.rho_L * HLS + inp.rho_G * (1.0 - HLS)
     muS = inp.mu_L * HLS + inp.mu_G * (1.0 - HLS)
+    fm = 1.0 if inp.f_wall_mult is None else inp.f_wall_mult
     fS, _ = fanning(inp.v_M, rhoS, muS, inp.D, inp.eps, bk=bk)
+    fS = fS * fm
     tauS = fS * rhoS * inp.v_M * vabs(inp.v_M, bk) / 2.0
     F_fric = tauS * 4.0 / inp.D * LS_LU + (t["tauF"] * t["SF"] + t["tauG"] * t["SG"]) / t["A"] * LF_LU
     rhoU = inp.rho_L * HL + inp.rho_G * (1.0 - HL)

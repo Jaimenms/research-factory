@@ -20,7 +20,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from ..backend import NUMPY
-from ..closures.common import G
+from ..closures.common import G, WALL_FRICTION_MULT
 from ..closures.friction import fanning, vabs
 from ..thermo import ComponentSet, FlashOptions, phase_state
 
@@ -32,6 +32,7 @@ class NoSlipOptions:
     dP: float = 1000.0  # Pa
     dT: float = 0.01  # K
     kinetic_energy: bool = False  # termo cinético na energia (opção A12)
+    wall_friction: str = "fanning"  # fanning | darcy_as_printed (ver ClosureOptions)
 
 
 def mixture_state(P, T, z, cs: ComponentSet, flash: FlashOptions, bk=NUMPY):
@@ -94,6 +95,7 @@ class NoSlipModel:
         rho = rho_mix[0]
         v = m / (A * rho)
         f, _ = fanning(v, rho, mu_mix[0], D, eps, bk=bk)
+        f = f * WALL_FRICTION_MULT[self.opts.wall_friction]
         F_fric = f * rho * v * vabs(v, bk) / 2.0 * 4.0 / D
         F_grav = rho * G * xp.sin(theta)
         Qw = -U * xp.pi * D * (T - T_amb)

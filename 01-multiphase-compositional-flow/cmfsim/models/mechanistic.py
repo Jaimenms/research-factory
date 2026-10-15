@@ -20,7 +20,7 @@ import numpy as np
 
 from ..backend import NUMPY
 from ..closures import ClosureOptions, FlowInputs, flow_closure
-from ..closures.common import G
+from ..closures.common import G, WALL_FRICTION_MULT
 from ..closures.friction import fanning, vabs
 from ..thermo import ComponentSet, FlashOptions, phase_state
 
@@ -173,6 +173,7 @@ class MechanisticModel:
             sigma=xp.maximum(st.sigma, 1e-4),
             v_SL=xp.maximum(v_SL, 1e-9),
             v_SG=xp.maximum(v_SG, 1e-9),
+            f_wall_mult=WALL_FRICTION_MULT[self.closures.wall_friction],
         )
         res, w = flow_closure(inp, self.closures, bk)
         # velocidades de fase do próprio fechamento (v_L H_L = v_SL, v_G (1 - H_L) = v_SG): o fluxo de
@@ -191,6 +192,7 @@ class MechanisticModel:
             mu1 = xp.where(wG > 0.5, st.mu_V, st.mu_L)
             v1 = (mG + mL) / (rho1 * A)
             f1, _ = fanning(v1, rho1, mu1, D, params["roughness"], bk=bk)
+            f1 = f1 * WALL_FRICTION_MULT[self.closures.wall_friction]
             F1 = f1 * rho1 * v1 * vabs(v1, bk) / 2.0 * 4.0 / D + rho1 * G * xp.sin(params["theta"])
             uu = xp.clip((xp.minimum(wG, 1.0 - wG) - 1e-4) / 1e-3, 0.0, 1.0)
             s = uu * uu * (3.0 - 2.0 * uu)  # 0 em fase única (< 1e-4), 1 a partir de 1,1e-3

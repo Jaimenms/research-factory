@@ -1,0 +1,26 @@
+{
+ "schema": "cmfsim-case/1",
+ "$extends": "offshore_5_5_noslip.json",
+ "name": "offshore_5_5_slip",
+ "description": "Variante com escorregamento (§3.2): diferenças finitas com Newton, padrão automático.",
+ "model": {
+  "type": "mechanistic",
+  "mass_split": "algebraic",
+  "regime": {
+   "regime": "automatic"
+  }
+ },
+ "solver": {
+  "type": "fd",
+  "n": 78,
+  "initial_guess": "march_noslip",
+  "rtol": 1e-07,
+  "atol": 1e-07,
+  "first_step": 5.0,
+  "backend": "jax",
+  "newton": {
+   "max_iter": 40,
+   "tol": 1e-09
+  }
+ }
+}

@@ -33,6 +33,7 @@ def horizontal_weights(inp: FlowInputs, hD_eq, opts, bk=NUMPY, **strat_kw):
     # (34) bolhas dispersas
     DL = 4.0 * t["AL"] / xp.maximum(t["SL"], 1e-12 * inp.D)
     fL, _ = fanning(t["vL"], inp.rho_L, inp.mu_L, DL, inp.eps, bk=bk)
+    fL = fL * (1.0 if inp.f_wall_mult is None else inp.f_wall_mult)
     dens = (
         xp.maximum(inp.rho_L - inp.rho_G, 1e-6) / inp.rho_L
         if opts.dispersed_density == "taitel"

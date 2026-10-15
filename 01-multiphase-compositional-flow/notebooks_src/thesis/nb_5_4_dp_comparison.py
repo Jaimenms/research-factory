@@ -20,7 +20,9 @@ ROOT = Path(__file__).resolve().parents[2] if "__file__" in globals() else Path.
 sys.path.insert(0, str(ROOT))
 from cmfsim import load_run  # noqa: E402
 
-RUNS = ROOT / "runs" / "dp_comparison"
+import os
+
+RUNS = Path(os.environ.get("CMFSIM_RUNS", ROOT / "runs" / "dp_comparison"))
 DATA = ROOT / "dissertation" / "data"
 
 

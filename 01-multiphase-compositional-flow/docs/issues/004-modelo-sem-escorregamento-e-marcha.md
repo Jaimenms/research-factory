@@ -74,6 +74,17 @@ que a condensação começa coincide a 1,5 °C (34,2 contra 32,2–32,9). O defa
 `"kelvin"` (física correta, que é o que interessa para treinar redes); a opção existe para quem
 quiser reproduzir as figuras.
 
+### Contraprova no caso offshore (§5.5, Figuras 32–33)
+
+Com o mesmo balanço de energia (Kelvin, físico), o modelo de não escorregamento reproduz as curvas
+«Modelo no-slip» da dissertação no sistema poço–linha–riser: P = 119,98 contra 119,97 bar no topo
+do poço (1500 m), 117,1 contra 117,9 bar a meio da linha, 114,4 contra 116,1 bar na base do
+riser; T = 65,9 / 52,2 / 42,0 °C contra 67,3 / 52,5 / 41,8 °C; padrão anular em todo o percurso,
+como a dissertação relata para o seu modelo no-slip. Logo a equação de energia e o seu
+fecho estão certos e a discrepância térmica fica **isolada na secção 5.6** (entradas do gasoduto
+diferentes das Tabelas 24–25, ou outra forma de Q_w nesse caso); a hipótese dos °C fica como
+curiosidade, não como correção.
+
 ## Benefício
 
 Caso 5.6 reexecutável em segundos, com derivadas exatas, corrida gravada com o caso completo e

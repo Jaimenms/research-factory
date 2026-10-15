@@ -36,8 +36,11 @@ def stratified_terms(hD, inp: FlowInputs, interfacial="xiao_const", fi_const=0.0
     DL = 4.0 * AL / xp.maximum(SL, 1e-12 * inp.D)
     den_G = (SG + SI) if DG_rule == "taitel_dukler" else (SL + SG)
     DG = 4.0 * AG / xp.maximum(den_G, 1e-12 * inp.D)
+    fm = 1.0 if inp.f_wall_mult is None else inp.f_wall_mult
     fL, _ = fanning(vL, inp.rho_L, inp.mu_L, DL, inp.eps, bk=bk)
     fG, _ = fanning(vG, inp.rho_G, inp.mu_G, DG, inp.eps, bk=bk)
+    fL = fL * fm
+    fG = fG * fm
     tauL = fL * inp.rho_L * vL * vabs(vL, bk) / 2.0
     tauG = fG * inp.rho_G * vG * vabs(vG, bk) / 2.0
     dv = vG - vL

@@ -38,6 +38,10 @@ viscosidade da mistura homogénea de bolhas não dita; Tabela 13 com σ = 0,0072
 | sigmoides | relativas, k = 50 | `k_switch=None` (degraus) |
 | 45° | degrau | `blend_deg > 0` (rampa C¹, issue 008 do mfsim) |
 
+A correlação de H_LS de Gomez (84) só vale até Re_SS ≈ 2e5: acima disso H_LS → 0 e o pistão deixa de
+existir (o piso de 0,05 em `slug_holdup` evita divisões por zero, não é física); o que a torna
+sensível à viscosidade do líquido (issue 001, Nc_eff do C7+).
+
 L_S (87) não afeta nem o holdup nem a perda de carga (as razões L_S/L_U e L_F/L_U não dependem de
 L_S), logo a ambiguidade de unidades de (87) é inócua.
 

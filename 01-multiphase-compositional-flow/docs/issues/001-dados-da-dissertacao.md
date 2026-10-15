@@ -23,7 +23,7 @@ massa específica crítica do metano, o ΔT da tangente hiperbólica de (136), e
 | Cp do C7+ | extrapolação linear da tendência C4–C8 da Tabela 8 até Nc ≈ 40 (MW 560): A = 21,4, B = 340e-3, C = −108,6e-6, D = 0 |
 | H_form do C7+ | −1023 kJ/kg (Tabela 20) × 560 kg/kmol |
 | k_ij | zero |
-| Nc_eff | n-alcanos = n; CO₂, N₂, H₂S = 1; C7+ = (MW − 2)/14 = 39,9 |
+| Nc_eff | n-alcanos = n; CO₂, N₂, H₂S = 1; C7+ = **20** (revisto em 2026-10-15: com 39,9 = (MW − 2)/14 os polinómios de Allan & Teja saem do domínio e dão μ_L = 1,3e-4 Pa·s, Re_SS ≈ 1,6e6 e H_LS de Gomez ≈ 0,02; com 15–30 dão 1,5–4 mPa·s e H_LS 0,7–0,87, e os casos verticais a 20 bar do Apêndice A passam de −83 % para a faixa dos outros) |
 | Pedersen | Pedersen & Fredenslund (1987): Tc, Pc, MW da mistura; α = 1 + 7,378e-3 ρ_r^1,847 MW^0,5173; ρ_c(CH₄) = 162,84 kg/m³; ΔT = T − 91 K; densidade do metano por PR na fase estável |
 | s1 (Tabela 2) | 1,696985927 (Hanley et al. 1975) |
 | B do propano | 28,785 (Smith et al. 2018) |
