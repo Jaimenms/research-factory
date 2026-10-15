@@ -1,0 +1,13 @@
+{
+ "figure": 42,
+ "caption": "Variáveis amostradas para simulação da linha de escoamento",
+ "page": 143,
+ "section": "5.7",
+ "source_images": [
+  "p143_i0.jpeg"
+ ],
+ "status": "skipped",
+ "confidence": "baixa",
+ "panels": [],
+ "notes": "Gráfico de dispersão 3D (pressão × temperatura × vazão) em projeção oblíqua: não é possível recuperar as três coordenadas de cada ponto a partir de uma única projeção 2D. As faixas das variáveis amostradas estão nas Tabelas 27–29 (poço: P 145–185 bar, T 60–100 °C; linha: P 60–100 bar, T 50–90 °C; riser: P 40–80 bar, T 30–70 °C; vazão 2–25 kg/s em todos)."
+}

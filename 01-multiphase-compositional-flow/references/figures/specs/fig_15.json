@@ -1,0 +1,102 @@
+{
+ "figure": 15,
+ "caption": "Massa específica do líquido",
+ "page": 111,
+ "section": "5.1",
+ "source_images": [
+  "p111_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "kg/m³",
+    "scale": "linear",
+    "ticks": [
+     [
+      300.0,
+      211.5
+     ],
+     [
+      400.0,
+      416.5
+     ],
+     [
+      500.0,
+      621.5
+     ],
+     [
+      600.0,
+      824.0
+     ],
+     [
+      700.0,
+      1028.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "kg/m³",
+    "scale": "linear",
+    "ticks": [
+     [
+      700.0,
+      201.5
+     ],
+     [
+      600.0,
+      349.5
+     ],
+     [
+      500.0,
+      499.5
+     ],
+     [
+      400.0,
+      646.5
+     ],
+     [
+      300.0,
+      794.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+}

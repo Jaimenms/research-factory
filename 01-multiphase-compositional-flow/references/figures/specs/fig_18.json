@@ -1,0 +1,106 @@
+{
+ "figure": 18,
+ "caption": "Fração vaporizada",
+ "page": 113,
+ "section": "5.1",
+ "source_images": [
+  "p113_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      190.5
+     ],
+     [
+      0.2,
+      373.5
+     ],
+     [
+      0.4,
+      558.5
+     ],
+     [
+      0.6,
+      741.5
+     ],
+     [
+      0.8,
+      926.5
+     ],
+     [
+      1.0,
+      1109.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      1.0,
+      138.5
+     ],
+     [
+      0.8,
+      280.5
+     ],
+     [
+      0.6,
+      422.5
+     ],
+     [
+      0.4,
+      564.5
+     ],
+     [
+      0.2,
+      705.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+}

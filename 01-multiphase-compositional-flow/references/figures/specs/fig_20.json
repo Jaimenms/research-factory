@@ -1,0 +1,118 @@
+{
+ "figure": 20,
+ "caption": "Viscosidade do líquido",
+ "page": 115,
+ "section": "5.2",
+ "source_images": [
+  "p115_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 62,
+    "bottom": 848,
+    "left": 164,
+    "right": 1218
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "Pa.s",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      198.5
+     ],
+     [
+      0.001,
+      368.5
+     ],
+     [
+      0.002,
+      536.5
+     ],
+     [
+      0.003,
+      704.5
+     ],
+     [
+      0.004,
+      873.0
+     ],
+     [
+      0.005,
+      1042.5
+     ],
+     [
+      0.006,
+      1211.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "Pa.s",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.006,
+      159.0
+     ],
+     [
+      0.005,
+      267.5
+     ],
+     [
+      0.004,
+      378.5
+     ],
+     [
+      0.003,
+      486.5
+     ],
+     [
+      0.002,
+      595.5
+     ],
+     [
+      0.001,
+      706.5
+     ],
+     [
+      0.0,
+      814.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). A maioria dos pontos está aglomerada junto à origem (< 0,001 Pa.s): aí a separação de marcadores é pouco fiável."
+}

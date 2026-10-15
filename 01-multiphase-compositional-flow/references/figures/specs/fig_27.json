@@ -1,0 +1,799 @@
+{
+ "figure": 27,
+ "caption": "Simulações de escoamento horizontal: modelos da literatura e modelo da dissertação",
+ "page": 124,
+ "section": "5.4",
+ "source_images": [
+  "p124_i0.jpeg",
+  "p124_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "4 in",
+   "frame_px": {
+    "top": 132,
+    "bottom": 552,
+    "left": 98,
+    "right": 946
+   },
+   "x": {
+    "label": "Caso",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      1.0,
+      137.0
+     ],
+     [
+      2.0,
+      168.5
+     ],
+     [
+      3.0,
+      201.0
+     ],
+     [
+      4.0,
+      233.5
+     ],
+     [
+      5.0,
+      265.0
+     ],
+     [
+      6.0,
+      297.5
+     ],
+     [
+      7.0,
+      329.0
+     ],
+     [
+      8.0,
+      361.5
+     ],
+     [
+      9.0,
+      394.0
+     ],
+     [
+      10.0,
+      425.5
+     ],
+     [
+      11.0,
+      458.0
+     ],
+     [
+      12.0,
+      490.5
+     ],
+     [
+      13.0,
+      522.0
+     ],
+     [
+      14.0,
+      554.5
+     ],
+     [
+      15.0,
+      586.0
+     ],
+     [
+      16.0,
+      618.5
+     ],
+     [
+      17.0,
+      651.0
+     ],
+     [
+      18.0,
+      682.5
+     ],
+     [
+      19.0,
+      715.0
+     ],
+     [
+      20.0,
+      748.0
+     ],
+     [
+      21.0,
+      779.0
+     ],
+     [
+      22.0,
+      811.5
+     ],
+     [
+      23.0,
+      843.0
+     ],
+     [
+      24.0,
+      875.5
+     ],
+     [
+      25.0,
+      908.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Queda de pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      3.5,
+      151.5
+     ],
+     [
+      3.0,
+      206.5
+     ],
+     [
+      2.5,
+      262.0
+     ],
+     [
+      2.0,
+      315.5
+     ],
+     [
+      1.5,
+      371.0
+     ],
+     [
+      1.0,
+      426.0
+     ],
+     [
+      0.5,
+      480.0
+     ],
+     [
+      0.0,
+      535.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelos da literatura (mín–máx) e modelo da dissertação",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "errorbar",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 90,
+       "satmax": 70
+      }
+     ],
+     "marker_rules": {
+      "circle_blue": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         0,
+         0,
+         255
+        ],
+        "tol": 80
+       }
+      ],
+      "triangle_red": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         255,
+         0,
+         0
+        ],
+        "tol": 80
+       }
+      ]
+     },
+     "half_window": 10
+    }
+   ]
+  },
+  {
+   "name": "6 in",
+   "frame_px": {
+    "top": 132,
+    "bottom": 552,
+    "left": 1116,
+    "right": 1964
+   },
+   "x": {
+    "label": "Caso",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      26.0,
+      1154.0
+     ],
+     [
+      27.0,
+      1186.5
+     ],
+     [
+      28.0,
+      1219.5
+     ],
+     [
+      29.0,
+      1250.5
+     ],
+     [
+      30.0,
+      1283.0
+     ],
+     [
+      31.0,
+      1314.5
+     ],
+     [
+      32.0,
+      1347.0
+     ],
+     [
+      33.0,
+      1380.0
+     ],
+     [
+      34.0,
+      1411.0
+     ],
+     [
+      35.0,
+      1444.0
+     ],
+     [
+      36.0,
+      1476.5
+     ],
+     [
+      37.0,
+      1507.5
+     ],
+     [
+      38.0,
+      1540.5
+     ],
+     [
+      39.0,
+      1571.5
+     ],
+     [
+      40.0,
+      1604.5
+     ],
+     [
+      41.0,
+      1637.0
+     ],
+     [
+      42.0,
+      1668.0
+     ],
+     [
+      43.0,
+      1701.0
+     ],
+     [
+      44.0,
+      1733.5
+     ],
+     [
+      45.0,
+      1765.0
+     ],
+     [
+      46.0,
+      1797.5
+     ],
+     [
+      47.0,
+      1828.5
+     ],
+     [
+      48.0,
+      1861.5
+     ],
+     [
+      49.0,
+      1894.0
+     ],
+     [
+      50.0,
+      1925.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Queda de pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.5,
+      199.0
+     ],
+     [
+      0.4,
+      267.0
+     ],
+     [
+      0.3,
+      333.5
+     ],
+     [
+      0.2,
+      401.0
+     ],
+     [
+      0.1,
+      467.5
+     ],
+     [
+      0.0,
+      535.0
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelos da literatura (mín–máx) e modelo da dissertação",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "errorbar",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 90,
+       "satmax": 70
+      }
+     ],
+     "marker_rules": {
+      "circle_blue": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         0,
+         0,
+         255
+        ],
+        "tol": 80
+       }
+      ],
+      "triangle_red": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         255,
+         0,
+         0
+        ],
+        "tol": 80
+       }
+      ]
+     },
+     "half_window": 10
+    }
+   ]
+  },
+  {
+   "name": "8 in",
+   "frame_px": {
+    "top": 635,
+    "bottom": 1053,
+    "left": 98,
+    "right": 946
+   },
+   "x": {
+    "label": "Caso",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      51.0,
+      137.0
+     ],
+     [
+      52.0,
+      168.5
+     ],
+     [
+      53.0,
+      201.0
+     ],
+     [
+      54.0,
+      233.5
+     ],
+     [
+      55.0,
+      265.0
+     ],
+     [
+      56.0,
+      297.5
+     ],
+     [
+      57.0,
+      329.0
+     ],
+     [
+      58.0,
+      361.5
+     ],
+     [
+      59.0,
+      394.0
+     ],
+     [
+      60.0,
+      425.5
+     ],
+     [
+      61.0,
+      458.0
+     ],
+     [
+      62.0,
+      490.5
+     ],
+     [
+      63.0,
+      522.0
+     ],
+     [
+      64.0,
+      554.5
+     ],
+     [
+      65.0,
+      586.0
+     ],
+     [
+      66.0,
+      618.5
+     ],
+     [
+      67.0,
+      651.0
+     ],
+     [
+      68.0,
+      682.5
+     ],
+     [
+      69.0,
+      715.0
+     ],
+     [
+      70.0,
+      748.0
+     ],
+     [
+      71.0,
+      779.0
+     ],
+     [
+      72.0,
+      811.5
+     ],
+     [
+      73.0,
+      843.0
+     ],
+     [
+      74.0,
+      875.5
+     ],
+     [
+      75.0,
+      908.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Queda de pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.16,
+      662.0
+     ],
+     [
+      0.14,
+      708.5
+     ],
+     [
+      0.12,
+      756.0
+     ],
+     [
+      0.1,
+      802.5
+     ],
+     [
+      0.08,
+      848.5
+     ],
+     [
+      0.06,
+      896.5
+     ],
+     [
+      0.04,
+      942.5
+     ],
+     [
+      0.02,
+      989.0
+     ],
+     [
+      0.0,
+      1036.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelos da literatura (mín–máx) e modelo da dissertação",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "errorbar",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 90,
+       "satmax": 70
+      }
+     ],
+     "marker_rules": {
+      "circle_blue": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         0,
+         0,
+         255
+        ],
+        "tol": 80
+       }
+      ],
+      "triangle_red": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         255,
+         0,
+         0
+        ],
+        "tol": 80
+       }
+      ]
+     },
+     "half_window": 10
+    }
+   ]
+  },
+  {
+   "name": "10 in",
+   "frame_px": {
+    "top": 635,
+    "bottom": 1053,
+    "left": 1116,
+    "right": 1964
+   },
+   "x": {
+    "label": "Caso",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      76.0,
+      1154.0
+     ],
+     [
+      77.0,
+      1186.5
+     ],
+     [
+      78.0,
+      1219.5
+     ],
+     [
+      79.0,
+      1250.5
+     ],
+     [
+      80.0,
+      1283.0
+     ],
+     [
+      81.0,
+      1314.5
+     ],
+     [
+      82.0,
+      1347.0
+     ],
+     [
+      83.0,
+      1380.0
+     ],
+     [
+      84.0,
+      1411.0
+     ],
+     [
+      85.0,
+      1444.0
+     ],
+     [
+      86.0,
+      1476.5
+     ],
+     [
+      87.0,
+      1507.5
+     ],
+     [
+      88.0,
+      1540.5
+     ],
+     [
+      89.0,
+      1571.5
+     ],
+     [
+      90.0,
+      1604.5
+     ],
+     [
+      91.0,
+      1637.0
+     ],
+     [
+      92.0,
+      1668.0
+     ],
+     [
+      93.0,
+      1701.0
+     ],
+     [
+      94.0,
+      1733.5
+     ],
+     [
+      95.0,
+      1765.0
+     ],
+     [
+      96.0,
+      1797.5
+     ],
+     [
+      97.0,
+      1828.5
+     ],
+     [
+      98.0,
+      1861.5
+     ],
+     [
+      99.0,
+      1894.0
+     ],
+     [
+      100.0,
+      1925.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Queda de pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.06,
+      669.5
+     ],
+     [
+      0.05,
+      731.0
+     ],
+     [
+      0.04,
+      791.0
+     ],
+     [
+      0.03,
+      852.5
+     ],
+     [
+      0.02,
+      914.0
+     ],
+     [
+      0.01,
+      975.5
+     ],
+     [
+      0.0,
+      1035.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelos da literatura (mín–máx) e modelo da dissertação",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "errorbar",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 90,
+       "satmax": 70
+      }
+     ],
+     "marker_rules": {
+      "circle_blue": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         0,
+         0,
+         255
+        ],
+        "tol": 80
+       }
+      ],
+      "triangle_red": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         255,
+         0,
+         0
+        ],
+        "tol": 80
+       }
+      ]
+     },
+     "half_window": 10
+    }
+   ]
+  }
+ ],
+ "notes": "A página 124 contém três imagens: p124_i0 (tira superior, 1989×369) e p124_i1 (1989×736) são as duas metades da Figura 27, cortada horizontalmente no PDF; foram empilhadas (vstack) antes da calibração (ticks contínuos confirmam o alinhamento). p124_i2 é a Figura 28. Barras verticais pretas = intervalo [mínimo, máximo] dos modelos da literatura; círculo azul = modelo da dissertação dentro do intervalo; triângulo vermelho = fora do intervalo. Por caso: y_min, y_max (extremos da barra) e y_model (centróide do marcador). Os valores exatos estão no Apêndice A (Tabelas 36–37) — esta digitalização é apenas complementar."
+}

@@ -1,0 +1,592 @@
+[
+ {
+  "figure": 1,
+  "caption": "Formulação da equação geral de conservação",
+  "page": 40,
+  "section": "2",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 2,
+  "caption": "Regimes de escoamento horizontais. Nome dos regimes de escoamento de cima para baixo: estratificado, anular, intermitente, disperso com bolhas",
+  "page": 51,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 3,
+  "caption": "Regimes de escoamento verticais. Nome dos regimes de escoamento da esquerda para a direita: anular, intermitente, disperso com bolhas",
+  "page": 52,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 4,
+  "caption": "Identificação do padrão de escoamento",
+  "page": 57,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 5,
+  "caption": "Padrão de escoamento estratificado",
+  "page": 59,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 6,
+  "caption": "Padrão de escoamento anular",
+  "page": 63,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 7,
+  "caption": "Padrão de escoamento de bolhas",
+  "page": 67,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 8,
+  "caption": "Padrão de escoamento intermitente",
+  "page": 69,
+  "section": "3",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 9,
+  "caption": "Estrutura geral simplificada dos dados requeridos pelo programa",
+  "page": 86,
+  "section": "4",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 10,
+  "caption": "Resolução do problema através do método integrador",
+  "page": 93,
+  "section": "4",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 11,
+  "caption": "Resolução do problema através do método de diferenças finitas",
+  "page": 101,
+  "section": "4",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 12,
+  "caption": "Etapas para o treinamento do modelo substituto",
+  "page": 104,
+  "section": "4",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 13,
+  "caption": "Envelope de fases e pontos analisados",
+  "page": 109,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_13.json",
+  "confidence": "alta",
+  "note": "Envelope gerado pelo HYSYS; 159 pares (P,T) dentro do envelope. As curvas azul/laranja são a linha de bolha e a linha de orvalho (nomes atribuídos pela posição, a figura não as rotula). A curva laranja é quase vertical perto do ponto crítico: aí a extração por coluna devolve os dois extremos (y mín/máx) da coluna."
+ },
+ {
+  "figure": 14,
+  "caption": "Massa específica do vapor",
+  "page": 110,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_14.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+ },
+ {
+  "figure": 15,
+  "caption": "Massa específica do líquido",
+  "page": 111,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_15.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+ },
+ {
+  "figure": 16,
+  "caption": "Entalpia do vapor",
+  "page": 111,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_16.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). Eixos rotulados em unidades de 1e6 J/kg; os valores foram convertidos para J/kg."
+ },
+ {
+  "figure": 17,
+  "caption": "Entalpia do líquido",
+  "page": 112,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_17.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). Eixos rotulados em unidades de 1e6 J/kg; os valores foram convertidos para J/kg."
+ },
+ {
+  "figure": 18,
+  "caption": "Fração vaporizada",
+  "page": 113,
+  "section": "5.1",
+  "status": "digitized",
+  "data_file": "data/fig_18.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+ },
+ {
+  "figure": 19,
+  "caption": "Viscosidade do vapor",
+  "page": 114,
+  "section": "5.2",
+  "status": "digitized",
+  "data_file": "data/fig_19.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). Eixos rotulados em unidades de 1e-5 Pa.s; os valores foram convertidos para Pa.s."
+ },
+ {
+  "figure": 20,
+  "caption": "Viscosidade do líquido",
+  "page": 115,
+  "section": "5.2",
+  "status": "digitized",
+  "data_file": "data/fig_20.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). A maioria dos pontos está aglomerada junto à origem (< 0,001 Pa.s): aí a separação de marcadores é pouco fiável."
+ },
+ {
+  "figure": 21,
+  "caption": "Tensão superficial",
+  "page": 115,
+  "section": "5.2",
+  "status": "digitized",
+  "data_file": "data/fig_21.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+ },
+ {
+  "figure": 22,
+  "caption": "Mapa de escoamento horizontal para ar-água",
+  "page": 118,
+  "section": "5.3",
+  "status": "digitized",
+  "data_file": "data/fig_22.json",
+  "confidence": "alta",
+  "note": "Mapa de padrão de escoamento ar-água (D = 0,025 m) em eixos log-log. Classes segundo a legenda da figura: quadrado azul = bolhas (disperso), losango verde = intermitente, círculo vermelho = anular, triângulo magenta = estratificado. As linhas tracejadas pretas (curvas de transição dos artigos de referência) foram extraídas como cadeias de traços ligados por proximidade/orientação; em junções a atribuição de um traço a uma cadeia pode ser ambígua."
+ },
+ {
+  "figure": 23,
+  "caption": "Mapa de escoamento vertical para ar-água",
+  "page": 118,
+  "section": "5.3",
+  "status": "digitized",
+  "data_file": "data/fig_23.json",
+  "confidence": "alta",
+  "note": "Mapa de padrão de escoamento ar-água (D = 0,025 m) em eixos log-log. Classes segundo a legenda da figura: quadrado azul = bolhas (disperso), losango verde = intermitente, círculo vermelho = anular. As linhas tracejadas pretas (curvas de transição dos artigos de referência) foram extraídas como cadeias de traços ligados por proximidade/orientação; em junções a atribuição de um traço a uma cadeia pode ser ambígua. O tick de 10 m/s do eixo x estava oculto por um marcador; a calibração usa 0,1, 1 e 100 m/s."
+ },
+ {
+  "figure": 24,
+  "caption": "Simulações de escoamento horizontal: modelos da literatura",
+  "page": 122,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_24.json",
+  "confidence": "média",
+  "note": "Quatro painéis (diâmetros 4, 6, 8 e 10 in), 25 casos por painel (eixo x = número do caso, categórico; x foi calibrado com a posição dos 25 ticks). Marcadores de modelos diferentes sobrepõem-se no mesmo caso, pelo que o centróide de um marcador parcialmente oculto pode estar deslocado. Os valores exatos estão no Apêndice A (Tabelas 36–37); esta digitalização é apenas complementar."
+ },
+ {
+  "figure": 25,
+  "caption": "Simulações de escoamento vertical: modelos da literatura",
+  "page": 122,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_25.json",
+  "confidence": "média",
+  "note": "Quatro painéis (diâmetros 4, 6, 8 e 10 in), 25 casos por painel (eixo x = número do caso, categórico; x foi calibrado com a posição dos 25 ticks). Marcadores de modelos diferentes sobrepõem-se no mesmo caso, pelo que o centróide de um marcador parcialmente oculto pode estar deslocado. Os valores exatos estão no Apêndice A (Tabelas 36–37); esta digitalização é apenas complementar. Os marcadores '+' de Aziz et al. (índigo) distinguem-se dos quadrados de Beggs & Brill (roxo) pela cor e pela área; '+' sobre um quadrado roxo fica parcialmente oculto."
+ },
+ {
+  "figure": 26,
+  "caption": "Histograma dos desvios relativos absolutos máximos entre os modelos da literatura",
+  "page": 123,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_26.json",
+  "confidence": "alta",
+  "note": "Dois painéis (tubo horizontal e vertical). Histogramas com 15 classes de largura igual, sem contorno: a extensão total das barras (primeira aresta à última) foi dividida em 15 classes e a altura de cada classe é a mediana do topo das colunas centrais; as contagens são inteiras (valor arredondado em `count`). Barras adjacentes de altura igual não são separáveis sem as classes."
+ },
+ {
+  "figure": 27,
+  "caption": "Simulações de escoamento horizontal: modelos da literatura e modelo da dissertação",
+  "page": 124,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_27.json",
+  "confidence": "média",
+  "note": "A página 124 contém três imagens: p124_i0 (tira superior, 1989×369) e p124_i1 (1989×736) são as duas metades da Figura 27, cortada horizontalmente no PDF; foram empilhadas (vstack) antes da calibração (ticks contínuos confirmam o alinhamento). p124_i2 é a Figura 28. Barras verticais pretas = intervalo [mínimo, máximo] dos modelos da literatura; círculo azul = modelo da dissertação dentro do intervalo; triângulo vermelho = fora do intervalo. Por caso: y_min, y_max (extremos da barra) e y_model (centróide do marcador). Os valores exatos estão no Apêndice A (Tabelas 36–37) — esta digitalização é apenas complementar."
+ },
+ {
+  "figure": 28,
+  "caption": "Simulações de escoamento vertical: modelos da literatura e modelo da dissertação",
+  "page": 124,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_28.json",
+  "confidence": "média",
+  "note": "Barras verticais pretas = intervalo [mínimo, máximo] dos modelos da literatura; círculo azul = modelo da dissertação dentro do intervalo; triângulo vermelho = fora do intervalo. Por caso: y_min, y_max (extremos da barra) e y_model (centróide do marcador). Os valores exatos estão no Apêndice A (Tabelas 36–37) — esta digitalização é apenas complementar."
+ },
+ {
+  "figure": 29,
+  "caption": "Distribuição dos parâmetros",
+  "page": 125,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_29.json",
+  "confidence": "alta",
+  "note": "Painel de 4 in da Figura 27 anotado com a estrutura dos parâmetros: grupos de 5 casos por pressão de entrada (20, 55, 90, 125, 160 bar) e, dentro de cada grupo, vazão 2, 4, 6, 8, 10 kg/s (casos 1–5: 20 bar; 6–10: 55 bar; 11–15: 90 bar; 16–20: 125 bar; 21–25: 160 bar). As anotações laranja são ignoradas pela segmentação. Barras verticais pretas = intervalo [mínimo, máximo] dos modelos da literatura; círculo azul = modelo da dissertação dentro do intervalo; triângulo vermelho = fora do intervalo. Por caso: y_min, y_max (extremos da barra) e y_model (centróide do marcador). Os valores exatos estão no Apêndice A (Tabelas 36–37) — esta digitalização é apenas complementar."
+ },
+ {
+  "figure": 30,
+  "caption": "Mapa do padrão de escoamento com as condições do caso 5",
+  "page": 127,
+  "section": "5.4",
+  "status": "digitized",
+  "data_file": "data/fig_30.json",
+  "confidence": "alta",
+  "note": "Mapa de regiões coloridas (azul = disperso com bolhas, verde = intermitente, vermelho = anular) para o fluido do caso 5 (vertical). Extraíram-se as fronteiras entre regiões (por coluna: limite azul/verde; por linha: limite (azul|verde)/vermelho) e a posição do 'x' (velocidades superficiais do caso 5). As caixas de texto foram excluídas das máscaras."
+ },
+ {
+  "figure": 31,
+  "caption": "Esquemático de sistema de produção de petróleo",
+  "page": 130,
+  "section": "5.5",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 32,
+  "caption": "Perfis de pressão do exemplo de sistema de produção offshore",
+  "page": 132,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_32.json",
+  "confidence": "alta",
+  "note": "Poço (0–1500 m), linha (1500–7500 m) e riser (7500–7800 m). Modelo = dissertação com escorregamento; Modelo no-slip = sem escorregamento; BB = Beggs & Brill (HYSYS); TULSA (HYSYS). Caixa da legenda excluída."
+ },
+ {
+  "figure": 33,
+  "caption": "Perfis de temperatura do exemplo de sistema de produção offshore",
+  "page": 132,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_33.json",
+  "confidence": "alta",
+  "note": "Ver Figura 32. Caixa da legenda excluída."
+ },
+ {
+  "figure": 34,
+  "caption": "Perfis de hold-up do exemplo de sistema de produção offshore",
+  "page": 133,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_34.json",
+  "confidence": "alta",
+  "note": "Ver Figura 32. Saltos verticais em 1500 m e 7500 m (mudança de inclinação): nessas colunas a extração devolve os dois extremos. Caixa da legenda (canto inferior esquerdo) excluída; pode cortar uns píxeis da curva 'Modelo no-slip' junto de x≈800 m."
+ },
+ {
+  "figure": 35,
+  "caption": "Comparação da fração de líquido através dos modelos mecanicistas e do flash termodinâmico",
+  "page": 134,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_35.json",
+  "confidence": "alta",
+  "note": "Título do gráfico: 'Fração volumétrica de líquido - Holdup'. Saltos verticais em 1500 m e 7500 m."
+ },
+ {
+  "figure": 36,
+  "caption": "Composição de CO2 nas fases líquido e vapor do exemplo de sistema de produção offshore",
+  "page": 135,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_36.json",
+  "confidence": "média",
+  "note": "Dois eixos y: 'Líquido' (oliva, traço-ponto) no eixo esquerdo e 'Vapor' (preto, pontilhado) no eixo direito (y2). A série preta é segmentada por escuridão dentro da moldura; as duas caixas de legenda foram excluídas (a de 'Vapor' cobre o início da curva, x < ~80 m). Intervalo do eixo y2 muito estreito (2,5e-5), logo a incerteza relativa em y2 é maior."
+ },
+ {
+  "figure": 37,
+  "caption": "Padrões de escoamento do exemplo de sistema de produção offshore",
+  "page": 136,
+  "section": "5.5",
+  "status": "digitized",
+  "data_file": "data/fig_37.json",
+  "confidence": "alta",
+  "note": "Códigos: 0 = estratificado, 2 = anular, 3 = intermitente, 4 = disperso com bolhas. Séries extraídas como degraus (`steps`: patamares [x_início, x_fim, nível]) além da curva completa. 'Modelo mecanístico' e 'Modelo no-slip' coincidem exatamente (a azul só é visível nos intervalos do traço-ponto ciano). As transições de 'Tulsa' estão desenhadas como rampas, não como degraus. 'Tulsa' é pontilhada e pálida no JPEG: para evitar o ringing de croma em torno das outras séries, exclui-se uma vizinhança de 16 px das outras séries; por isso só sobrevivem o patamar 4 (0–850 m) e as rampas (4→3 em ~850–900 m e 3→0 em ~1500–1800 m). Os patamares de 'Tulsa' coincidentes com outras séries (3 com BB em 900–1500 m e no riser 7500–7800 m; 0 com mecanístico/no-slip em 1800–7500 m) não são recuperáveis da imagem e estão descritos no texto (p. 136)."
+ },
+ {
+  "figure": 38,
+  "caption": "Gasoduto: perfil de pressão",
+  "page": 138,
+  "section": "5.6",
+  "status": "digitized",
+  "data_file": "data/fig_38.json",
+  "confidence": "alta",
+  "note": "Casos (Tabela 25): 1 = 60 °C, U = 1; 2 = 60 °C, U = 3; 3 = 60 °C, U = 6; 4 = 80 °C, U = 1; 5 = 80 °C, U = 3; 6 = 80 °C, U = 6 W/(m²K). Séries 2 e 5 são pontilhadas: segmentadas por tonalidade (pontos pálidos no JPEG), excluindo uma vizinhança de 6 px das outras séries e filtrando pontos isolados; ficam com lacunas onde cruzam/encostam a outras séries. Caixa da legenda excluída. Todas as séries partem de 70 bar em x = 0 e sobrepõem-se nos primeiros ~500 m."
+ },
+ {
+  "figure": 39,
+  "caption": "Gasoduto: perfil de temperatura",
+  "page": 139,
+  "section": "5.6",
+  "status": "digitized",
+  "data_file": "data/fig_39.json",
+  "confidence": "alta",
+  "note": "Casos (Tabela 25): 1 = 60 °C, U = 1; 2 = 60 °C, U = 3; 3 = 60 °C, U = 6; 4 = 80 °C, U = 1; 5 = 80 °C, U = 3; 6 = 80 °C, U = 6 W/(m²K). Séries 2 e 5 são pontilhadas: segmentadas por tonalidade (pontos pálidos no JPEG), excluindo uma vizinhança de 6 px das outras séries e filtrando pontos isolados; ficam com lacunas onde cruzam/encostam a outras séries. Caixa da legenda excluída. Moldura medida à mão (linhas da moldura mais claras nesta imagem)."
+ },
+ {
+  "figure": 40,
+  "caption": "Gasoduto: perfil de fração vaporizada",
+  "page": 139,
+  "section": "5.6",
+  "status": "digitized",
+  "data_file": "data/fig_40.json",
+  "confidence": "alta",
+  "note": "Casos (Tabela 25): 1 = 60 °C, U = 1; 2 = 60 °C, U = 3; 3 = 60 °C, U = 6; 4 = 80 °C, U = 1; 5 = 80 °C, U = 3; 6 = 80 °C, U = 6 W/(m²K). Séries 2 e 5 são pontilhadas: segmentadas por tonalidade (pontos pálidos no JPEG), excluindo uma vizinhança de 6 px das outras séries e filtrando pontos isolados; ficam com lacunas onde cruzam/encostam a outras séries. Caixa da legenda excluída. Os ticks de 1000 m e 6000 m do eixo x estavam ocultos; a calibração usa os restantes 7. Séries 1, 4 e 5 permanecem em 1,000 em todo o comprimento (sobrepostas); séries 2, 3 e 6 caem quase verticalmente no ponto de orvalho (x ≈ 6900, 3350 e 4350 m): nessas colunas a extração devolve os dois extremos."
+ },
+ {
+  "figure": 41,
+  "caption": "Variáveis amostradas para simulação do poço",
+  "page": 142,
+  "section": "5.7",
+  "status": "skipped",
+  "data_file": null,
+  "confidence": null,
+  "note": "Gráfico de dispersão 3D (pressão × temperatura × vazão) em projeção oblíqua: não é possível recuperar as três coordenadas de cada ponto a partir de uma única projeção 2D. As faixas das variáveis amostradas estão nas Tabelas 27–29 (poço: P 145–185 bar, T 60–100 °C; linha: P 60–100 bar, T 50–90 °C; riser: P 40–80 bar, T 30–70 °C; vazão 2–25 kg/s em todos)."
+ },
+ {
+  "figure": 42,
+  "caption": "Variáveis amostradas para simulação da linha de escoamento",
+  "page": 143,
+  "section": "5.7",
+  "status": "skipped",
+  "data_file": null,
+  "confidence": null,
+  "note": "Gráfico de dispersão 3D (pressão × temperatura × vazão) em projeção oblíqua: não é possível recuperar as três coordenadas de cada ponto a partir de uma única projeção 2D. As faixas das variáveis amostradas estão nas Tabelas 27–29 (poço: P 145–185 bar, T 60–100 °C; linha: P 60–100 bar, T 50–90 °C; riser: P 40–80 bar, T 30–70 °C; vazão 2–25 kg/s em todos)."
+ },
+ {
+  "figure": 43,
+  "caption": "Variáveis amostradas para simulação do riser",
+  "page": 143,
+  "section": "5.7",
+  "status": "skipped",
+  "data_file": null,
+  "confidence": null,
+  "note": "Gráfico de dispersão 3D (pressão × temperatura × vazão) em projeção oblíqua: não é possível recuperar as três coordenadas de cada ponto a partir de uma única projeção 2D. As faixas das variáveis amostradas estão nas Tabelas 27–29 (poço: P 145–185 bar, T 60–100 °C; linha: P 60–100 bar, T 50–90 °C; riser: P 40–80 bar, T 30–70 °C; vazão 2–25 kg/s em todos)."
+ },
+ {
+  "figure": 44,
+  "caption": "Estrutura do modelo substituto",
+  "page": 144,
+  "section": "5.7",
+  "status": "schematic",
+  "data_file": null,
+  "confidence": null,
+  "note": "Esquema/diagrama sem dados numéricos."
+ },
+ {
+  "figure": 45,
+  "caption": "treinamento RNA poço – evolução do erro",
+  "page": 147,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_45.json",
+  "confidence": "média",
+  "note": "Evolução do erro médio quadrático durante o treino (um marcador por época). Marcadores grandes muito sobrepostos junto de 0: componentes grandes divididas por máximos da transformada de distância; n_markers é uma estimativa."
+ },
+ {
+  "figure": 46,
+  "caption": "Teste RNA poço – histograma da função de erro",
+  "page": 148,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_46.json",
+  "confidence": "média",
+  "note": "Histograma do erro relativo absoluto (%) no teste com 36 classes de largura igual entre 0 e o máximo dos dados (a aresta direita da última barra é medida na imagem; a largura resultante está em `bin_width`). Cada série soma ~50 % (as percentagens parecem normalizadas pelo total de amostras das duas variáveis). Barras hachuradas: 'Pressão' (azul, xadrez) e 'Temperatura' (verde, diagonal) sobre fundo branco; 'Sobreposição' (cinza escuro) = mín(P, T) em cada classe, por baixo das hachuras. Método: em cada classe mede-se o topo da tinta (máx(P, T)) e o topo da região cinza (mín(P, T) = sobreposição); a tonalidade (azulada/esverdeada) da faixa entre os dois topos diz qual das séries é a maior. A compressão JPEG esbate as hachuras, pelo que a atribuição P/T em classes muito baixas pode falhar; 'kind' em cada classe regista o caso (P > T, T > P, P = T, P only, T only, empty)."
+ },
+ {
+  "figure": 47,
+  "caption": "Teste RNA poço – validação da pressão",
+  "page": 148,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_47.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 48,
+  "caption": "Teste RNA poço – validação da temperatura",
+  "page": 149,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_48.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 49,
+  "caption": "Treinamento RNA linha de escoamento – evolução do erro",
+  "page": 149,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_49.json",
+  "confidence": "média",
+  "note": "Evolução do erro médio quadrático durante o treino (um marcador por época). Marcadores grandes muito sobrepostos junto de 0: componentes grandes divididas por máximos da transformada de distância; n_markers é uma estimativa."
+ },
+ {
+  "figure": 50,
+  "caption": "Teste RNA linha de escoamento – histograma da função de erro",
+  "page": 150,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_50.json",
+  "confidence": "média",
+  "note": "Histograma do erro relativo absoluto (%) no teste com 18 classes de largura igual entre 0 e o máximo dos dados (a aresta direita da última barra é medida na imagem; a largura resultante está em `bin_width`). Cada série soma ~50 % (as percentagens parecem normalizadas pelo total de amostras das duas variáveis). Barras hachuradas: 'Pressão' (azul, xadrez) e 'Temperatura' (verde, diagonal) sobre fundo branco; 'Sobreposição' (cinza escuro) = mín(P, T) em cada classe, por baixo das hachuras. Método: em cada classe mede-se o topo da tinta (máx(P, T)) e o topo da região cinza (mín(P, T) = sobreposição); a tonalidade (azulada/esverdeada) da faixa entre os dois topos diz qual das séries é a maior. A compressão JPEG esbate as hachuras, pelo que a atribuição P/T em classes muito baixas pode falhar; 'kind' em cada classe regista o caso (P > T, T > P, P = T, P only, T only, empty). Moldura medida à mão (deteção automática falhou)."
+ },
+ {
+  "figure": 51,
+  "caption": "teste RNA linha de escoamento – validação da pressão",
+  "page": 150,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_51.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 52,
+  "caption": "teste RNA linha de escoamento – validação da temperatura",
+  "page": 151,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_52.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 53,
+  "caption": "Treinamento RNA riser – evolução do erro",
+  "page": 151,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_53.json",
+  "confidence": "média",
+  "note": "Evolução do erro médio quadrático durante o treino (um marcador por época). Marcadores grandes muito sobrepostos junto de 0: componentes grandes divididas por máximos da transformada de distância; n_markers é uma estimativa."
+ },
+ {
+  "figure": 54,
+  "caption": "Teste RNA riser – histograma da função de erro",
+  "page": 152,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_54.json",
+  "confidence": "média",
+  "note": "Histograma do erro relativo absoluto (%) no teste com 36 classes de largura igual entre 0 e o máximo dos dados (a aresta direita da última barra é medida na imagem; a largura resultante está em `bin_width`). Cada série soma ~50 % (as percentagens parecem normalizadas pelo total de amostras das duas variáveis). Barras hachuradas: 'Pressão' (azul, xadrez) e 'Temperatura' (verde, diagonal) sobre fundo branco; 'Sobreposição' (cinza escuro) = mín(P, T) em cada classe, por baixo das hachuras. Método: em cada classe mede-se o topo da tinta (máx(P, T)) e o topo da região cinza (mín(P, T) = sobreposição); a tonalidade (azulada/esverdeada) da faixa entre os dois topos diz qual das séries é a maior. A compressão JPEG esbate as hachuras, pelo que a atribuição P/T em classes muito baixas pode falhar; 'kind' em cada classe regista o caso (P > T, T > P, P = T, P only, T only, empty)."
+ },
+ {
+  "figure": 55,
+  "caption": "Teste RNA riser – validação da pressão",
+  "page": 152,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_55.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 56,
+  "caption": "teste RNA riser – validação da temperatura",
+  "page": 153,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_56.json",
+  "confidence": "média",
+  "note": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+ },
+ {
+  "figure": 57,
+  "caption": "Perfil de temperatura - modelo substituto versus modelo físico",
+  "page": 154,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_57.json",
+  "confidence": "alta",
+  "note": "Vazão 20 kg/s. 'RNA' = 4 pontos (entrada do poço, saída do poço/entrada da linha, saída da linha/entrada do riser, saída do riser). Caixa da legenda excluída. Os desvios por ponto estão na Tabela 33."
+ },
+ {
+  "figure": 58,
+  "caption": "Perfil de pressão - modelo substituto versus modelo físico",
+  "page": 154,
+  "section": "5.7",
+  "status": "digitized",
+  "data_file": "data/fig_58.json",
+  "confidence": "alta",
+  "note": "Ver Figura 57."
+ },
+ {
+  "figure": 59,
+  "caption": "Relação entre número de pontos e tempo de execução",
+  "page": 158,
+  "section": "5.8",
+  "status": "digitized",
+  "data_file": "data/fig_59.json",
+  "confidence": "alta",
+  "note": "Gráfico do Excel. Pontos: 12, 30 e 78 pontos de malha (Tabela 35: escorregamento 37, 47(?) e 230 s). As linhas de tendência exponenciais (pontilhadas) foram extraídas após remover as componentes grandes (marcadores). Excluídas: legenda interna e os dois textos de equação."
+ }
+]

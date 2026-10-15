@@ -1,0 +1,157 @@
+{
+ "figure": 57,
+ "caption": "Perfil de temperatura - modelo substituto versus modelo físico",
+ "page": 154,
+ "section": "5.7",
+ "source_images": [
+  "p154_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 109,
+    "bottom": 799,
+    "left": 150,
+    "right": 1077
+   },
+   "x": {
+    "label": "Comprimento",
+    "unit": "m",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      193.5
+     ],
+     [
+      1000.0,
+      302.5
+     ],
+     [
+      2000.0,
+      410.5
+     ],
+     [
+      3000.0,
+      518.5
+     ],
+     [
+      4000.0,
+      626.5
+     ],
+     [
+      5000.0,
+      735.5
+     ],
+     [
+      6000.0,
+      845.5
+     ],
+     [
+      7000.0,
+      953.5
+     ],
+     [
+      8000.0,
+      1061.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Temperatura",
+    "unit": "°C",
+    "scale": "linear",
+    "ticks": [
+     [
+      80.0,
+      139.5
+     ],
+     [
+      75.0,
+      231.5
+     ],
+     [
+      70.0,
+      320.5
+     ],
+     [
+      65.0,
+      412.5
+     ],
+     [
+      60.0,
+      501.5
+     ],
+     [
+      55.0,
+      593.5
+     ],
+     [
+      50.0,
+      682.5
+     ],
+     [
+      45.0,
+      772.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelo físico",
+     "legend_color_rgb": [
+      31,
+      119,
+      180
+     ],
+     "type": "line",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        31,
+        119,
+        180
+       ],
+       "tol": 50
+      }
+     ]
+    },
+    {
+     "name": "RNA",
+     "legend_color_rgb": [
+      255,
+      0,
+      0
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        255,
+        0,
+        0
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 40
+    }
+   ],
+   "exclude_px": [
+    [
+     800,
+     118,
+     1070,
+     215
+    ]
+   ]
+  }
+ ],
+ "notes": "Vazão 20 kg/s. 'RNA' = 4 pontos (entrada do poço, saída do poço/entrada da linha, saída da linha/entrada do riser, saída do riser). Caixa da legenda excluída. Os desvios por ponto estão na Tabela 33."
+}

@@ -1,0 +1,130 @@
+{
+ "figure": 50,
+ "caption": "Teste RNA linha de escoamento – histograma da função de erro",
+ "page": 150,
+ "section": "5.7",
+ "source_images": [
+  "p150_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 101,
+    "bottom": 737,
+    "left": 139,
+    "right": 994
+   },
+   "x": {
+    "label": "Erro relativo absoluto",
+    "unit": "%",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      139.5
+     ],
+     [
+      20.0,
+      310.0
+     ],
+     [
+      40.0,
+      480.5
+     ],
+     [
+      60.0,
+      653.0
+     ],
+     [
+      80.0,
+      823.5
+     ],
+     [
+      100.0,
+      993.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Porcentagem dos dados",
+    "unit": "%",
+    "scale": "linear",
+    "ticks": [
+     [
+      30.0,
+      144.0
+     ],
+     [
+      25.0,
+      242.0
+     ],
+     [
+      20.0,
+      342.0
+     ],
+     [
+      15.0,
+      440.0
+     ],
+     [
+      10.0,
+      538.5
+     ],
+     [
+      5.0,
+      638.0
+     ],
+     [
+      0.0,
+      736.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pressão / Temperatura / Sobreposição",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "hist_overlay",
+     "bins": {
+      "start": 0.0,
+      "n": 18,
+      "end": "auto"
+     },
+     "v_ink": 230,
+     "v_gray": 175,
+     "hue_rules": {
+      "blue": {
+       "kind": "blueness",
+       "min": 18
+      },
+      "green": {
+       "kind": "greenness",
+       "min": 25
+      }
+     },
+     "out_names": {
+      "blue": "Pressão",
+      "green": "Temperatura",
+      "gray": "Sobreposição"
+     }
+    }
+   ],
+   "exclude_px": [
+    [
+     680,
+     112,
+     915,
+     262
+    ]
+   ]
+  }
+ ],
+ "notes": "Histograma do erro relativo absoluto (%) no teste com 18 classes de largura igual entre 0 e o máximo dos dados (a aresta direita da última barra é medida na imagem; a largura resultante está em `bin_width`). Cada série soma ~50 % (as percentagens parecem normalizadas pelo total de amostras das duas variáveis). Barras hachuradas: 'Pressão' (azul, xadrez) e 'Temperatura' (verde, diagonal) sobre fundo branco; 'Sobreposição' (cinza escuro) = mín(P, T) em cada classe, por baixo das hachuras. Método: em cada classe mede-se o topo da tinta (máx(P, T)) e o topo da região cinza (mín(P, T) = sobreposição); a tonalidade (azulada/esverdeada) da faixa entre os dois topos diz qual das séries é a maior. A compressão JPEG esbate as hachuras, pelo que a atribuição P/T em classes muito baixas pode falhar; 'kind' em cada classe regista o caso (P > T, T > P, P = T, P only, T only, empty). Moldura medida à mão (deteção automática falhou)."
+}

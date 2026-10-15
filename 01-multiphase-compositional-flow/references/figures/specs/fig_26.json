@@ -1,0 +1,222 @@
+{
+ "figure": 26,
+ "caption": "Histograma dos desvios relativos absolutos máximos entre os modelos da literatura",
+ "page": 123,
+ "section": "5.4",
+ "source_images": [
+  "p123_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "horizontal",
+   "frame_px": {
+    "top": 49,
+    "bottom": 927,
+    "left": 94,
+    "right": 903
+   },
+   "x": {
+    "label": "Desvios relativos absolutos",
+    "unit": "%",
+    "scale": "linear",
+    "ticks": [
+     [
+      200.0,
+      192.0
+     ],
+     [
+      400.0,
+      317.5
+     ],
+     [
+      600.0,
+      444.5
+     ],
+     [
+      800.0,
+      571.0
+     ],
+     [
+      1000.0,
+      698.0
+     ],
+     [
+      1200.0,
+      825.0
+     ]
+    ]
+   },
+   "y": {
+    "label": "Número de casos simulados",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      25.0,
+      90.5
+     ],
+     [
+      20.0,
+      258.0
+     ],
+     [
+      15.0,
+      425.5
+     ],
+     [
+      10.0,
+      593.0
+     ],
+     [
+      5.0,
+      759.0
+     ],
+     [
+      0.0,
+      926.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Casos (tubo horizontal)",
+     "legend_color_rgb": [
+      31,
+      119,
+      180
+     ],
+     "type": "bar",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        31,
+        119,
+        180
+       ],
+       "tol": 60
+      }
+     ],
+     "bins": {
+      "n": 15
+     }
+    }
+   ]
+  },
+  {
+   "name": "vertical",
+   "frame_px": {
+    "top": 49,
+    "bottom": 927,
+    "left": 1065,
+    "right": 1874
+   },
+   "x": {
+    "label": "Desvios relativos absolutos",
+    "unit": "%",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      1079.5
+     ],
+     [
+      20.0,
+      1171.5
+     ],
+     [
+      40.0,
+      1264.0
+     ],
+     [
+      60.0,
+      1356.0
+     ],
+     [
+      80.0,
+      1448.0
+     ],
+     [
+      100.0,
+      1540.0
+     ],
+     [
+      120.0,
+      1632.0
+     ],
+     [
+      140.0,
+      1724.0
+     ],
+     [
+      160.0,
+      1817.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Número de casos simulados",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      30.0,
+      167.0
+     ],
+     [
+      25.0,
+      294.0
+     ],
+     [
+      20.0,
+      420.5
+     ],
+     [
+      15.0,
+      547.5
+     ],
+     [
+      10.0,
+      673.0
+     ],
+     [
+      5.0,
+      800.0
+     ],
+     [
+      0.0,
+      926.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Casos (tubo vertical)",
+     "legend_color_rgb": [
+      31,
+      119,
+      180
+     ],
+     "type": "bar",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        31,
+        119,
+        180
+       ],
+       "tol": 60
+      }
+     ],
+     "bins": {
+      "n": 15
+     }
+    }
+   ]
+  }
+ ],
+ "notes": "Dois painéis (tubo horizontal e vertical). Histogramas com 15 classes de largura igual, sem contorno: a extensão total das barras (primeira aresta à última) foi dividida em 15 classes e a altura de cada classe é a mediana do topo das colunas centrais; as contagens são inteiras (valor arredondado em `count`). Barras adjacentes de altura igual não são separáveis sem as classes."
+}

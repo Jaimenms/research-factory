@@ -1,0 +1,110 @@
+{
+ "figure": 21,
+ "caption": "Tensão superficial",
+ "page": 115,
+ "section": "5.2",
+ "source_images": [
+  "p115_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "N/m",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.005,
+      347.5
+     ],
+     [
+      0.01,
+      542.5
+     ],
+     [
+      0.015,
+      737.5
+     ],
+     [
+      0.02,
+      932.5
+     ],
+     [
+      0.025,
+      1127.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "N/m",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.03,
+      197.5
+     ],
+     [
+      0.025,
+      304.5
+     ],
+     [
+      0.02,
+      410.5
+     ],
+     [
+      0.015,
+      516.5
+     ],
+     [
+      0.01,
+      623.0
+     ],
+     [
+      0.005,
+      729.5
+     ],
+     [
+      0.0,
+      835.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+}

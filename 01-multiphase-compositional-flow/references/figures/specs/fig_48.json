@@ -1,0 +1,131 @@
+{
+ "figure": 48,
+ "caption": "Teste RNA poço – validação da temperatura",
+ "page": 149,
+ "section": "5.7",
+ "source_images": [
+  "p149_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 101,
+    "bottom": 737,
+    "left": 139,
+    "right": 994
+   },
+   "x": {
+    "label": "Estimado",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      179.0
+     ],
+     [
+      0.2,
+      334.5
+     ],
+     [
+      0.4,
+      489.5
+     ],
+     [
+      0.6,
+      644.5
+     ],
+     [
+      0.8,
+      799.5
+     ],
+     [
+      1.0,
+      954.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Esperado",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      1.0,
+      128.5
+     ],
+     [
+      0.8,
+      245.5
+     ],
+     [
+      0.6,
+      361.5
+     ],
+     [
+      0.4,
+      476.5
+     ],
+     [
+      0.2,
+      592.0
+     ],
+     [
+      0.0,
+      707.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (temperatura, poço)",
+     "legend_color_rgb": [
+      0,
+      128,
+      0
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        128,
+        0
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    },
+    {
+     "name": "Reta y = x",
+     "legend_color_rgb": [
+      31,
+      119,
+      180
+     ],
+     "type": "line",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        31,
+        119,
+        180
+       ],
+       "tol": 40
+      }
+     ],
+     "max_span": 8
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade do teste da RNA (x = valor estimado pela rede, y = valor esperado do modelo físico; variáveis normalizadas em [0, 1]). A reta y = x (tab:blue) foi extraída como série 'Reta y = x'. Marcadores sobrepostos divididos por máximos da transformada de distância (n_markers estimado)."
+}

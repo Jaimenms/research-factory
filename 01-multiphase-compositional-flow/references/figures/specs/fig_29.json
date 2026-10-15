@@ -1,0 +1,212 @@
+{
+ "figure": 29,
+ "caption": "Distribuição dos parâmetros",
+ "page": 125,
+ "section": "5.4",
+ "source_images": [
+  "p125_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 80,
+    "bottom": 747,
+    "left": 164,
+    "right": 1511
+   },
+   "x": {
+    "label": "Caso",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      1.0,
+      226.5
+     ],
+     [
+      2.0,
+      276.0
+     ],
+     [
+      3.0,
+      328.0
+     ],
+     [
+      4.0,
+      379.5
+     ],
+     [
+      5.0,
+      429.5
+     ],
+     [
+      6.0,
+      481.0
+     ],
+     [
+      7.0,
+      531.0
+     ],
+     [
+      8.0,
+      582.5
+     ],
+     [
+      9.0,
+      634.5
+     ],
+     [
+      10.0,
+      684.0
+     ],
+     [
+      11.0,
+      736.0
+     ],
+     [
+      12.0,
+      787.5
+     ],
+     [
+      13.0,
+      837.5
+     ],
+     [
+      14.0,
+      889.0
+     ],
+     [
+      15.0,
+      939.0
+     ],
+     [
+      16.0,
+      990.5
+     ],
+     [
+      17.0,
+      1042.5
+     ],
+     [
+      18.0,
+      1092.0
+     ],
+     [
+      19.0,
+      1144.0
+     ],
+     [
+      20.0,
+      1195.5
+     ],
+     [
+      21.0,
+      1245.5
+     ],
+     [
+      22.0,
+      1297.0
+     ],
+     [
+      23.0,
+      1347.0
+     ],
+     [
+      24.0,
+      1398.5
+     ],
+     [
+      25.0,
+      1450.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Queda de pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      3.5,
+      110.5
+     ],
+     [
+      3.0,
+      198.5
+     ],
+     [
+      2.5,
+      286.0
+     ],
+     [
+      2.0,
+      371.5
+     ],
+     [
+      1.5,
+      459.5
+     ],
+     [
+      1.0,
+      547.0
+     ],
+     [
+      0.5,
+      633.0
+     ],
+     [
+      0.0,
+      720.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelos da literatura (mín–máx) e modelo da dissertação",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "errorbar",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 90,
+       "satmax": 70
+      }
+     ],
+     "marker_rules": {
+      "circle_blue": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         0,
+         0,
+         255
+        ],
+        "tol": 80
+       }
+      ],
+      "triangle_red": [
+       {
+        "kind": "rgb",
+        "rgb": [
+         255,
+         0,
+         0
+        ],
+        "tol": 80
+       }
+      ]
+     },
+     "half_window": 10
+    }
+   ]
+  }
+ ],
+ "notes": "Painel de 4 in da Figura 27 anotado com a estrutura dos parâmetros: grupos de 5 casos por pressão de entrada (20, 55, 90, 125, 160 bar) e, dentro de cada grupo, vazão 2, 4, 6, 8, 10 kg/s (casos 1–5: 20 bar; 6–10: 55 bar; 11–15: 90 bar; 16–20: 125 bar; 21–25: 160 bar). As anotações laranja são ignoradas pela segmentação. Barras verticais pretas = intervalo [mínimo, máximo] dos modelos da literatura; círculo azul = modelo da dissertação dentro do intervalo; triângulo vermelho = fora do intervalo. Por caso: y_min, y_max (extremos da barra) e y_model (centróide do marcador). Os valores exatos estão no Apêndice A (Tabelas 36–37) — esta digitalização é apenas complementar."
+}

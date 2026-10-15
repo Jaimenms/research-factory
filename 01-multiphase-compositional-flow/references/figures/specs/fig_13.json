@@ -1,0 +1,189 @@
+{
+ "figure": 13,
+ "caption": "Envelope de fases e pontos analisados",
+ "page": 109,
+ "section": "5.1",
+ "source_images": [
+  "p109_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Temperatura",
+    "unit": "K",
+    "scale": "linear",
+    "ticks": [
+     [
+      150.0,
+      255.5
+     ],
+     [
+      200.0,
+      365.5
+     ],
+     [
+      250.0,
+      473.5
+     ],
+     [
+      300.0,
+      583.5
+     ],
+     [
+      350.0,
+      694.5
+     ],
+     [
+      400.0,
+      804.5
+     ],
+     [
+      450.0,
+      914.5
+     ],
+     [
+      500.0,
+      1024.5
+     ],
+     [
+      550.0,
+      1135.0
+     ]
+    ]
+   },
+   "y": {
+    "label": "Pressão",
+    "unit": "bar",
+    "scale": "linear",
+    "ticks": [
+     [
+      120.0,
+      164.5
+     ],
+     [
+      100.0,
+      272.5
+     ],
+     [
+      80.0,
+      381.5
+     ],
+     [
+      60.0,
+      489.5
+     ],
+     [
+      40.0,
+      597.5
+     ],
+     [
+      20.0,
+      705.5
+     ],
+     [
+      0.0,
+      814.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos analisados (P,T)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 40
+    },
+    {
+     "name": "Curva azul do envelope (bolha)",
+     "legend_color_rgb": [
+      31,
+      119,
+      180
+     ],
+     "type": "line",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        31,
+        119,
+        180
+       ],
+       "tol": 45
+      }
+     ],
+     "max_span": 40
+    },
+    {
+     "name": "Curva laranja do envelope (orvalho)",
+     "legend_color_rgb": [
+      255,
+      127,
+      14
+     ],
+     "type": "line",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        255,
+        127,
+        14
+       ],
+       "tol": 60
+      }
+     ],
+     "max_span": 40
+    },
+    {
+     "name": "Ponto crítico",
+     "legend_color_rgb": [
+      255,
+      0,
+      0
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        255,
+        0,
+        0
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 40
+    }
+   ]
+  }
+ ],
+ "notes": "Envelope gerado pelo HYSYS; 159 pares (P,T) dentro do envelope. As curvas azul/laranja são a linha de bolha e a linha de orvalho (nomes atribuídos pela posição, a figura não as rotula). A curva laranja é quase vertical perto do ponto crítico: aí a extração por coluna devolve os dois extremos (y mín/máx) da coluna."
+}

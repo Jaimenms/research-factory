@@ -1,0 +1,122 @@
+{
+ "figure": 19,
+ "caption": "Viscosidade do vapor",
+ "page": 114,
+ "section": "5.2",
+ "source_images": [
+  "p114_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 114,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "Pa.s",
+    "scale": "linear",
+    "ticks": [
+     [
+      5e-06,
+      162.5
+     ],
+     [
+      1e-05,
+      351.5
+     ],
+     [
+      1.5e-05,
+      540.5
+     ],
+     [
+      2e-05,
+      729.5
+     ],
+     [
+      2.5e-05,
+      916.5
+     ],
+     [
+      3e-05,
+      1105.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "Pa.s",
+    "scale": "linear",
+    "ticks": [
+     [
+      2.5e-05,
+      158.5
+     ],
+     [
+      2.25e-05,
+      242.5
+     ],
+     [
+      2e-05,
+      327.5
+     ],
+     [
+      1.75e-05,
+      414.5
+     ],
+     [
+      1.5e-05,
+      498.5
+     ],
+     [
+      1.25e-05,
+      585.5
+     ],
+     [
+      1e-05,
+      670.0
+     ],
+     [
+      7.5e-06,
+      754.5
+     ],
+     [
+      5e-06,
+      841.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). Eixos rotulados em unidades de 1e-5 Pa.s; os valores foram convertidos para Pa.s."
+}

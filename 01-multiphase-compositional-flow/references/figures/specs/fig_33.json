@@ -1,0 +1,200 @@
+{
+ "figure": 33,
+ "caption": "Perfis de temperatura do exemplo de sistema de produção offshore",
+ "page": 132,
+ "section": "5.5",
+ "source_images": [
+  "p132_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 40,
+    "bottom": 939,
+    "left": 82,
+    "right": 1905
+   },
+   "x": {
+    "label": "Comprimento",
+    "unit": "m",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      165.5
+     ],
+     [
+      1000.0,
+      377.5
+     ],
+     [
+      2000.0,
+      589.5
+     ],
+     [
+      3000.0,
+      802.5
+     ],
+     [
+      4000.0,
+      1014.5
+     ],
+     [
+      5000.0,
+      1227.5
+     ],
+     [
+      6000.0,
+      1439.5
+     ],
+     [
+      7000.0,
+      1652.5
+     ],
+     [
+      8000.0,
+      1864.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Temperatura",
+    "unit": "°C",
+    "scale": "linear",
+    "ticks": [
+     [
+      80.0,
+      81.5
+     ],
+     [
+      70.0,
+      269.0
+     ],
+     [
+      60.0,
+      458.0
+     ],
+     [
+      50.0,
+      646.5
+     ],
+     [
+      40.0,
+      835.0
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Modelo",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "line",
+     "linestyle": "solid",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ]
+    },
+    {
+     "name": "BB",
+     "legend_color_rgb": [
+      128,
+      0,
+      128
+     ],
+     "type": "line",
+     "linestyle": "dashed",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        128,
+        0,
+        128
+       ],
+       "tol": 55
+      }
+     ]
+    },
+    {
+     "name": "TULSA",
+     "legend_color_rgb": [
+      0,
+      128,
+      0
+     ],
+     "type": "line",
+     "linestyle": "dotted",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        128,
+        0
+       ],
+       "tol": 60
+      },
+      {
+       "kind": "hue",
+       "h": 120,
+       "tol": 20,
+       "smin": 0.08,
+       "vmin": 60
+      }
+     ],
+     "exclude_others": true,
+     "density_filter": {
+      "window": 30,
+      "min_neighbors": 2,
+      "tol_px": 4.0
+     }
+    },
+    {
+     "name": "Modelo no-slip",
+     "legend_color_rgb": [
+      0,
+      191,
+      255
+     ],
+     "type": "line",
+     "linestyle": "dashdot",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        191,
+        255
+       ],
+       "tol": 60
+      }
+     ]
+    }
+   ],
+   "exclude_px": [
+    [
+     1655,
+     45,
+     1900,
+     195
+    ]
+   ]
+  }
+ ],
+ "notes": "Ver Figura 32. Caixa da legenda excluída."
+}

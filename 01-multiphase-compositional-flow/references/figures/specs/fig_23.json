@@ -1,0 +1,156 @@
+{
+ "figure": 23,
+ "caption": "Mapa de escoamento vertical para ar-água",
+ "page": 118,
+ "section": "5.3",
+ "source_images": [
+  "p118_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "alta",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 21,
+    "bottom": 710,
+    "left": 106,
+    "right": 1502
+   },
+   "x": {
+    "label": "Velocidade superficial do vapor",
+    "unit": "m/s",
+    "scale": "log",
+    "ticks": [
+     [
+      0.1,
+      134.0
+     ],
+     [
+      1.0,
+      517.0
+     ],
+     [
+      100.0,
+      1282.0
+     ]
+    ]
+   },
+   "y": {
+    "label": "Velocidade superficial do líquido",
+    "unit": "m/s",
+    "scale": "log",
+    "ticks": [
+     [
+      100.0,
+      111.0
+     ],
+     [
+      10.0,
+      255.0
+     ],
+     [
+      1.0,
+      399.0
+     ],
+     [
+      0.1,
+      543.0
+     ],
+     [
+      0.01,
+      686.0
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Bolhas (quadrado azul)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "s",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 80
+      }
+     ],
+     "min_area": 30
+    },
+    {
+     "name": "Intermitente (losango verde)",
+     "legend_color_rgb": [
+      0,
+      128,
+      0
+     ],
+     "type": "scatter",
+     "marker": "D",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        128,
+        0
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 25
+    },
+    {
+     "name": "Anular (círculo vermelho)",
+     "legend_color_rgb": [
+      255,
+      0,
+      0
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        255,
+        0,
+        0
+       ],
+       "tol": 80
+      }
+     ],
+     "min_area": 30
+    },
+    {
+     "name": "Transições (tracejado preto)",
+     "legend_color_rgb": [
+      0,
+      0,
+      0
+     ],
+     "type": "dashed_chain",
+     "rules": [
+      {
+       "kind": "dark",
+       "vmax": 80,
+       "satmax": 60
+      }
+     ],
+     "min_area": 12,
+     "max_gap": 40,
+     "angle_tol": 40
+    }
+   ]
+  }
+ ],
+ "notes": "Mapa de padrão de escoamento ar-água (D = 0,025 m) em eixos log-log. Classes segundo a legenda da figura: quadrado azul = bolhas (disperso), losango verde = intermitente, círculo vermelho = anular. As linhas tracejadas pretas (curvas de transição dos artigos de referência) foram extraídas como cadeias de traços ligados por proximidade/orientação; em junções a atribuição de um traço a uma cadeia pode ser ambígua. O tick de 10 m/s do eixo x estava oculto por um marcador; a calibração usa 0,1, 1 e 100 m/s."
+}

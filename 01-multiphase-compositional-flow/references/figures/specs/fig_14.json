@@ -1,0 +1,134 @@
+{
+ "figure": 14,
+ "caption": "Massa específica do vapor",
+ "page": 110,
+ "section": "5.1",
+ "source_images": [
+  "p110_i0.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "kg/m³",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      198.0
+     ],
+     [
+      20.0,
+      310.5
+     ],
+     [
+      40.0,
+      422.5
+     ],
+     [
+      60.0,
+      534.5
+     ],
+     [
+      80.0,
+      646.5
+     ],
+     [
+      100.0,
+      761.0
+     ],
+     [
+      120.0,
+      873.5
+     ],
+     [
+      140.0,
+      985.5
+     ],
+     [
+      160.0,
+      1097.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "kg/m³",
+    "scale": "linear",
+    "ticks": [
+     [
+      160.0,
+      134.5
+     ],
+     [
+      140.0,
+      219.5
+     ],
+     [
+      120.0,
+      303.5
+     ],
+     [
+      100.0,
+      388.5
+     ],
+     [
+      80.0,
+      473.5
+     ],
+     [
+      60.0,
+      557.5
+     ],
+     [
+      40.0,
+      642.5
+     ],
+     [
+      20.0,
+      727.5
+     ],
+     [
+      0.0,
+      811.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só)."
+}

@@ -1,0 +1,126 @@
+{
+ "figure": 53,
+ "caption": "Treinamento RNA riser – evolução do erro",
+ "page": 151,
+ "section": "5.7",
+ "source_images": [
+  "p151_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 100,
+    "bottom": 737,
+    "left": 139,
+    "right": 994
+   },
+   "x": {
+    "label": "Contagem do treinamento",
+    "unit": "época",
+    "scale": "linear",
+    "ticks": [
+     [
+      0.0,
+      179.0
+     ],
+     [
+      25.0,
+      273.5
+     ],
+     [
+      50.0,
+      370.5
+     ],
+     [
+      75.0,
+      466.5
+     ],
+     [
+      100.0,
+      563.5
+     ],
+     [
+      125.0,
+      659.5
+     ],
+     [
+      150.0,
+      754.5
+     ],
+     [
+      175.0,
+      851.0
+     ],
+     [
+      200.0,
+      947.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "Erro Médio Quadrado",
+    "unit": "-",
+    "scale": "linear",
+    "ticks": [
+     [
+      1.2,
+      100.5
+     ],
+     [
+      1.0,
+      202.5
+     ],
+     [
+      0.8,
+      303.5
+     ],
+     [
+      0.6,
+      403.5
+     ],
+     [
+      0.4,
+      505.5
+     ],
+     [
+      0.2,
+      607.0
+     ],
+     [
+      0.0,
+      706.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Erro médio quadrado (riser)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 40,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Evolução do erro médio quadrático durante o treino (um marcador por época). Marcadores grandes muito sobrepostos junto de 0: componentes grandes divididas por máximos da transformada de distância; n_markers é uma estimativa."
+}

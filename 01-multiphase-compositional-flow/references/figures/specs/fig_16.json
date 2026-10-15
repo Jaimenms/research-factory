@@ -1,0 +1,114 @@
+{
+ "figure": 16,
+ "caption": "Entalpia do vapor",
+ "page": 111,
+ "section": "5.1",
+ "source_images": [
+  "p111_i1.jpeg"
+ ],
+ "status": "digitized",
+ "confidence": "média",
+ "panels": [
+  {
+   "name": "main",
+   "frame_px": {
+    "top": 115,
+    "bottom": 842,
+    "left": 158,
+    "right": 1136
+   },
+   "x": {
+    "label": "Implementado",
+    "unit": "J/kg",
+    "scale": "linear",
+    "ticks": [
+     [
+      -5000000.0,
+      200.5
+     ],
+     [
+      -4500000.0,
+      337.5
+     ],
+     [
+      -4000000.0,
+      473.5
+     ],
+     [
+      -3500000.0,
+      611.5
+     ],
+     [
+      -3000000.0,
+      749.5
+     ],
+     [
+      -2500000.0,
+      887.0
+     ],
+     [
+      -2000000.0,
+      1024.5
+     ]
+    ]
+   },
+   "y": {
+    "label": "HYSYS",
+    "unit": "J/kg",
+    "scale": "linear",
+    "ticks": [
+     [
+      -2000000.0,
+      199.5
+     ],
+     [
+      -2500000.0,
+      308.5
+     ],
+     [
+      -3000000.0,
+      416.5
+     ],
+     [
+      -3500000.0,
+      524.5
+     ],
+     [
+      -4000000.0,
+      632.5
+     ],
+     [
+      -4500000.0,
+      741.5
+     ]
+    ]
+   },
+   "series": [
+    {
+     "name": "Pontos (implementado vs HYSYS)",
+     "legend_color_rgb": [
+      0,
+      0,
+      255
+     ],
+     "type": "scatter",
+     "marker": "o",
+     "rules": [
+      {
+       "kind": "rgb",
+       "rgb": [
+        0,
+        0,
+        255
+       ],
+       "tol": 70
+      }
+     ],
+     "min_area": 60,
+     "split_overlaps": true
+    }
+   ]
+  }
+ ],
+ "notes": "Gráfico de paridade (x = valor da implementação da dissertação; y = HYSYS); 159 pares (P,T) segundo o texto (n_markers detetados < 159 por sobreposição). Não há reta y = x desenhada. Marcadores grandes e muito sobrepostos: componentes conexas maiores do que um marcador foram divididas pelos máximos locais da transformada de distância (n_markers é uma estimativa; pontos quase coincidentes podem ser contados como um só). Eixos rotulados em unidades de 1e6 J/kg; os valores foram convertidos para J/kg."
+}
