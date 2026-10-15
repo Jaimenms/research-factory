@@ -12,7 +12,7 @@ from .scalar import solve_bracketed
 
 
 def harmathy_v0(inp: FlowInputs, bk=NUMPY):
-    return 1.53 * bk.safe_pow(G * inp.sigma * (inp.rho_L - inp.rho_G) / inp.rho_L**2, 0.25)
+    return 1.53 * bk.safe_pow(G * inp.sigma * bk.xp.maximum(inp.rho_L - inp.rho_G, 0.0) / inp.rho_L**2, 0.25)
 
 
 def bubble_residual(HL, inp: FlowInputs, bk=NUMPY, C0=1.15):

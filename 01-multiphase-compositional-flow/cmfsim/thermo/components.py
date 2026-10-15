@@ -38,6 +38,9 @@ class ComponentSet:
     # (0.4572355289, 0.0777960739) só para comparar com oráculos externos
     omega_a: float = 0.45724
     omega_b: float = 0.07780
+    # temperatura usada no polinómio de Cp de gás ideal: "kelvin" (correto) ou "celsius" (hipótese
+    # para reproduzir os perfis térmicos da dissertação, issue 004: cp efetivo ~ 800 J/(kg K))
+    cp_temperature: str = "kelvin"
 
     @property
     def n(self) -> int:

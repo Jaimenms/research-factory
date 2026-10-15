@@ -49,8 +49,23 @@ uv run python -m dissertation.extract          # Apêndice A -> CSV
 8. Cada passo fecha com rotina verde, `black` limpo, docs atualizados e commit com `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` (git na raiz de `research-factory/`).
 9. Um único tubo com parâmetros que variam axialmente (`pipe.profile`); sem grafo por agora.
 
+## Estado (2026-10-15)
+
+Fases 0–4 feitas (issues 001–005): termodinâmica validada contra `thermo`, fechamentos e mapas de
+padrão, marcha de não escorregamento com integrador próprio, modelo mecanicista por diferenças
+finitas com Newton (backend de produção: JAX). Em aberto: comparação com o Apêndice A (lote
+`batches/dp_comparison.json`), achado dos perfis térmicos da dissertação (issue 004), `vmap`
+sobre casos, modelo substituto (adiado).
+
 ## Armadilhas conhecidas
 
+- Shell: o diretório de trabalho alterna entre a raiz do monorepo e o projeto; usar caminhos
+  absolutos (`P=/Users/jaimenms/code/personal/research-factory/01-multiphase-compositional-flow`)
+  e `uv run --project "$P"`. Encadear `pytest` sem `| tail` antes de um commit (estado de saída).
+- Método 3.2 em numpy: diferenças avançadas na Jacobiana; converge em malhas grossas (≤ 25 nós) e
+  pode estagnar nas finas no vinco do ponto de orvalho; o backend de produção é o JAX (`jvp` exato).
+- `_COMPILED` em `simulation.py` guarda as funções compiladas por estrutura (fluido, opções,
+  malha): mudar só D, P_in, m, U, T_amb não recompila; mudar o fluido ou n recompila.
 - JAX: `where` antes das funções com domínio restrito (sqrt, log, arccos, potências), para tangentes finitas (issue 037 do mfsim).
 - Flash: o resultado das substituições sucessivas entra com `stop_gradient`; as derivadas vêm do polimento de Newton (teorema da função implícita). Com `polish_iter=0` não há derivadas corretas do flash em JAX.
 - Constantes de PR: Ω_a = 0,45724 e Ω_b = 0,0778 como impressas na dissertação (a `thermo` usa as exatas: diferenças de ~1e-5).

@@ -31,6 +31,7 @@
      }
     },
     "kij": {"oneOf": [{"const": "zero"}, {"type": "array", "items": {"type": "array", "items": {"type": "number"}}}]},
+    "cp_temperature": {"enum": ["kelvin", "celsius"]},
     "eos": {"type": "object", "properties": {"type": {"const": "peng_robinson"}, "constants": {"enum": ["thesis", "exact"]}}, "additionalProperties": false},
     "flash": {
      "type": "object",
@@ -90,6 +91,10 @@
     "dP": {"type": "number", "exclusiveMinimum": 0}, "dT": {"type": "number", "exclusiveMinimum": 0},
     "kinetic_energy": {"type": "boolean"},
     "mass_split": {"enum": ["ode", "algebraic"]},
+    "mass_basis": {"enum": ["mass", "mole"]},
+    "edge_order": {"enum": [1, 2]},
+    "fd_step_dP": {"type": "number", "exclusiveMinimum": 0}, "fd_step_dT": {"type": "number", "exclusiveMinimum": 0},
+    "single_phase_blend": {"type": "boolean"},
     "regime": {
      "type": "object",
      "properties": {
@@ -118,7 +123,9 @@
     "max_steps_per_interval": {"type": "integer"}, "safety": {"type": "number"},
     "backend": {"enum": ["numpy", "jax"]},
     "n": {"type": "integer", "minimum": 2}, "root": {"enum": ["newton_exact", "newton_colored", "scipy_hybr"]},
-    "initial_guess": {"enum": ["flat", "march_noslip"]}, "edge_order": {"enum": [1, 2]}
+    "initial_guess": {"enum": ["flat", "march_noslip"]},
+    "newton": {"type": "object", "properties": {"max_iter": {"type": "integer", "minimum": 1}, "tol": {"type": "number", "exclusiveMinimum": 0},
+               "fd_step": {"type": "number"}, "line_search": {"type": "integer", "minimum": 1}}, "additionalProperties": false}
    },
    "additionalProperties": false
   },

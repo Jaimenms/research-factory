@@ -13,7 +13,9 @@ from pathlib import Path
 import numpy as np
 
 from ..closures import ClosureOptions
+from ..models.mechanistic import MechanisticOptions
 from ..models.noslip import NoSlipOptions
+from ..solvers.newton import NewtonOptions
 from ..pipe import PipeProfile
 from ..solvers.rk45 import RK45Options
 from ..thermo import ComponentSet, FlashOptions
@@ -78,6 +80,11 @@ class Case:
     rk45: RK45Options
     backend: str
     dx_out: float
+    mechanistic: MechanisticOptions = MechanisticOptions()
+    newton: NewtonOptions = NewtonOptions()
+    n_nodes: int = 30
+    initial_guess: str = "march_noslip"
+    outlet: dict = field(default_factory=dict)
     raw: dict = field(repr=False, default_factory=dict)
 
     @classmethod
@@ -92,6 +99,10 @@ class Case:
         cs = ComponentSet.from_records(comps, kij=None if kij == "zero" else np.asarray(kij, float))
         if f.get("eos", {}).get("constants", "thesis") == "exact":
             cs = cs.with_exact_pr_constants()
+        if f.get("cp_temperature", "kelvin") != "kelvin":
+            from dataclasses import replace as _replace
+
+            cs = _replace(cs, cp_temperature=f["cp_temperature"])
         z = np.array([c["z"] for c in comps], float)
         z = z / z.sum()
         flash = _opts_from(FlashOptions, f.get("flash", {}))
@@ -113,6 +124,11 @@ class Case:
             rk45=rk,
             backend=s.get("backend", "numpy"),
             dx_out=float(d.get("outputs", {}).get("dx_out", pipe.L / 100.0)),
+            mechanistic=_opts_from(MechanisticOptions, m),
+            newton=_opts_from(NewtonOptions, s.get("newton", {})),
+            n_nodes=int(s.get("n", d.get("pipe", {}).get("n", 30))),
+            initial_guess=s.get("initial_guess", "march_noslip"),
+            outlet=dict(d["boundary"].get("outlet", {})),
             raw=copy.deepcopy(d),
         )
 

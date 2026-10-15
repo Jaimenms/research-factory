@@ -41,8 +41,8 @@ class RK45Options:
     safety: float = 0.9
 
 
-def integrate(rhs, u0, x_out, seg_of_interval, opts: RK45Options = RK45Options(), scale=None, bk=NUMPY):
-    """Integra du/dx = rhs(x, u, seg) de x_out[0] a x_out[-1]; devolve U (n_out, nu) nos pontos de saída
+def integrate(rhs, u0, x_out, seg_of_interval, opts: RK45Options = RK45Options(), scale=None, bk=NUMPY, args=()):
+    """Integra du/dx = rhs(x, u, seg, *args) de x_out[0] a x_out[-1]; devolve U (n_out, nu) nos pontos de saída
     e um dict com passos aceites e rejeitados. `seg_of_interval` (n_out - 1,) é o índice do troço de cada
     intervalo; `scale` (nu,) escala o erro local (tolerância relativa a |u|/scale mais atol)."""
     xp = bk.xp
@@ -64,7 +64,7 @@ def integrate(rhs, u0, x_out, seg_of_interval, opts: RK45Options = RK45Options()
 
         def stage(i, ks):
             ui = u + h * (A_mat[i] @ ks)
-            ki = rhs(x + C[i] * h, ui, seg)
+            ki = rhs(x + C[i] * h, ui, seg, *args)
             return bk.set(ks, i, ki)
 
         ks = bk.fori_loop(0, 7, stage, xp.zeros((7, nu)))

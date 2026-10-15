@@ -18,6 +18,10 @@ def pure_h_ideal(T, cs: ComponentSet, bk=NUMPY):
     C = xp.asarray(cs.cpC)[None, :]
     D = xp.asarray(cs.cpD)[None, :]
     T0 = T_REF
+    if cs.cp_temperature == "celsius":  # hipótese da issue 004: polinómio avaliado em °C
+        T = T - 273.15
+        T0 = T0 - 273.15
+        D = 0.0 * D  # o termo D/T^2 não é avaliável em °C (T = 0 °C); nulo nos hidrocarbonetos
     integ = A * (T - T0) + B / 2.0 * (T**2 - T0**2) + C / 3.0 * (T**3 - T0**3) - D * (1.0 / T - 1.0 / T0)
     return xp.asarray(cs.Hf)[None, :] + R_GAS * integ
 

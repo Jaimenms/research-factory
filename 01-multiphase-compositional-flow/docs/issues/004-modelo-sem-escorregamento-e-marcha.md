@@ -52,6 +52,28 @@ fatores do integral. Sem código nem autor não se resolve; fica como opção fu
 posição em que a condensação começa é consequência direta deste achado (a temperatura em que
 começa, não).
 
+### Hipótese testada: Cp de gás ideal avaliado com T em °C
+
+Se o polinómio Cp/R = A + B T + C T² for avaliado com T em °C (erro de unidade plausível num
+código que recebe °C nas tabelas), o cp da mistura a 45 °C cai de ≈ 2050 para ≈ 800 J/(kg K),
+exatamente o valor implícito no caso 1 da dissertação. Opção `fluid.cp_temperature = "celsius"`
+(`ComponentSet.cp_temperature`; lote `batches/dissertation_celsius.json`):
+
+| caso | T_out dissertação | T_out Kelvin (físico) | T_out Celsius (hipótese) | x_cond dissertação / Celsius |
+|---|---|---|---|---|
+| 1 (60 °C, U 1) | 43,6 | 53,6 | 49,4 | — |
+| 2 (60, 3) | 30,9 | 44,9 | 37,9 | 6948 / — |
+| 3 (60, 6) | 26,9 | 36,6 | 31,7 | 3319 / 5600 |
+| 4 (80, 1) | 53,8 | 70,0 | 63,2 | — |
+| 5 (80, 3) | 33,7 | 55,9 | 44,7 | 4795 / — |
+| 6 (80, 6) | 27,5 | 42,9 | 33,5 | 4292 / 7300 |
+
+A hipótese explica cerca de metade do excesso de arrefecimento (fator ≈ 2 dos ≈ 2,7) e faz os
+casos 3 e 6 condensar como na dissertação; resta um fator ≈ 1,4 por explicar. A temperatura a
+que a condensação começa coincide a 1,5 °C (34,2 contra 32,2–32,9). O default fica em
+`"kelvin"` (física correta, que é o que interessa para treinar redes); a opção existe para quem
+quiser reproduzir as figuras.
+
 ## Benefício
 
 Caso 5.6 reexecutável em segundos, com derivadas exatas, corrida gravada com o caso completo e

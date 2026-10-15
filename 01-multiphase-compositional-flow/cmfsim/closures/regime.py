@@ -33,7 +33,11 @@ def horizontal_weights(inp: FlowInputs, hD_eq, opts, bk=NUMPY, **strat_kw):
     # (34) bolhas dispersas
     DL = 4.0 * t["AL"] / xp.maximum(t["SL"], 1e-12 * inp.D)
     fL, _ = fanning(t["vL"], inp.rho_L, inp.mu_L, DL, inp.eps, bk=bk)
-    dens = (inp.rho_L - inp.rho_G) / inp.rho_L if opts.dispersed_density == "taitel" else inp.rho_G / inp.rho_L
+    dens = (
+        xp.maximum(inp.rho_L - inp.rho_G, 1e-6) / inp.rho_L
+        if opts.dispersed_density == "taitel"
+        else inp.rho_G / inp.rho_L
+    )
     v_db = bk.safe_sqrt(4.0 * t["AG"] / xp.maximum(t["SI"], 1e-12 * inp.D) * G * cos_t / xp.maximum(fL, 1e-300) * dens)
     w_bub = smooth_step(vabs(t["vL"], bk) / xp.maximum(v_db, 1e-300) - 1.0, k, bk)
     strat = 1.0 - w_ns
@@ -47,7 +51,7 @@ def vertical_weights(inp: FlowInputs, opts, bk=NUMPY):
     """Pesos (0, anular, bolhas, intermitente) pelos critérios verticais de Taitel et al. (1980)."""
     xp = bk.xp
     k = opts.k_switch
-    drho = inp.rho_L - inp.rho_G
+    drho = xp.maximum(inp.rho_L - inp.rho_G, 1e-6)  # piso: numa fase densa única as raízes coincidem
     c4 = bk.safe_pow(inp.sigma * G * drho, 0.25)
     # (35) anular
     v_ann = 3.1 * c4 / bk.safe_sqrt(inp.rho_G)

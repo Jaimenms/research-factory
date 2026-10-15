@@ -1,0 +1,97 @@
+{
+ "schema": "cmfsim-case/1",
+ "name": "dp_vertical_mechanistic_base",
+ "description": "Linha vertical de 100 m (Tabela 15), fluido CH4/C7+ 70/30 (Tabela 17), T_in 40 °C, U = 0; grelha D x P_in x m da Tabela 16 por overrides no lote.",
+ "fluid": {
+  "type": "compositional",
+  "components": [
+   {
+    "id": "C1",
+    "z": 0.7,
+    "MW": 16.0,
+    "Pc": 4600000.0,
+    "Tc": 190.6,
+    "omega": 0.012,
+    "Tb": 111.4,
+    "Hf": -74900000.0,
+    "cp": [
+     1.702,
+     0.009081,
+     -2.164e-06,
+     0.0
+    ],
+    "Nc_eff": 1.0
+   },
+   {
+    "id": "C7plus",
+    "z": 0.3,
+    "MW": 560.0,
+    "Pc": 837900.0,
+    "Tc": 991.4,
+    "omega": 1.32,
+    "Tb": 841.9,
+    "Hf": -572880000.0,
+    "cp": [
+     21.4,
+     0.34,
+     -0.0001086,
+     0.0
+    ],
+    "Nc_eff": 39.9
+   }
+  ],
+  "kij": "zero",
+  "eos": {
+   "type": "peng_robinson",
+   "constants": "thesis"
+  }
+ },
+ "pipe": {
+  "profile": [
+   {
+    "x": 0.0,
+    "D": 0.1016,
+    "roughness": 4.5e-05,
+    "angle_deg": 90.0,
+    "U": 0.0,
+    "T_amb": 313.15
+   },
+   {
+    "x": 100.0
+   }
+  ]
+ },
+ "boundary": {
+  "inlet": {
+   "P": 2000000.0,
+   "T": 313.15,
+   "m": 2.0
+  }
+ },
+ "outputs": {
+  "dx_out": 5.0
+ },
+ "meta": {
+  "source": "dissertação §5.4; alvo: dissertation/data/appendix_a_{orientation}.csv (coluna dissertation)"
+ },
+ "model": {
+  "type": "mechanistic",
+  "mass_split": "algebraic",
+  "regime": {
+   "regime": "automatic"
+  }
+ },
+ "solver": {
+  "type": "fd",
+  "n": 30,
+  "initial_guess": "march_noslip",
+  "rtol": 1e-07,
+  "atol": 1e-07,
+  "first_step": 2.0,
+  "backend": "jax",
+  "newton": {
+   "max_iter": 40,
+   "tol": 1e-09
+  }
+ }
+}

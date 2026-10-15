@@ -7,7 +7,11 @@ como na dissertação (169–170, três flashes por avaliação), que é o camin
 
 Termo dissipativo F (−dP/dx sem aceleração): `friction="homogeneous"` (a dissertação não diz como
 calculou o atrito no modelo de não escorregamento, B15 em docs/05): Churchill na mistura homogénea
-(rho_mix e mu_mix ponderadas em volume) mais a gravidade rho_mix g sin theta."""
+(rho_mix e mu_mix ponderadas em volume) mais a gravidade rho_mix g sin theta.
+
+Os parâmetros do caso (tubo por troço, vazão) são argumentos (`params`) e não atributos: uma
+função compilada serve todos os casos com a mesma estrutura (mesmo fluido e opções), que é o que
+permite `jit` uma vez e `vmap` sobre casos."""
 
 from __future__ import annotations
 
@@ -44,32 +48,32 @@ def mixture_state(P, T, z, cs: ComponentSet, flash: FlashOptions, bk=NUMPY):
 
 
 class NoSlipModel:
-    """du/dx para u = (P, T) num tubo com parâmetros por troço (dict de arrays D, roughness, theta, U, T_amb)."""
+    """du/dx para u = (P, T). `params`: dict de arrays por troço (D, roughness, theta, U, T_amb) e `m`."""
 
     def __init__(
-        self,
-        cs: ComponentSet,
-        z,
-        m,
-        pipe_arrays,
-        flash: FlashOptions = FlashOptions(),
-        opts: NoSlipOptions = NoSlipOptions(),
-        bk=NUMPY,
+        self, cs: ComponentSet, z, flash: FlashOptions = FlashOptions(), opts: NoSlipOptions = NoSlipOptions(), bk=NUMPY
     ):
-        self.cs, self.z, self.m = cs, np.asarray(z, float), float(m)
-        self.pipe = {k: bk.xp.asarray(v, float) for k, v in pipe_arrays.items()}
+        self.cs, self.z = cs, np.asarray(z, float)
         self.flash, self.opts, self.bk = flash, opts, bk
 
-    def _params(self, seg):
-        p = self.pipe
+    @staticmethod
+    def params_from(pipe_arrays, m, bk=NUMPY):
+        xp = bk.xp
+        p = {k: xp.asarray(v, float) for k, v in pipe_arrays.items()}
+        p["m"] = xp.asarray(float(m))
+        return p
+
+    @staticmethod
+    def _seg(params, seg):
+        p = params
         return p["D"][seg], p["roughness"][seg], p["theta"][seg], p["U"][seg], p["T_amb"][seg]
 
-    def fluxes(self, u, seg):
+    def fluxes(self, u, seg, params):
         """Phi = [G v + P, h_mix (+ v^2/2)] com G = m/A."""
         xp = self.bk.xp
-        D = self._params(seg)[0]
+        D = self._seg(params, seg)[0]
         A = xp.pi * D**2 / 4.0
-        Gm = self.m / A
+        Gm = params["m"] / A
         P, T = u[0], u[1]
         rho_mix, h_mix, mu_mix, lam_G, st = mixture_state(
             P[None], T[None], self.z[None, :], self.cs, self.flash, self.bk
@@ -78,40 +82,41 @@ class NoSlipModel:
         e = h_mix[0] + (0.5 * v**2 if self.opts.kinetic_energy else 0.0)
         return xp.stack([Gm * v + P, e])
 
-    def sources(self, u, seg):
+    def sources(self, u, seg, params):
         """S = [-F, Q_w/m - g sin theta]."""
         xp = self.bk.xp
         bk = self.bk
-        D, eps, theta, U, T_amb = self._params(seg)
+        D, eps, theta, U, T_amb = self._seg(params, seg)
+        m = params["m"]
         A = xp.pi * D**2 / 4.0
         P, T = u[0], u[1]
         rho_mix, h_mix, mu_mix, lam_G, st = mixture_state(P[None], T[None], self.z[None, :], self.cs, self.flash, bk)
         rho = rho_mix[0]
-        v = self.m / (A * rho)
+        v = m / (A * rho)
         f, _ = fanning(v, rho, mu_mix[0], D, eps, bk=bk)
         F_fric = f * rho * v * vabs(v, bk) / 2.0 * 4.0 / D
         F_grav = rho * G * xp.sin(theta)
         Qw = -U * xp.pi * D * (T - T_amb)
-        return xp.stack([-(F_fric + F_grav), Qw / self.m - G * xp.sin(theta)])
+        return xp.stack([-(F_fric + F_grav), Qw / m - G * xp.sin(theta)])
 
-    def jacobian(self, u, seg):
+    def jacobian(self, u, seg, params):
         xp = self.bk.xp
         if self.opts.derivatives == "autodiff" and self.bk.has_ad:
             cols = []
             for k in range(2):
                 e = self.bk.set(xp.zeros((2,)), k, 1.0)
-                cols.append(self.bk.jvp(lambda uu: self.fluxes(uu, seg), (u,), (e,))[1])
+                cols.append(self.bk.jvp(lambda uu: self.fluxes(uu, seg, params), (u,), (e,))[1])
             return xp.stack(cols, axis=1)
         d = (self.opts.dP, self.opts.dT)
-        phi0 = self.fluxes(u, seg)
+        phi0 = self.fluxes(u, seg, params)
         cols = []
         for k in range(2):
             e = self.bk.set(xp.zeros((2,)), k, d[k])
-            cols.append((phi0 - self.fluxes(u - e, seg)) / d[k])  # para trás, como (169–170)
+            cols.append((phi0 - self.fluxes(u - e, seg, params)) / d[k])  # para trás, como (169–170)
         return xp.stack(cols, axis=1)
 
-    def rhs(self, x, u, seg):
+    def rhs(self, x, u, seg, params):
         xp = self.bk.xp
-        J = self.jacobian(u, seg)
-        S = self.sources(u, seg)
+        J = self.jacobian(u, seg, params)
+        S = self.sources(u, seg, params)
         return xp.linalg.solve(J, S)
