@@ -1,19 +1,18 @@
-%% Artigo 01 do tema 01 — volume I: o simulador (modelo, três solvers, JAX, verificação e validação).
+%% Artigo 01 do tema 01 — volume I: o simulador (modelo, três solvers, JAX, verificação) comparado com o HYSYS.
 %% O volume II (papers/02-surrogate-models) trata dos substitutos e cita este.
 %%
 %% Revista alvo: Geoenergy Science and Engineering (Elsevier; ex-Journal of Petroleum Science and Engineering).
 %% Pesquisa e justificação: ../00-escolha-da-revista.md. Construção: `make` nesta pasta (ver ../README.md):
-%% figures/make_figures.py gera todas as figuras (figures/generated/) e os fragmentos de tabela
-%% (tables/generated/*.tex, lidos por \input) a partir das corridas gravadas em runs/.
+%% figures/make_figures.py gera todas as figuras (figures/generated/), os fragmentos de tabela
+%% (tables/generated/*.tex, lidos por \input) e os CSV suplementares com os valores do HYSYS.
 %%
-%% Modelo: Elsevier CAS, classe cas-sc (coluna única), o que o guia de autores da revista indica.
-%% Regras do guia já embutidas aqui:
-%%   - citações autor–ano (natbib authoryear + cas-model2-names): \citet{} -> Autor (ano), \citep{} -> (Autor, ano)
-%%   - resumo <= 250 palavras, sem referências; 3–5 highlights <= 85 caracteres cada; 1–7 palavras-chave
-%%   - secções numeradas 1, 1.1, 1.1.1; equações numeradas pela ordem de citação; apêndices A, B com Eq. (A.1)
-%%   - unidades SI; variáveis em itálico; figuras vetoriais (PDF)
-%%   - agradecimentos, declarações (conflito de interesses, IA generativa, dados) e CRediT antes das referências
-%% Opção `review` da classe: espaçamento largo e números de linha, para a revisão por pares.
+%% Decisão do dono (2026-10-16): as comparações são com o HYSYS, como a dissertação as fez (envelope e
+%% propriedades, perda de carga do Apêndice A, perfis do sistema offshore); não se compara com o modelo da
+%% dissertação, que só é citada como origem da formulação e dos resultados do HYSYS.
+%%
+%% Modelo: Elsevier CAS, classe cas-sc (coluna única). Regras do guia já embutidas: citações autor–ano; resumo
+%% <= 250 palavras; 3–5 highlights <= 85 caracteres; 1–7 palavras-chave; secções numeradas; SI; figuras vetoriais;
+%% declarações e CRediT antes das referências. Opção `review` da classe para a revisão por pares.
 
 \documentclass[a4paper,fleqn]{cas-sc}
 %\documentclass[a4paper,fleqn,review]{cas-sc}
@@ -22,6 +21,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{siunitx}
+\usepackage{url}
+\usepackage{placeins}
 
 \graphicspath{{figures/generated/}{figures/static/}}
 
@@ -69,16 +70,16 @@
 
 \begin{abstract}
 % <= 250 palavras, autocontido, sem referências (texto literal: a classe CAS grava o resumo num ficheiro auxiliar).
-Steady-state compositional simulation of gas--liquid flow in wells, flowlines and risers couples a cubic equation of state and an isothermal flash to mixture momentum and energy balances closed by homogeneous or flow-pattern-dependent mechanistic relations. This article, the first of two, presents a simulator in which the physics is written once, in flux form, and executed on an array backend with automatic differentiation (JAX): the Jacobian of the conserved fluxes, the derivatives of the flash outputs with respect to pressure and temperature and the sparse Newton Jacobian of the nodal systems are exact, and the same compiled program is vectorised over many cases. Two flow models, a homogeneous no-slip model and a mechanistic model with slip, are solved by three interchangeable methods, an adaptive Runge--Kutta march and finite-difference and finite-volume nodal systems, and are cross-verified on an offshore well--flowline--riser system and on a gas-condensate pipeline to within 0.01 bar and 0.1 K, with global momentum and energy balances closed to machine precision by the finite-volume scheme and Newton convergence in one to three iterations across phase and flow-pattern changes. The simulator is compared with the reference implementation on 200 pressure-drop cases, the offshore system and the gas-condensate pipeline: it reproduces the reference where the physics is shared, isolates the remaining discrepancies to their origin, and runs the offshore system in a fraction of a second once compiled, with a vectorised march that produces hundreds of converged profiles per minute. The second part of the work uses this simulator as the data generator and as the residual provider of neural and physics-informed surrogate models.
+Steady-state compositional simulation of gas--liquid flow in wells, flowlines and risers couples a cubic equation of state and an isothermal flash to mixture momentum and energy balances closed by homogeneous or flow-pattern-dependent mechanistic relations. This article, the first of two, presents a simulator in which the physics is written once, in flux form, and executed on an array backend with automatic differentiation (JAX): the Jacobian of the conserved fluxes, the derivatives of the flash with respect to pressure and temperature and the sparse Newton Jacobians are exact, and the compiled program is vectorised over cases. A no-slip and a mechanistic model are solved by an adaptive Runge--Kutta march and by finite-difference and finite-volume nodal systems; the three methods agree to 0.01 bar and 0.1 K, the finite volumes close the momentum and energy balances to machine precision, and Newton converges in one to three iterations across phase and flow-pattern changes. The thermodynamic kernel reproduces an independent open-source Peng--Robinson implementation to a relative 1e-6. Compared with Aspen HYSYS, the phase envelope of an 11-component fluid agrees to 0.7 bar in the median; in 100 vertical lines the mechanistic model falls inside the range of four HYSYS correlations in 88 % of the cases, with a median deviation of 1 % from their mean, while in 100 short horizontal lines with a heavy pseudo-component both models lie below that range, which itself spans a factor of three; along an offshore well--flowline--riser system the mechanistic pressure follows the Beggs and Brill profile of HYSYS within about 1 bar after the well and the temperatures agree within 2 K. Once compiled, the nodal solvers run the offshore system in about 0.6 s.
 \end{abstract}
 
 % 3 a 5 pontos, no máximo 85 caracteres cada (contando espaços).
 \begin{highlights}
 \item Flux-form compositional pipe-flow model written once, differentiated and vectorised with JAX
-\item Exact flash derivatives and Newton Jacobians by forward-mode automatic differentiation
 \item No-slip and mechanistic models solved by three cross-verified methods (march, FD, FV)
 \item Finite volumes close momentum and energy balances to machine precision across phase changes
-\item Vectorised marching produces 300 converged profiles per segment in about one minute
+\item Compared with Aspen HYSYS on phase envelope, 200 pressure-drop lines and an offshore system
+\item Vertical pressure drops fall inside the range of four HYSYS correlations in 88 % of cases
 \end{highlights}
 
 % 1 a 7 palavras-chave, de preferência de uma palavra.
@@ -97,9 +98,8 @@ $g$ & gravitational acceleration (\si{\metre\per\second\squared}) \\
 $h_k$ & specific enthalpy of phase $k$ (\si{\joule\per\kilogram}) \\
 $H_L$ & liquid holdup (--) \\
 $\bJ$ & Jacobian $\partial\bPhi/\partial\bu$ \\
-$L$ & segment length (\si{\metre}) \\
 $\mdot$, $\mdot_k$ & total and phase mass flow rates (\si{\kilogram\per\second}) \\
-$P$ & pressure (\si{\pascal}) \\
+$P$ & pressure (\si{\pascal}; tables and figures in bar) \\
 $Q_w$ & heat exchanged with the surroundings per unit length (\si{\watt\per\metre}) \\
 $\bS$ & source vector \\
 $T$ & temperature (\si{\kelvin}) \\
@@ -110,20 +110,22 @@ $w_G$ & vapour mass fraction from the flash (--) \\
 $x$ & axial coordinate (\si{\metre}) \\
 $\beta$ & molar vapour fraction (--) \\
 $\lambda_L$ & no-slip liquid volume fraction (--) \\
+$\mu_k$ & dynamic viscosity of phase $k$ (\si{\pascal\second}) \\
 $\rho_k$ & density of phase $k$ (\si{\kilogram\per\metre\cubed}) \\
+$\sigma$ & surface tension (\si{\newton\per\metre}) \\
 $\bPhi$ & conserved flux vector \\
 $\theta$ & pipe inclination from the horizontal (\si{\radian}) \\
 \end{tabular}
 
 \section{Introduction}\label{sec:intro}
 
-Flow assurance in offshore production depends on steady-state models of gas--liquid flow along wells, flowlines and risers that predict pressure, temperature, phase fractions and flow pattern from the fluid composition and the boundary conditions. The mechanistic, flow-pattern-based closures of \citet{taitel1976,taitel1980}, \citet{xiao1990} and \citet{gomez2000} remain the workhorse of pipeline design, and compositional formulations couple them to a cubic equation of state \citep{peng1976} and an isothermal flash \citep{michelsen1982a,michelsen1982b} so that phase behaviour, condensation and heat transfer are resolved along the pipe. \citet{carvalho2022} developed such a formulation with two flow models, a homogeneous no-slip model marched as an initial-value problem and a mechanistic model with slip solved as a nodal nonlinear system, validated it against a commercial simulator on 200 pressure-drop cases and two production systems, and used it to train neural surrogate models.
+Flow assurance in offshore production depends on steady-state models of gas--liquid flow along wells, flowlines and risers that predict pressure, temperature, phase fractions and flow pattern from the fluid composition and the boundary conditions. Commercial simulators such as Aspen HYSYS \citep{aspenhysys} offer a choice of empirical and mechanistic correlations for this purpose \citep{beggs1973,aziz1972,mandhane1974,zhang2003}, and the mechanistic, flow-pattern-based closures of \citet{taitel1976,taitel1980}, \citet{xiao1990} and \citet{gomez2000} remain the basis of most pipeline models. Compositional formulations couple them to a cubic equation of state \citep{peng1976} and an isothermal flash \citep{michelsen1982a,michelsen1982b} so that phase behaviour, condensation and heat transfer are resolved along the pipe; the formulation used here, with a homogeneous no-slip model and a mechanistic model with slip, was developed in the first author's master's thesis \citep{carvalho2022}.
 
-Two difficulties recur in this class of simulators. The first is numerical: the derivatives that drive both the march (the Jacobian of the conserved fluxes with respect to pressure and temperature, which contains the derivatives of the flash) and the Newton iterations of the nodal systems are usually approximated by finite differences, each of which costs additional flash calculations and introduces noise that interferes with convergence across phase changes; the reference implementation reported fragile convergence of its root finder where phases appear or disappear. The second is cost: the flash dominates the run time, and the thousands of evaluations needed for optimisation, uncertainty quantification or surrogate training multiply it.
+Two difficulties recur in this class of simulators. The first is numerical: the derivatives that drive both a marching solution (the Jacobian of the conserved fluxes with respect to pressure and temperature, which contains the derivatives of the flash) and the Newton iterations of a nodal solution are usually approximated by finite differences, each of which costs additional flash calculations and introduces noise that interferes with convergence where phases appear or disappear. The second is cost: the flash dominates the run time, and the thousands of evaluations needed for optimisation, uncertainty quantification or surrogate training multiply it.
 
-This article reports a reimplementation of the model of \citet{carvalho2022} designed around automatic differentiation and vectorisation \citep{jax2018}. The contributions are: (i) a flux-form statement of both flow models on a single interface, with exact Jacobians and flash derivatives obtained by forward-mode automatic differentiation; (ii) three interchangeable solvers (adaptive march, finite differences, finite volumes) that verify each other on the same equations, with global balance diagnostics; (iii) a comparison with the reference implementation on three benchmark problems, which reproduces the reference where the physics is shared and isolates the discrepancies to their origin; and (iv) a vectorised march that generates hundreds of converged profiles per minute. The companion paper \citep{carvalho2026b} uses this simulator as the data generator and as the residual provider of neural and physics-informed surrogate models.
+This article presents a reimplementation of the compositional model designed around automatic differentiation and vectorisation \citep{jax2018}. The contributions are: (i) a flux-form statement of both flow models on a single interface, with exact Jacobians and flash derivatives obtained by forward-mode automatic differentiation; (ii) three interchangeable solvers (adaptive march, finite differences, finite volumes) that verify each other on the same equations, with global balance diagnostics, and a verification of the thermodynamic kernel against an independent open-source implementation; (iii) a comparison with Aspen HYSYS on the phase envelope and properties of an 11-component fluid, on 200 horizontal and vertical pressure-drop lines and on an offshore well--flowline--riser system; and (iv) a vectorised march that generates hundreds of converged profiles per minute. The companion paper \citep{carvalho2026b} uses this simulator as the data generator and as the residual provider of neural and physics-informed surrogate models.
 
-Section~\ref{sec:model} states the model, Section~\ref{sec:numerics} the numerical methods and the differentiable implementation, and Section~\ref{sec:results} the verification, validation and performance.
+Section~\ref{sec:model} states the model, Section~\ref{sec:numerics} the numerical methods and the differentiable implementation, Section~\ref{sec:verification} the verification, Section~\ref{sec:hysys} the comparison with HYSYS, Section~\ref{sec:application} an application to a gas-condensate pipeline and Section~\ref{sec:performance} the computational performance.
 
 \section{Mathematical model}\label{sec:model}
 
@@ -135,11 +137,11 @@ A single pipe of length $L$ is described by segments of constant diameter $D$, r
 \bPhi = \begin{pmatrix} \dfrac{\mdot_G v_G + \mdot_L v_L}{A} + P \\[1.2ex] \dfrac{\mdot_G h_G + \mdot_L h_L}{\mdot} \end{pmatrix}, \qquad
 \bS = \begin{pmatrix} -F - \rho_m g \sin\theta \\[0.6ex] \dfrac{Q_w}{\mdot} - g\sin\theta \end{pmatrix},
 \end{equation}
-where the first component is the mixture momentum balance (momentum flux plus pressure, with wall friction $F$ and the hydrostatic term with the in situ mixture density $\rho_m = \rho_G\alpha_G + \rho_L H_L$) and the second is the mixture energy balance in terms of the mass-weighted specific enthalpy, with the potential-energy term and the heat exchanged with the surroundings,
+where the first component is the mixture momentum balance (momentum flux plus pressure, with wall friction $F$ and the hydrostatic term with the in situ mixture density $\rho_m = \rho_G(1 - H_L) + \rho_L H_L$) and the second is the mixture energy balance in terms of the mass-weighted specific enthalpy, with the potential-energy term and the heat exchanged with the surroundings,
 \begin{equation}\label{eq:qw}
 Q_w = -\pi D\, U\, (T - T_\mathrm{amb}).
 \end{equation}
-The kinetic-energy contribution to the energy balance is neglected, as in the reference model; it is available as an option. The state vector is $\bu = (P, T)$: for a given composition and $\mdot$, every quantity in Eqs.~\eqref{eq:flux}--\eqref{eq:qw} is a local function of $\bu$ through the flash and the closure relations. The two models differ only in how the phase velocities and the friction term are closed.
+The kinetic-energy contribution to the energy balance is neglected; it is available as an option. The state vector is $\bu = (P, T)$: for a given composition and $\mdot$, every quantity in Eqs.~\eqref{eq:flux}--\eqref{eq:qw} is a local function of $\bu$ through the flash and the closure relations. The two models differ only in how the phase velocities and the friction term are closed.
 
 \subsection{Thermodynamic model}\label{sec:thermo}
 
@@ -147,7 +149,7 @@ Phase equilibrium and phase properties come from the Peng--Robinson equation of 
 \begin{equation}\label{eq:pr}
 P = \frac{RT}{v - b} - \frac{a\,\alpha(T)}{v(v + b) + b(v - b)},
 \end{equation}
-with the classical mixing rules and zero binary interaction parameters, as in the reference (Appendix~\ref{app:eos}). The isothermal flash solves the Rachford--Rice equation \citep{rachford1952} with successive substitution of the equilibrium ratios followed by Newton polishing \citep{michelsen1982a,michelsen1982b}, preceded by a stability test. Phase densities follow from the compressibility roots, enthalpies from the ideal-gas heat-capacity polynomials and the residual enthalpy of the equation of state, liquid viscosity from the corresponding-states correlation of \citet{allan1991}, vapour viscosity from \citet{pedersen1987} and surface tension from the parachor method; the parameters are those tabulated by \citet{carvalho2022}. The no-slip liquid volume fraction follows directly from the flash,
+with the classical mixing rules and zero binary interaction parameters (Appendix~\ref{app:eos}). The isothermal flash solves the Rachford--Rice equation \citep{rachford1952} with successive substitution of the equilibrium ratios followed by Newton polishing \citep{michelsen1982a,michelsen1982b}, preceded by a stability test. Phase densities follow from the compressibility roots, enthalpies from the ideal-gas heat-capacity polynomials, the enthalpies of formation and the residual enthalpy of the equation of state, liquid viscosity from the corresponding-states correlation of \citet{allan1991}, vapour viscosity from \citet{pedersen1987} and surface tension from the parachor method. The component data are listed in Appendix~\ref{app:data}. The no-slip liquid volume fraction follows directly from the flash,
 \begin{equation}\label{eq:lambda}
 \lambda_L = \frac{\mdot_L/\rho_L}{\mdot_L/\rho_L + \mdot_G/\rho_G}.
 \end{equation}
@@ -170,9 +172,9 @@ Because both models expose the same pair $(\bPhi, \bS)$ as functions of $\bu$, t
 \begin{equation}\label{eq:march}
 \bJ(\bu)\,\frac{\dd\bu}{\dd x} = \bS(\bu), \qquad \bu(0) = (P_\mathrm{in}, T_\mathrm{in}),
 \end{equation}
-integrated with the embedded Dormand--Prince 5(4) pair \citep{dormand1980} with adaptive step, from output point to output point, with the error measured on the state scaled by (\SI{1}{\bar}, \SI{1}{\kelvin}). The reference implementation expanded $\dd\bPhi/\dd x$ term by term, evaluated the partial derivatives of the flash outputs by one-sided finite differences at the cost of three flashes per evaluation, and integrated with a library solver; here $\bJ$ is exact (Section~\ref{sec:ad}) and a single flash is needed per right-hand-side evaluation. The converged equilibrium ratios of the last accepted step are carried as an auxiliary variable and seed the next flash, which halves the substitution iterations without changing the result.
+integrated with the embedded Dormand--Prince 5(4) pair \citep{dormand1980} with adaptive step, from output point to output point, with the error measured on the state scaled by (\SI{1}{\bar}, \SI{1}{\kelvin}). Expanding $\dd\bPhi/\dd x$ term by term and evaluating the partial derivatives of the flash outputs by one-sided finite differences costs three flashes per evaluation; here $\bJ$ is exact (Section~\ref{sec:ad}) and a single flash is needed per right-hand-side evaluation. The converged equilibrium ratios of the last accepted step are carried as an auxiliary variable and seed the next flash, which halves the substitution iterations without changing the result.
 
-\paragraph{Finite differences} With $P$ and $T$ as unknowns at $n$ nodes per segment, the flux derivative is discretised with the second-order operator $\mathbf{M}$ (centred inside, one-sided at the ends), $(\mathbf{M}\bPhi)_i = \bS_i$. For the mechanistic model this is the nodal method of the reference, with the phase mass rates eliminated algebraically ($\mdot_G = w_G\mdot$), which keeps two unknowns per node.
+\paragraph{Finite differences} With $P$ and $T$ as unknowns at $n$ nodes per segment, the flux derivative is discretised with the second-order operator $\mathbf{M}$ (centred inside, one-sided at the ends), $(\mathbf{M}\bPhi)_i = \bS_i$. For the mechanistic model the phase mass rates are eliminated algebraically ($\mdot_G = w_G\mdot$), which keeps two unknowns per node.
 
 \paragraph{Finite volumes} Integrating Eq.~\eqref{eq:flux} over each cell gives
 \begin{equation}\label{eq:fv}
@@ -186,91 +188,131 @@ with the exact banded Jacobian assembled by forward-mode automatic differentiati
 
 \subsection{Automatic differentiation and vectorisation}\label{sec:ad}
 
-The physics is written once against an injected array backend; the same code runs in NumPy, for inspection and small cases, and in JAX \citep{jax2018}, where it is compiled just in time and transformed. Three transformations matter here. First, forward-mode linearisation gives $\bJ$ in Eq.~\eqref{eq:march} and the coloured Newton Jacobian in Eq.~\eqref{eq:newton} exactly, at the cost of two tangent evaluations instead of three extra flashes. Second, the flash is itself differentiable: the successive-substitution iterations are excluded from the derivative graph and the Newton polishing steps, which solve the equilibrium conditions to machine precision, carry the derivatives of the vapour fraction and of the phase compositions with respect to $P$ and $T$ by the implicit function theorem, so that the tangents are those of the converged solution and not of a truncated iteration. Functions with restricted domains (square roots, logarithms, powers) are guarded before evaluation so that the tangents stay finite, and the flash runs inside the compiled program, since an eager call would be retraced at every step. Third, the compiled march is vectorised over cases with the pipe and inlet parameters as arguments: one compilation serves any number of cases with the same fluid and grid, and a batch of 300 cases costs roughly the time of the slowest case rather than the sum. This vectorised march is the data generator of the companion paper \citep{carvalho2026b}, where the same compiled right-hand side also provides the residual of the governing equations for physics-informed surrogates.
+The physics is written once against an injected array backend; the same code runs in NumPy, for inspection and small cases, and in JAX \citep{jax2018}, where it is compiled just in time and transformed. Three transformations matter here. First, forward-mode linearisation gives $\bJ$ in Eq.~\eqref{eq:march} and the coloured Newton Jacobian in Eq.~\eqref{eq:newton} exactly, at the cost of two tangent evaluations instead of three extra flashes. Second, the flash is itself differentiable: the successive-substitution iterations are excluded from the derivative graph and the Newton polishing steps, which solve the equilibrium conditions to machine precision, carry the derivatives of the vapour fraction and of the phase compositions with respect to $P$ and $T$ by the implicit function theorem, so that the tangents are those of the converged solution and not of a truncated iteration. Functions with restricted domains (square roots, logarithms, powers) are guarded before evaluation so that the tangents stay finite, and the flash runs inside the compiled program, since an eager call would be retraced at every step. Third, the compiled march is vectorised over cases with the pipe and inlet parameters as arguments, so that one compilation serves any number of cases with the same fluid and grid and a whole batch is evaluated in a single call. This vectorised march is the data generator of the companion paper \citep{carvalho2026b}, where the same compiled right-hand side also provides the residual of the governing equations for physics-informed surrogates.
 
 \subsection{Reproducibility}\label{sec:implementation}
 
-Each case is a self-contained JSON document (fluid with component properties, pipe profile, inlet conditions, model and solver options) and each recorded run stores the profiles together with the case and the software provenance. The reference curves used below were digitised from the figures of \citet{carvalho2022} and its tabulated appendices were extracted from the document; every figure and table of this article is produced by one script from the recorded runs and these reference data.
+Each case is a self-contained JSON document (fluid with component properties, pipe profile, inlet conditions, model and solver options) and each recorded run stores the profiles together with the case and the software provenance. Every figure and table of this article is produced by one script from the recorded runs and the reference data.
 
-\section{Verification, validation and performance}\label{sec:results}
+\section{Verification}\label{sec:verification}
 
-Table~\ref{tab:benchmarks} summarises the three benchmark problems of \citet{carvalho2022} used here.
+Table~\ref{tab:benchmarks} lists the problems used in this and the next sections; the fluid compositions are in Table~\ref{tab:fluids}.
 
 \begin{table}[htbp]
-\caption{Benchmark problems from \citet{carvalho2022}.}\label{tab:benchmarks}
+\caption{Problems, fluids and references.}\label{tab:benchmarks}
 \footnotesize
 \input{tables/generated/tab_benchmarks}
 \input{tables/generated/tab_benchmarks_note}
 \end{table}
 
-\subsection{Cross-verification of the solvers}\label{sec:matrix}
+\subsection{Thermodynamic kernel}\label{sec:thermo_verification}
 
-Table~\ref{tab:matrix} gives, for the offshore system and for one case of the gas-condensate pipeline, the pressure and temperature at the check points obtained with each model, each solver and each backend, together with the Newton iterations, the global balance residuals and the wall time. For a given model the three solvers agree to \SI{0.01}{\bar} and \SI{0.1}{\kelvin}, and NumPy and JAX agree to the printed digits, so that the implementation of the equations is verified independently of the discretisation. The finite-volume balances close to machine precision on their own grid, those of the march and of the finite differences are of the order of the integration tolerance or of the discretisation error (tens to hundreds of pascal over \SI{170}{\bar}, a relative $10^{-6}$ to $10^{-5}$). Starting from the no-slip march, the nodal systems of the no-slip model converge in a single Newton iteration and those of the mechanistic model in three, including the changes of flow pattern along the system; the reference reported fragile convergence of its root finder across phase changes.
+The flash of the 11-component fluid was computed at the 159 two-phase states of the HYSYS comparison (Section~\ref{sec:envelope}) by the present implementation and by the open-source thermo library \citep{thermo2024}, an independent Peng--Robinson implementation, with the same critical constants, acentric factors and zero interaction parameters. The two agree to $R^2 = 1$ to eight decimals and to relative deviations below $2\times10^{-6}$ in the vapour and liquid densities and in the vapour fraction (Table~\ref{tab:thermo_reference}), so that the equation of state, the stability test and the flash are verified independently of the flow models.
 
 \begin{table}[htbp]
-\caption{Two models, three solvers and two backends on the offshore system (81 nodes) and on case 3 of the gas-condensate pipeline (64 nodes).}\label{tab:matrix}
+\caption{Flash of the 11-component fluid at 159 states: this work against an independent open-source Peng--Robinson implementation.}\label{tab:thermo_reference}
+\footnotesize
+\input{tables/generated/tab_thermo_reference}
+\input{tables/generated/tab_thermo_reference_note}
+\end{table}
+
+\subsection{Cross-verification of the solvers}\label{sec:matrix}
+
+Table~\ref{tab:matrix} gives, for the offshore system and for one case of the gas-condensate pipeline of Section~\ref{sec:application}, the pressure and temperature at the check points obtained with each model, each solver and each backend, together with the Newton iterations and the global balance residuals. For a given model the three solvers agree to \SI{0.01}{\bar} and \SI{0.1}{\kelvin}, and NumPy and JAX agree to the printed digits, so that the implementation of the equations is verified independently of the discretisation. The finite-volume balances close to machine precision on their own grid; those of the march and of the finite differences are of the order of the integration tolerance or of the discretisation error (tens to hundreds of pascal over \SI{170}{\bar}, a relative $10^{-6}$ to $10^{-5}$). Starting from the no-slip march, the nodal systems of the no-slip model converge in a single Newton iteration and those of the mechanistic model in two or three, including the changes of flow pattern along the system and the onset of condensation.
+
+\begin{table}[htbp]
+\caption{Two models, three solvers and two backends on the offshore system and on case 3 of the gas-condensate pipeline.}\label{tab:matrix}
 \footnotesize
 \resizebox{\textwidth}{!}{\input{tables/generated/tab_solver_matrix}}
 \input{tables/generated/tab_solver_matrix_note}
 \end{table}
 
-\subsection{Pressure drop in horizontal and vertical lines}\label{sec:dp}
+\section{Comparison with Aspen HYSYS}\label{sec:hysys}
 
-Fig.~\ref{fig:dp_parity} and Table~\ref{tab:dp_stats} compare the pressure drop in the 200 lines (\SI{100}{\metre}, adiabatic, binary CH$_4$/C$_{7+}$ fluid) with the values tabulated by the reference implementation. In the vertical lines, where the hydrostatic term dominates, the mechanistic model reproduces the reference with a median deviation of \SI{+3}{\percent} and 72\,\% of the cases within \SI{10}{\percent}; the no-slip model, which has no slip to raise the holdup, is \SI{14}{\percent} lower in the median, as expected. In the horizontal lines both models are systematically lower than the reference, by about one half. The reference itself noted that its horizontal values lay far above the five literature correlations it compared with (mean deviations of several hundred percent), whereas the present values lie below that band. The friction closures and the liquid-viscosity correlation were checked term by term against the printed equations and against the digitised property comparisons of the reference, so the origin of the horizontal discrepancy lies in an unprinted implementation detail of the reference, most likely in the stratified-flow holdup or interfacial friction, and it is left open.
+The HYSYS results used here were computed by the first author with Aspen HYSYS \citep{aspenhysys}, Peng--Robinson property package and pipe segments with the correlations listed in Table~\ref{tab:benchmarks}, for the same fluids and conditions \citep{carvalho2022}. The C$_{7+}$ pseudo-component of the pressure-drop and offshore fluids was characterised in HYSYS and its properties are listed in Table~\ref{tab:components}. The pressure drops of the 200 lines are tabulated values; the phase envelope, the property distributions and the offshore profiles are available as plots and were digitised. All of them are provided as supplementary material.
+
+\subsection{Phase envelope and fluid properties}\label{sec:envelope}
+
+Fig.~\ref{fig:envelope} compares the phase envelope of the 11-component fluid computed by the present flash with the HYSYS envelope: the bubble line agrees with a median deviation of \SI{0.66}{\bar} and the dew line of \SI{0.69}{\bar} at the same temperature, with the largest deviations (up to \SI{11}{\bar} on the bubble line) near the critical point, where both lines are steep and the digitisation is least precise. The HYSYS values of the phase properties at the 159 states inside the envelope are available only as the markers of parity plots, without the state each marker belongs to, so the comparison is of distributions: Fig.~\ref{fig:properties} plots the quantiles of the present values against those of HYSYS, and Table~\ref{tab:properties} gives the ratios of the medians and of the 10th and 90th percentiles. Overlapping markers merge in the digitisation, which biases the digitised distribution towards rare values, so the present 159 values are merged in the same way before the quantiles are computed. Liquid density, liquid enthalpy, vapour fraction and surface tension follow the diagonal, with median ratios of 0.97--1.01 except for the vapour fraction (1.15, from the upper tail); the vapour density agrees up to \SI{100}{\kilogram\per\metre\cubed}, with the densest vapour states lower; the vapour enthalpy is offset by up to \SI{0.4}{\mega\joule\per\kilogram} in the middle of its range, which reflects the ideal-gas heat-capacity and formation-enthalpy data of the two packages rather than the equation of state, since the residual part is verified in Section~\ref{sec:thermo_verification}. The vapour viscosity is about \SI{15}{\percent} below HYSYS over the whole range, the difference between the corresponding-states method of \citet{pedersen1987} and the HYSYS method, and the liquid viscosity agrees below \SI{1}{\milli\pascal\second} with a higher tail.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\linewidth]{dp_parity}
-\caption{Pressure-drop parity between this work and the reference implementation for the (a) horizontal and (b) vertical lines; dotted lines mark $\pm$\SI{25}{\percent}.}\label{fig:dp_parity}
+\includegraphics[width=0.85\linewidth]{envelope_hysys}
+\caption{Phase envelope of the 11-component fluid: this work (solid) against HYSYS (dotted), and the 159 states of the property comparison.}\label{fig:envelope}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{properties_hysys}
+\caption{Quantile--quantile comparison of the phase properties at the 159 states with HYSYS: (a) vapour density, (b) liquid density, (c) vapour enthalpy, (d) liquid enthalpy, (e) molar vapour fraction, (f) vapour viscosity, (g) liquid viscosity and (h) surface tension; the line is the diagonal.}\label{fig:properties}
 \end{figure}
 
 \begin{table}[htbp]
-\caption{Deviation of the computed pressure drop from the reference values over the 200 lines.}\label{tab:dp_stats}
+\caption{Phase envelope and property distributions: this work against HYSYS.}\label{tab:properties}
 \footnotesize
-\input{tables/generated/tab_dp_stats}
-\input{tables/generated/tab_dp_stats_note}
+\input{tables/generated/tab_properties_hysys}
+\input{tables/generated/tab_properties_hysys_note}
+\end{table}
+
+\subsection{Pressure drop in horizontal and vertical lines}\label{sec:dp}
+
+The 200 lines are \SI{100}{\metre} long, adiabatic, horizontal or vertical, with four diameters, five inlet pressures and five mass flow rates (Table~\ref{tab:benchmarks}), and carry a binary mixture of methane and the C$_{7+}$ pseudo-component (70/30 mol). HYSYS computed each line with four correlations: \citet{beggs1973}, the Tulsa unified model \citep{zhang2003}, the HTFS liquid-slip method, and Gregory--Aziz--Mandhane \citep{mandhane1974} in the horizontal or Aziz--Govier--Fogarasi \citep{aziz1972} in the vertical lines. Fig.~\ref{fig:dp} shows, case by case, the range spanned by the four correlations and the pressure drop of the two present models, and Table~\ref{tab:dp} summarises the deviations.
+
+In the vertical lines, where the hydrostatic term dominates and the four HYSYS correlations agree within \SI{20}{\percent} of each other in the median, the mechanistic model falls inside their range in 88\,\% of the cases, with a median deviation of $+1$\,\% from their geometric mean, $+2$\,\% from Tulsa and $-6$\,\% from Beggs and Brill; the no-slip model, which cannot raise the holdup above the no-slip fraction, is \SI{14}{\percent} lower, as expected, and drops out of the range at low pressure and large diameter, where slip matters most. In the horizontal lines the four HYSYS correlations themselves disagree by a factor of three in the median, and both present models lie below the whole range in 87--95\,\% of the cases: the mechanistic model is \SI{52}{\percent} below Tulsa and \SI{73}{\percent} below Beggs and Brill in the median. These lines are short, adiabatic and friction-dominated, with pressure drops from $10^{-4}$ to \SI{1}{\bar}, and their liquid is the heavy pseudo-component (\SI{560}{\gram\per\mole}), so they are sensitive both to the liquid viscosity and to the stratified-flow closure. The liquid viscosity given by the corresponding-states correlation is \SIrange{0.7}{3}{\milli\pascal\second} at these conditions, decreasing with pressure as methane dissolves in the liquid; tripling it raises the computed pressure drops by about one fifth, so viscosity alone does not explain the gap. Closing it requires the liquid viscosity and holdup that HYSYS computes for the same states, which are not available, and the horizontal comparison is reported as an open discrepancy.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{dp_hysys}
+\caption{Pressure drop in the (a) horizontal and (b) vertical lines, case by case: range of the four HYSYS correlations (grey band) and their geometric mean (dash), and the mechanistic (circles) and no-slip (squares) models of this work.}\label{fig:dp}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Pressure drop in the 200 lines: this work against the four HYSYS correlations.}\label{tab:dp}
+\footnotesize
+\resizebox{\textwidth}{!}{\input{tables/generated/tab_dp_hysys}}
+\input{tables/generated/tab_dp_hysys_note}
 \end{table}
 
 \subsection{Offshore production system}\label{sec:offshore}
 
-Fig.~\ref{fig:offshore} and Table~\ref{tab:offshore_points} show the profiles along the well, flowline and riser. The no-slip model reproduces the no-slip curves of the reference: \SI{119.98}{\bar} against \SI{119.97}{\bar} at the wellhead, within \SI{1.7}{\bar} at the riser base, within \SI{1.4}{\kelvin} in temperature everywhere, and annular flow along the whole system, as reported. Since the energy equation and its closure are shared by all cases, this agreement verifies the heat-transfer formulation that is questioned in Section~\ref{sec:condensate}. With the mechanistic model the present implementation loses more pressure along the flowline than the reference (\SI{102}{\bar} against \SI{115}{\bar} at the riser base), consistently with the horizontal lines of Section~\ref{sec:dp}. The holdup of the reference is $0.85\times$ the present value in all three segments for both models; the ratio is the same for the no-slip model, whose holdup is the flash fraction $\lambda_L$ of Eq.~\eqref{eq:lambda}, so it is thermodynamic and traces to the characterisation of the C$_{7+}$ pseudo-component (molar mass \SI{560}{\gram\per\mole}, acentric factor 1.32): a liquid density about \SI{25}{\percent} higher, or a critical pressure $1.25\times$ larger, reproduces the reference curve.
+The offshore system consists of a vertical well of \SI{1500}{\metre} and \SI{127}{\milli\metre}, a horizontal flowline of \SI{6000}{\metre} and a vertical riser of \SI{300}{\metre}, both of \SI{152.4}{\milli\metre}, with overall heat-transfer coefficients of 7 and \SI{5}{\watt\per\metre\squared\per\kelvin} and ambient temperatures of 40 and \SI{12}{\celsius}; a 9-component fluid with the C$_{7+}$ pseudo-component enters the well at \SI{170}{\bar}, \SI{80}{\celsius} and \SI{10}{\kilogram\per\second}. HYSYS computed the system with the Tulsa and Beggs and Brill correlations. Fig.~\ref{fig:offshore} and Table~\ref{tab:offshore} compare the profiles. The two HYSYS correlations differ by up to \SI{10}{\bar} in pressure, and the present models fall on either side: the no-slip model follows Tulsa in the well and in the first half of the flowline (\SI{120.0}{\bar} against \SI{118.7}{\bar} at the wellhead, \SI{117.1}{\bar} against \SI{117.8}{\bar} at mid-flowline), while the mechanistic model loses more pressure in the well (\SI{115.6}{\bar} at the wellhead, between Tulsa and Beggs and Brill) and then follows the Beggs and Brill profile within about \SI{1}{\bar} along the flowline and at the riser base (\SI{102.3}{\bar} against \SI{102.6}{\bar}). The temperatures agree within \SI{2}{\kelvin} everywhere, the present ones being 0.1 to \SI{1.7}{\kelvin} warmer. The no-slip holdup, the flash fraction $\lambda_L$, is below both HYSYS holdups, as it must be when the gas moves faster than the liquid; the mechanistic holdup lies between the two correlations in the well, below them in the flowline (0.34 against 0.38 and 0.45) and above them at the riser base. The mechanistic model predicts annular flow along the whole system, whereas the Beggs and Brill correlation in HYSYS reports intermittent flow throughout, a difference of classification that the pressure profiles absorb.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.85\linewidth]{offshore_profiles}
-\caption{Profiles of (a) pressure, (b) temperature and (c) liquid holdup along the well--flowline--riser system for the no-slip and mechanistic models (solid lines) against the reference curves (dotted lines).}\label{fig:offshore}
+\includegraphics[width=0.85\linewidth]{offshore_hysys}
+\caption{Profiles of (a) pressure, (b) temperature and (c) liquid holdup along the well--flowline--riser system (shaded: flowline): the no-slip and mechanistic models of this work (solid) against HYSYS with the Tulsa (dotted; pressure as digitised points) and Beggs and Brill (dashed) correlations.}\label{fig:offshore}
 \end{figure}
 
 \begin{table}[htbp]
-\caption{Offshore system: pressure, temperature and holdup at the wellhead, mid-flowline and riser base.}\label{tab:offshore_points}
+\caption{Offshore system: pressure, temperature and holdup at the wellhead, mid-flowline and riser base, this work against HYSYS.}\label{tab:offshore}
 \footnotesize
-\input{tables/generated/tab_offshore_points}
-\input{tables/generated/tab_offshore_points_note}
+\input{tables/generated/tab_offshore_hysys}
+\input{tables/generated/tab_offshore_hysys_note}
 \end{table}
 
-\subsection{Gas-condensate pipeline}\label{sec:condensate}
+\section{Application: condensation in a gas pipeline}\label{sec:application}
 
-The \SI{8}{\kilo\metre} pipeline with a rich gas (Table~\ref{tab:benchmarks}) was simulated for two inlet temperatures and three heat-transfer coefficients. With the printed values of $U$ the present model cooled the gas far more slowly than the reference figures. Fitting the exponential cooling law $T - T_\mathrm{amb} \propto \exp(-a x)$ to the single-phase part of the six reference profiles gave pure exponentials (residual below \SI{0.1}{\kelvin}) whose decay rate per unit $U$ was the same in all six cases and $3.4\times$ the value of $U\pi D/(\mdot c_p)$ with the printed data, with no additive term and no dependence on temperature. A single constant factor on the heat-loss term therefore explains the whole set, whereas an error in the thermodynamics or in the energy equation is ruled out both by the shape of the profiles and by the agreement in the offshore system; the printed $U$ values are taken as a presentation error of the reference and the effective values $3.42\,U$ are used. Fig.~\ref{fig:condensate} and Table~\ref{tab:condensate} then show agreement of the temperature profiles to \SIrange{0.1}{0.3}{\kelvin}, of the outlet pressure to \SI{0.04}{\bar} and of the onset of condensation to within \SI{1.1}{\kilo\metre}; the dew-point temperature at the onset agrees to \SI{1.5}{\kelvin}. The reference vapour-fraction curves drop discontinuously at the dew point, which the equilibrium flash cannot produce, and then flatten above the present curves: this is the signature of a dead band in the phase-stability test of the reference. The vapour fraction plotted there is molar, which the present curves match to 0.004 in the two-phase region.
+An \SI{8}{\kilo\metre} horizontal pipeline of \SI{12}{in} carries a rich gas of methane to $n$-pentane (Table~\ref{tab:fluids}) at \SI{70}{\bar} and \SI{15}{\kilogram\per\second}, with the ambient at \SI{25}{\celsius}. Six cases combine two inlet temperatures (60 and \SI{80}{\celsius}) with three overall heat-transfer coefficients (3.4, 10.3 and \SI{20.5}{\watt\per\metre\squared\per\kelvin}, from an insulated to a bare line), and the question is whether and where condensate forms. Fig.~\ref{fig:condensate} and Table~\ref{tab:condensate} show the results of the no-slip model. With the lowest coefficient the gas reaches the outlet at 43 and \SI{54}{\celsius} and stays single-phase. With the two higher coefficients it reaches the dew point between 3.0 and \SI{7.6}{\kilo\metre}, always at \SIrange{34.0}{34.3}{\celsius}, the dew temperature of the fluid at the local pressure, and leaves with 0.3 to 3.9 mol\% of liquid; the higher inlet temperature only delays the onset. The march resolves the onset without special treatment, since the flash and its derivatives are continuous across the dew point, and the finite-volume solver reproduces the same profiles (Table~\ref{tab:matrix}, case 3).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.85\linewidth]{condensate_profiles}
-\caption{Gas-condensate pipeline, cases 1--4 and 6: (a) temperature and (b) molar vapour fraction along the line with the effective heat-transfer coefficients (solid) against the digitised reference curves (dotted).}\label{fig:condensate}
+\caption{Gas-condensate pipeline: (a) temperature and (b) molar vapour fraction along the line for the six cases (solid: inlet at \SI{60}{\celsius}; dashed: \SI{80}{\celsius}); circles mark the onset of condensation.}\label{fig:condensate}
 \end{figure}
 
 \begin{table}[htbp]
-\caption{Gas-condensate pipeline: outlet temperature and onset of condensation.}\label{tab:condensate}
+\caption{Gas-condensate pipeline: outlet conditions and onset of condensation.}\label{tab:condensate}
 \footnotesize
 \input{tables/generated/tab_condensate}
 \input{tables/generated/tab_condensate_note}
 \end{table}
 
-\subsection{Computational performance}\label{sec:performance}
+\section{Computational performance}\label{sec:performance}
 
-Table~\ref{tab:performance} lists wall times. The compiled march of the offshore system takes \SI{0.18}{\second} once the program is compiled; the times in the table include the compilation of the first run of each structure, which is the dominant cost for a single case (tens of seconds) but is paid once. In NumPy the same march takes \SI{70}{\second} because the derivatives are computed by finite differences with extra flashes, in line with the \SI{7}{\second} of the reference on a slower machine once the number of flashes is accounted for. The nodal systems converge in one to three Newton iterations, against the hundreds of root-finder evaluations implied by the \SIrange{37}{230}{\second} of the reference. The vectorised march costs \SI{0.28}{\second} per sample for a batch of 300 cases including compilation, which is what makes the surrogate workflow of the companion paper cheap: three hundred converged profiles of a segment in about one minute.
+Table~\ref{tab:performance} lists wall times on the offshore system. The first run of each model structure includes the just-in-time compilation, \SIrange{13}{38}{\second}, which is paid once and reused for any other inlet condition, pipe parameter or flow rate. Once compiled, the nodal systems with 81 nodes take \SIrange{0.5}{0.7}{\second}, one to three Newton iterations with the exact coloured Jacobian, and the adaptive march takes \SI{1.2}{\second} for the no-slip and \SI{4.1}{\second} for the mechanistic model, with 158 accepted steps and 157 output points. The NumPy backend, which evaluates the same equations without compilation and with finite-difference derivatives, takes \SI{15}{\second} for the finite-volume system, 25 times the compiled JAX run, and \SI{73}{\second} for the mechanistic march. For many cases of one segment the compilation dominates: a march of the well takes \SI{46}{\second} the first time and \SI{0.25}{\second} once compiled, and the vectorised march evaluates 300 cases in \SI{112}{\second} including compilation and in \SI{54}{\second} once compiled, \SI{0.18}{\second} per case. On a CPU, vectorisation thus gains about \SI{30}{\percent} per case over compiled calls made one by one; its main benefit is that a single compilation serves the whole batch, which is how the companion paper generates its training sets in about a minute per segment.
 
 \begin{table}[htbp]
-\caption{Wall times on the offshore system, this work against \citet{carvalho2022}.}\label{tab:performance}
+\caption{Wall times on the offshore system.}\label{tab:performance}
 \footnotesize
 \input{tables/generated/tab_performance}
 \input{tables/generated/tab_performance_note}
@@ -278,7 +320,7 @@ Table~\ref{tab:performance} lists wall times. The compiled march of the offshore
 
 \section{Conclusions}\label{sec:conclusions}
 
-Writing the compositional two-phase pipe-flow model in flux form on an array backend with automatic differentiation gave exact Jacobians and flash derivatives, three solvers that verify one another to \SI{0.01}{\bar} on the same equations, global balances that close to machine precision in the finite-volume scheme, Newton convergence in one to three iterations across phase and pattern changes, and a vectorised march that generates hundreds of converged profiles per minute. Against the reference implementation the no-slip model reproduces the offshore system and, with an effective heat-transfer coefficient identified from the shape of the reference profiles, the gas-condensate pipeline; the mechanistic model reproduces the vertical pressure drops and leaves the horizontal ones, lower than the reference by about one half, as an open question for which the unprinted closure details of the reference are the suspect. The finite-volume scheme on the flux interface is the recommended nodal method, since it is conservative, narrow-banded and insensitive to the kinks of the dew point and of the pattern transitions, while the march remains the tool of choice for generating data. The companion paper \citep{carvalho2026b} builds on both: the vectorised march generates the training sets of neural surrogates of the production system, and the compiled right-hand side supplies the residual of the governing equations to physics-informed surrogates that return whole profiles with the axial position as an input.
+Writing the compositional two-phase pipe-flow model in flux form on an array backend with automatic differentiation gave exact Jacobians and flash derivatives, three solvers that verify one another to \SI{0.01}{\bar} on the same equations, global balances that close to machine precision in the finite-volume scheme, Newton convergence in one to three iterations across phase and pattern changes, and a vectorised march that generates hundreds of converged profiles per minute. The thermodynamic kernel reproduces an independent open-source Peng--Robinson implementation to a relative $10^{-6}$ and the HYSYS phase envelope to \SI{0.7}{\bar} in the median. Against the HYSYS pipe correlations, the mechanistic model falls inside their range in 88\,\% of 100 vertical lines and follows the Beggs and Brill profile of an offshore system within about \SI{1}{\bar} along the flowline, with temperatures within \SI{2}{\kelvin}; in short horizontal lines carrying a heavy pseudo-component both models lie below the range of the HYSYS correlations, which themselves span a factor of three, and this discrepancy, sensitive to the liquid viscosity and to the stratified-flow closure, is left open. The finite-volume scheme on the flux interface is the recommended nodal method, since it is conservative, narrow-banded and insensitive to the kinks of the dew point and of the pattern transitions, while the march remains the tool of choice for generating data. The companion paper \citep{carvalho2026b} builds on both: the vectorised march generates the training sets of neural surrogates of the production system, and the compiled right-hand side supplies the residual of the governing equations to physics-informed surrogates that return whole profiles with the axial position as an input.
 
 \section*{Acknowledgements}
 % TODO: bolsa PRH/ANP e outras fontes de financiamento.
@@ -289,12 +331,13 @@ The authors declare that they have no known competing financial interests or per
 
 \section*{Declaration of generative AI and AI-assisted technologies in the writing process}
 % Obrigatória na submissão; ajustar ao uso real.
-During the preparation of this work the authors used AI-assisted tools for code development, for the extraction of tabulated data from the reference document and for language editing. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+During the preparation of this work the authors used AI-assisted tools for code development, for the digitisation of plotted reference data and for language editing. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
 
 \section*{Data availability}
 % TODO: DOI do repositório (Zenodo) ou endereço público do código e dos casos.
-The simulator, the case definitions, the recorded runs and the script that produces every figure and table of this article are available in a public repository.
+The simulator, the case definitions, the recorded runs, the script that produces every figure and table of this article, and the HYSYS reference values (the 200 pressure drops and the digitised offshore profiles, as CSV files) are available in a public repository and as supplementary material.
 
+\FloatBarrier
 \appendix
 % O guia pede Eq. (A.1), Tabela A.1 e Fig. A.1 nos apêndices; a classe não renumera sozinha.
 \setcounter{equation}{0}\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
@@ -303,10 +346,33 @@ The simulator, the case definitions, the recorded runs and the script that produ
 \section{Equation-of-state parameters}\label{app:eos}
 The attractive and covolume parameters of Eq.~\eqref{eq:pr} are
 \begin{equation}\label{eq:pr_ab}
-a = \Omega_a \frac{R^2 T_c^2}{P_c}, \qquad b = \Omega_b \frac{R T_c}{P_c}, \qquad \alpha(T) = \left[1 + \kappa\left(1 - \sqrt{T/T_c}\right)\right]^2, \qquad \kappa = 0.37464 + 1.54226\,\omega - 0.26992\,\omega^2,
+\begin{aligned}
+a &= \Omega_a \frac{R^2 T_c^2}{P_c}, \qquad b = \Omega_b \frac{R T_c}{P_c},\\
+\alpha(T) &= \left[1 + \kappa\left(1 - \sqrt{T/T_c}\right)\right]^2, \qquad \kappa = 0.37464 + 1.54226\,\omega - 0.26992\,\omega^2,
+\end{aligned}
 \end{equation}
-with $\Omega_a = 0.45724$ and $\Omega_b = 0.0778$ as printed in the reference, and the van der Waals mixing rules with zero binary interaction parameters. The critical properties, acentric factors, normal boiling points, enthalpies of formation and ideal-gas heat-capacity polynomials of the pure components are those tabulated by \citet{carvalho2022}; the C$_{7+}$ pseudo-component of the offshore fluid is characterised by its molar mass (\SI{560}{\gram\per\mole}), critical temperature (\SI{991.4}{\kelvin}), critical pressure (\SI{8.379}{\bar}) and acentric factor (1.32), with the ideal-gas heat capacity extrapolated from the normal alkanes.
+with $\Omega_a = 0.45724$ and $\Omega_b = 0.0778$, and the van der Waals mixing rules with zero binary interaction parameters. The comparison with the open-source implementation in Section~\ref{sec:thermo_verification} uses the exact values of $\Omega_a$ and $\Omega_b$ in both codes; the rounded values change the properties by about $10^{-5}$.
 
+\FloatBarrier
+\section{Component data and fluid compositions}\label{app:data}
+
+Table~\ref{tab:components} lists the pure-component data and Table~\ref{tab:fluids} the compositions of the four fluids.
+
+\begin{table}[htbp]
+\caption{Component data.}\label{tab:components}
+\footnotesize
+\resizebox{\textwidth}{!}{\input{tables/generated/tab_components}}
+\input{tables/generated/tab_components_note}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Fluid compositions.}\label{tab:fluids}
+\footnotesize
+\input{tables/generated/tab_fluids}
+\input{tables/generated/tab_fluids_note}
+\end{table}
+
+\FloatBarrier
 \printcredits
 
 \bibliographystyle{cas-model2-names}

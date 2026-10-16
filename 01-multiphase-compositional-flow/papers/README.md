@@ -9,7 +9,7 @@ CAS, citações autor–ano).
 |---|---|
 | `_common/` | `paper.mk` (regras de `make`), `figlib.py` (apoio às figuras: caminhos, estilo, paleta, gravação PDF+PNG), `cmfsim-paper.mplstyle`, `references.bib` (bibliografia canónica do tema), `latex/` (ícones da classe CAS) |
 | `_template/` | esqueleto de artigo novo (`tools/new_paper.py` copia-o) |
-| `01-compositional-steady-state/` | **volume I**: o simulador composicional em regime permanente, 2 modelos × 3 solvers × 2 backends verificados entre si, JAX em destaque, validação contra a dissertação e desempenho; manuscrito completo, 3 figuras e 6 tabelas geradas |
+| `01-compositional-steady-state/` | **volume I**: o simulador composicional em regime permanente, 2 modelos × 3 solvers × 2 backends verificados entre si, JAX em destaque, núcleo termodinâmico verificado contra a biblioteca `thermo`, **comparação com o Aspen HYSYS** (envelope e propriedades, 200 linhas de perda de carga contra quatro correlações, sistema offshore contra Tulsa e Beggs & Brill; sem comparação com o modelo da dissertação), aplicação ao gasoduto com condensado e desempenho medido (`tools/measure_performance.py`); 5 figuras, 10 tabelas e os valores do HYSYS em CSV suplementar |
 | `02-surrogate-models/` | **volume II** (cita o I): substitutos por redes neuronais com dados da marcha vetorizada, grelha de hiperparâmetros, encadeamento e ganho de desempenho, substituto de perfil com s = x/L, PINN com o resíduo do modelo e validação (sobreajuste, viés, divisões treino/teste); manuscrito completo, 7 figuras e 9 tabelas geradas |
 
 Dentro de cada artigo:
