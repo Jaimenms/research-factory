@@ -59,7 +59,7 @@ começa, não).
 Se o polinómio Cp/R = A + B T + C T² for avaliado com T em °C (erro de unidade plausível num
 código que recebe °C nas tabelas), o cp da mistura a 45 °C cai de ≈ 2050 para ≈ 800 J/(kg K),
 exatamente o valor implícito no caso 1 da dissertação. Opção `fluid.cp_temperature = "celsius"`
-(`ComponentSet.cp_temperature`; lote `batches/dissertation_celsius.json`):
+(`ComponentSet.cp_temperature`; o lote `batches/dissertation_celsius.json` que gerou esta tabela foi apagado em 2026-10-15 com a aprovação do dono):
 
 | caso | T_out dissertação | T_out Kelvin (físico) | T_out Celsius (hipótese) | x_cond dissertação / Celsius |
 |---|---|---|---|---|
@@ -123,7 +123,7 @@ térmico. Os candidatos redondos mais próximos, 1/D = 3,28 e π = 3,14, ficam 4
 origem). Lote `batches/dissertation.json` recorrido; `nb_5_6_condensate` mostra o ajuste exponencial e
 as figuras; teste noturno com rms(T) < 0,5 °C e início da condensação a < 1 km. A hipótese dos °C fica
 superada (a opção `cp_temperature` continua disponível, default `kelvin`; o lote
-`batches/dissertation_celsius.json` deixa de ser usado pelo notebook). A série 5 das Figuras 39–40
+`batches/dissertation_celsius.json` foi apagado com a aprovação do dono). A série 5 das Figuras 39–40
 (pontilhada, segmentada por tonalidade) está mal digitalizada e fica fora das verificações.
 
 **O que fica por explicar.** A Tabela 26 (composições na saída do caso 2) implica, pelo balanço material
