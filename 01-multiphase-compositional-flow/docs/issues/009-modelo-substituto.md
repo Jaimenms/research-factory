@@ -81,7 +81,10 @@ Figuras 45, 49 e 53 param em ~200 contagens). As oito redes da Tabela 30 estão 
 | riser | 0,963 / 0,905 | 0,9999 / 0,9994 | 0,15 / 0,05 | 0,44 bar / 2,0 K |
 
 Modelos finais (Tabela 31: 1 camada, 20 neurónios, ReLU, 0,01; 122 parâmetros cada) em
-`models/surrogate/{well,line,riser}.json`. Encadeados a 170 bar, 80 °C e 20 kg/s contra a corrida de
+`models/surrogate/{well,line,riser}.json`. **A escolha segue a Tabela 31 da dissertação (reprodução), não a
+melhor rede da nossa grelha**: as dez melhores por trecho (R² ≥ 0,9993 em P e T, p. ex. 20 neurónios
+sigmóide 1 camada a taxa 0,1) e as piores (5 neurónios ReLU com 3 camadas, que não aprendem) estão no
+notebook 5.7, e as 135 linhas por trecho em `models/surrogate/grid_{well,line,riser}.csv`. Encadeados a 170 bar, 80 °C e 20 kg/s contra a corrida de
 referência do cmfsim (Figuras 57–58, Tabela 33):
 
 | ponto | P físico / RNA [bar] | erro P cmfsim / Tabela 33 | T físico / RNA [°C] | erro T cmfsim / Tabela 33 |

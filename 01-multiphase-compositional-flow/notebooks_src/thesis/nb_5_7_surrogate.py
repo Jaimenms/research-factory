@@ -136,11 +136,36 @@ save(fig, "nb_5_7_appendix_b")
 # %% [markdown]
 # ## Apêndice C e Tabela 30 — busca em grelha (135 redes por trecho)
 #
-# Mesma grelha e mesma numeração do Apêndice C (neurónios × taxa × ativação × camadas). Os R² do autor
-# vêm de um treino em PyTorch com inicialização aleatória; os nossos, de Adam em lote completo em JAX.
-# Compara-se o número de redes com R² > 0,9 em P e T e a lista das que o conseguem nos três trechos.
+# Mesma grelha e mesma numeração do Apêndice C: camadas {1, 2, 3} × ativação {relu, sigmoid, tanh} ×
+# neurónios {5, 10, 15, 20, 25} × taxa {0,1, 0,01, 0,001}, todas treinadas com os mesmos dados (70/30,
+# semente 0, 2000 épocas de Adam em lote completo) e avaliadas pelo R² de teste em P e T
+# (`surrogate.grid`; CSV completos em `runs/surrogate/grid_*.csv` e `models/surrogate/grid_*.csv`). Os R²
+# do autor vêm de um treino em PyTorch com inicialização aleatória. Compara-se o número de redes com
+# R² > 0,9 em P e T, a lista das que o conseguem nos três trechos e as dez melhores de cada trecho.
+# **Os modelos finais usam os hiperparâmetros da Tabela 31 (reprodução da dissertação), não a melhor rede
+# da nossa grelha**: com estes dados quase todas as redes ficam acima de 0,99 e a escolha pesa pouco.
 # %%
 if grid:
+    for s, name in SEG.items():
+        ranked = sorted(grid[s], key=lambda r: -float(r["r2_sum"]))[:10]
+        theirs = {r["case"]: r for r in appc[s]}
+        rows = [
+            (
+                r["case"],
+                r["neurons"],
+                r["learning_rate"],
+                r["activation"],
+                r["layers"],
+                f"{float(r['r2_P']):.4f}",
+                f"{float(r['r2_T']):.4f}",
+                f"{float(theirs[r['case']]['r2_P']):.2f} / {float(theirs[r['case']]['r2_T']):.2f}",
+            )
+            for r in ranked
+        ]
+        print(f"**{name}: dez melhores redes da grelha (por R² P + R² T no teste)**")
+        table(rows, ["caso", "neurónios", "taxa", "ativação", "camadas", "R² P cmfsim", "R² T cmfsim", "R² P / T dissertação"])
+        worst = sorted(grid[s], key=lambda r: float(r["r2_sum"]))[:4]
+        print("   piores:", "; ".join(f"caso {r['case']} ({r['neurons']}n, {r['activation']}, {r['layers']}c, taxa {r['learning_rate']}): R² {float(r['r2_P']):.2f}/{float(r['r2_T']):.2f}" for r in worst))
     rows = []
     for s, name in SEG.items():
         ours = [r for r in grid[s] if r["both_above_0_9"] == "True"]

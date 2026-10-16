@@ -107,17 +107,25 @@ def save(fig, out_dir, name, png=True):
     return pdf
 
 
-def run_cli(figures, description):
-    """Linha de comando comum: `--out DIR` (obrigatório), `--only NOME` (repetível), `--no-png`.
+def run_cli(figures, description, tables=None):
+    """Linha de comando comum: `--out DIR` (obrigatório), `--tables DIR` (fragmentos LaTeX das tabelas),
+    `--only NOME` (repetível), `--no-png`.
 
-    `figures` é um dict nome -> função(out_dir, png) que grava a figura com esse nome.
+    `figures` é um dict nome -> função(out_dir, png) que grava a figura com esse nome; `tables`, um dict
+    nome -> função(out_dir) que grava `out_dir/nome.tex` (um `tabular` lido por `\\input` no manuscrito).
     """
+    tables = tables or {}
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--out", required=True, type=Path, help="pasta das figuras geradas")
-    parser.add_argument("--only", action="append", choices=sorted(figures), help="gerar só esta figura (repetível)")
+    parser.add_argument("--tables", type=Path, help="pasta dos fragmentos LaTeX das tabelas")
+    parser.add_argument("--only", action="append", choices=sorted(figures) + sorted(tables), help="gerar só este item (repetível)")
     parser.add_argument("--no-png", action="store_true", help="não gravar a pré-visualização PNG")
     args = parser.parse_args()
     use_style()
-    for name in args.only or sorted(figures):
-        figures[name](args.out, not args.no_png)
+    names = args.only or (sorted(figures) + sorted(tables))
+    for name in names:
+        if name in figures:
+            figures[name](args.out, not args.no_png)
+        elif args.tables is not None:
+            tables[name](args.tables)
     return args

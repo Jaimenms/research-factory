@@ -76,13 +76,25 @@ def simulate_outputs(case, X: np.ndarray, chunk=100, backend="jax"):
     return {"Y": Y, "ok": ok, "x_out": np.asarray(x_out), "profiles": U, "info": info}
 
 
-def generate(case_path, out, n=300, seed=0, segment=None, ranges=None, inputs_csv=None, criterion="random", chunk=100):
+def generate(
+    case_path,
+    out,
+    n=300,
+    seed=0,
+    segment=None,
+    ranges=None,
+    inputs_csv=None,
+    criterion="random",
+    chunk=100,
+    overrides=None,
+):
     """Gera e grava a massa de dados de um caso de trecho. Entradas: `ranges` (ou as da dissertação via
-    `segment`) amostradas por hipercubo latino, ou lidas de `inputs_csv`."""
+    `segment`) amostradas por hipercubo latino, ou lidas de `inputs_csv`. `overrides`: lista
+    `caminho=valor` aplicada ao caso (p. ex. `outputs.dx_out=30` para perfis mais finos)."""
     from cmfsim.io.spec import Case, load_json
     from cmfsim.results import provenance
 
-    case_dict = load_json(case_path)
+    case_dict = load_json(case_path, overrides)
     case = Case.from_dict(case_dict)
     if inputs_csv is not None:
         X = read_inputs_csv(inputs_csv)
@@ -147,9 +159,18 @@ def main(argv=None):
     ap.add_argument("--inputs", help="CSV com colunas P_in_bar, T_in_K, m_kg_s (p. ex. o Apêndice B)")
     ap.add_argument("--criterion", default="random", choices=("random", "center", "maximin"))
     ap.add_argument("--chunk", type=int, default=100)
+    ap.add_argument("--set", action="append", default=[], help="override caminho=valor no caso (repetível)")
     a = ap.parse_args(argv)
     out, meta = generate(
-        a.case, a.out, n=a.n, seed=a.seed, segment=a.segment, inputs_csv=a.inputs, criterion=a.criterion, chunk=a.chunk
+        a.case,
+        a.out,
+        n=a.n,
+        seed=a.seed,
+        segment=a.segment,
+        inputs_csv=a.inputs,
+        criterion=a.criterion,
+        chunk=a.chunk,
+        overrides=a.set,
     )
     print(f"gravado {out}: {meta['n_ok']} amostras válidas em {meta['cpu']:.1f} s")
 

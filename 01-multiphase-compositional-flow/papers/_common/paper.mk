@@ -6,6 +6,7 @@
 #   BUILD      pasta de saída do LaTeX (omissão: build; fora do git)
 #   FIGSCRIPT  guião que gera as figuras (omissão: figures/make_figures.py)
 #   GEN        pasta das figuras geradas (omissão: figures/generated; fora do git)
+#   TGEN       pasta dos fragmentos LaTeX das tabelas (omissão: tables/generated; fora do git)
 #
 # Motor: latexmk (TeX Live/MacTeX) se existir, senão tectonic (brew install tectonic; descarrega os
 # pacotes à primeira compilação). Ambos correm o BibTeX e as passagens extra sozinhos.
@@ -14,6 +15,7 @@ PAPER     ?= main
 BUILD     ?= build
 FIGSCRIPT ?= figures/make_figures.py
 GEN       ?= figures/generated
+TGEN      ?= tables/generated
 
 COMMON  := $(dir $(lastword $(MAKEFILE_LIST)))
 PROJECT := $(abspath $(COMMON)/../..)
@@ -43,7 +45,7 @@ all: pdf
 figures: $(GEN)/.stamp
 
 $(GEN)/.stamp: $(FIGSCRIPT) $(COMMON)figlib.py $(COMMON)cmfsim-paper.mplstyle
-	$(UV) $(FIGSCRIPT) --out $(GEN)
+	$(UV) $(FIGSCRIPT) --out $(GEN) --tables $(TGEN)
 	@touch $@
 
 refigures:
@@ -64,13 +66,14 @@ clean:
 	rm -rf $(BUILD)
 
 distclean: clean
-	rm -rf $(GEN)
+	rm -rf $(GEN) $(TGEN)
 
 check:
 	@echo "motor LaTeX: $(ENGINE)"
 	@echo "projeto:     $(PROJECT)"
 	@echo "python:      $(UV)"
 	@echo "figuras:     $(GEN)"
+	@echo "tabelas:     $(TGEN)"
 
 open: pdf
 	open $(BUILD)/$(PAPER).pdf
