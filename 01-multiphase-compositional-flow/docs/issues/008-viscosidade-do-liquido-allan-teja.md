@@ -1,64 +1,72 @@
-# 008 · Viscosidade do líquido: a regra de mistura de Allan & Teja dá 3–4× menos do que a dissertação e o HYSYS
+# 008 · Viscosidade do líquido (Allan & Teja): o desvio aparente de 3–4× era um artefacto da digitalização; formulação confirmada
 
 | | |
 |---|---|
-| tipo | hipótese / estudo |
-| área | termodinâmica (propriedades de transporte, §2.5.2, eqs. 137–141) |
-| estado | aberto (2026-10-15): achado quantificado, causa por identificar; nada adotado |
-| onde | `cmfsim/thermo/viscosity.py` (`allan_teja_viscosity`), `notebooks_src/thesis/nb_5_2_viscosity_tension.py`, `dissertation/data/components.json` (`Nc_eff`) |
-| dados | Figura 20 digitalizada (paridade «Implementado vs HYSYS», 24 marcadores de 159 pontos), 159 estados (P, T) da Figura 13, fluido da Tabela 6; Apêndice A horizontal |
+| tipo | estudo |
+| área | termodinâmica (propriedades de transporte, §2.5.2, eqs. 137–141); método de comparação com as paridades digitalizadas |
+| estado | fechada (2026-10-15): nada a mudar no simulador; comparação por quantis corrigida |
+| onde | `cmfsim/thermo/viscosity.py` (`allan_teja_viscosity`), `dissertation/notebook_utils.py` (`merge_like_figure`, `qq_parity`), `notebooks_src/thesis/nb_5_1_thermo.py`, `nb_5_2_viscosity_tension.py` |
+| dados | Figuras 14–21 digitalizadas (paridades «Implementado vs HYSYS»), 159 estados (P, T) da Figura 13, fluido da Tabela 6; Apêndice A horizontal |
 
-## O achado
+## O que parecia
 
-Nos 159 estados da Figura 13 (fluido da Tabela 6, todos bifásicos com T em kelvin; o notebook 5.2
-somava 273,15 a temperaturas já em kelvin e comparava 155 estados fora do envelope, corrigido
-nesta issue), a distribuição da nossa viscosidade do líquido fica 3–4× abaixo das duas da Figura
-20, que concordam entre si:
+O notebook 5.2 somava 273,15 a temperaturas já em kelvin (155 dos 159 estados fora do envelope;
+corrigido). Com os estados certos, a distribuição da nossa viscosidade do líquido nos 159 pontos
+parecia 3–4× abaixo das duas da Figura 20 (HYSYS no eixo y, implementação da dissertação no eixo
+x), em todos os quantis (medianas 0,18 contra 0,70 e 0,54 mPa·s), e a da massa específica do
+vapor (Figura 14) 0,70× a do HYSYS.
 
-| μ_L [mPa·s] | q05 | q25 | q50 | q75 | q95 |
-|---|---|---|---|---|---|
-| HYSYS (eixo y da Figura 20) | 0,116 | 0,442 | 0,699 | 1,165 | 3,749 |
-| implementação da dissertação (eixo x) | 0,160 | 0,341 | 0,540 | 0,894 | 3,513 |
-| cmfsim, Nc efetivo médio molar (atual) | 0,100 | 0,128 | 0,175 | 0,292 | 0,891 |
-| cmfsim, Nc efetivo médio mássico | 0,122 | 0,158 | 0,226 | 0,397 | 1,640 |
-| cmfsim, ln μ médio molar dos puros | 0,087 | 0,115 | 0,158 | 0,262 | 0,809 |
+## A formulação
 
-As distribuições não são emparelhadas e a Figura 20 só tem 24 marcadores legíveis (os sobrepostos
-fundem-se), o que enviesa a distribuição da figura para os valores raros; mas a razão de 3–4× é
-muito maior do que esse viés e aparece em todos os quantis. O nC8 puro a 300 K dá 0,503 mPa·s
-(medido 0,51): a correlação (137–140) está bem; o problema está na **mistura**. A dissertação não
-define o número de carbonos efetivo da mistura (eq. 141, marcada ⚠ no índice de equações) nem os
-Nc efetivos de CO₂, N₂ e H₂S (hipótese Nc = 1 na issue 001); usamos Nc_m = Σ x_i Nc_i. Nenhuma
-regra de mistura simples fecha a diferença (a mássica sobe 30 %).
+A fonte original (Allan & Teja, Can. J. Chem. Eng. 69, 986–991, 1991) está atrás de paywall e as
+fontes secundárias encontradas (Orbey & Sandler 1993; estudos de misturas de álcoois; revisões de
+correlações) não reproduzem a regra de mistura; a única referência verificável é a própria
+dissertação, pp. 83–84, que imprime:
 
-Candidatos a investigar (por ordem): (1) a forma impressa de (141) pode não ser uma média: Allan &
-Teja (1991) definem o Nc efetivo de um componente não alcano pela viscosidade de referência, e
-para a mistura há variantes com média em fração mássica ou com pesos de MW; (2) os Nc efetivos
-dos não alcanos; (3) a dissertação pode avaliar a correlação à composição global ou com outra
-unidade de temperatura; (4) o HYSYS usa outro método (o eixo x, que é a dissertação, está perto
-do HYSYS, logo o que falta está do nosso lado).
+- (137) Nc_m = Σ x_i Nc_i, com Nc igual ao número de carbonos para n-alcanos;
+- (138–140) A = 145,73 + 99,01 Nc_m + 0,83 Nc_m² − 0,125 Nc_m³; B = 30,48 + 34,01 Nc_m − 1,23 Nc_m² +
+  0,017 Nc_m³; C = −3,07 − 1,99 Nc_m;
+- (141) η_L = exp[A(−1/B + 1/(T + C))].
 
-## Onde pesa: Apêndice A horizontal
+É exatamente o que `allan_teja_viscosity` faz (com o fator 1e-3 de cP para Pa·s; o texto não diz a
+unidade). O nC8 puro a 300 K dá 0,503 mPa·s (medido 0,51). O ⚠ de (141) no índice de equações fica
+levantado.
 
-A issue 005 registou os casos horizontais a ~0,4× a dissertação e apontou a viscosidade do
-líquido como sensibilidade. Teste direto (`allan_teja_viscosity` × 3, 10 casos horizontais e 5
-verticais do lote `batches/dp_comparison.json`, método 3.2 em JAX):
+## O artefacto
 
-| | cmfsim/dissertação, mediana | casos a < 25 % |
-|---|---|---|
-| horizontal, μ_L atual | 0,43 | 0 / 10 |
-| horizontal, μ_L × 3 | 0,52 | 1 / 10 |
-| vertical, μ_L atual | 1,05 | 5 / 5 |
-| vertical, μ_L × 3 | 1,05 | 5 / 5 |
+As paridades são imagens; os marcadores sobrepostos fundem-se em componentes conexas e a
+digitalização conta-os uma vez (a Figura 20 tem 24 marcadores para 159 pontos, a 14 tem 60, a 18
+tem 72). Os nossos 159 valores de μ_L concentram-se em 0,1–0,3 mPa·s, que na escala da Figura 20
+(0–6 mPa·s em 1013 px) ocupam 17–50 px: fundem-se em meia dúzia de marcadores, e a distribuição
+lida fica dominada pelos valores raros e altos. Simulando a fusão nos nossos valores (dois valores a
+menos de um diâmetro de marcador ao longo da diagonal viram um só; `merge_like_figure`, diâmetro
+da área do marcador na spec):
 
-Por caso horizontal, μ_L × 3 sobe a razão de 0,32–0,62 para 0,40–0,77 (mais nos casos de 4 in,
-intermitentes; quase nada nos de 8–10 in, estratificados). Logo a viscosidade explica uma parte
-pequena do défice horizontal; o grosso continua na leitura dos fechamentos horizontais (issue 005:
-anular/estratificado contra a dissertação). O vertical não mexe.
+| figura | marcadores na figura | cmfsim fundido (6 / 10 / 14 px) | mediana crua / HYSYS | mediana fundida / HYSYS |
+|---|---|---|---|---|
+| 20, μ_L | 24 | 25 / 20 / 15 | 0,25 | 0,82 / 1,04 / 1,02 |
+| 14, ρ_V | 60 | 64 / 45 / 38 | 0,70 | 0,86 / 0,94 / 0,96 |
+| 18, β | 72 | 62 / 43 / 35 | 0,99 | 1,06 / 1,08 / 1,13 |
+| 15, ρ_L | 91 | 68 / 57 / 46 | 1,04 | 0,99 / 1,01 / 0,98 |
+| 21, σ | 110 | 84 / 64 / 49 | 0,83 | 0,94 / 1,00 / 1,01 |
+| 19, μ_V | 86 | 59 / 41 / 32 | 0,89 | 0,83 / 0,85 / 0,83 |
 
-## Decisão
+Fundidos, os nossos valores reproduzem o número de marcadores e a distribuição da figura em μ_L,
+ρ_V, β, ρ_L e σ. A única propriedade com desvio consistente é a viscosidade do vapor (Pedersen):
+~15 % abaixo do HYSYS em todas as leituras, com dispersão menor (q95 18,8 contra 22,8 µPa·s), o que
+é coerente com o que a dissertação diz da correlação de Pedersen para componentes mais pesados.
 
-Nada adotado: `Nc_eff` e a média molar ficam como estão (default = leitura literal), o notebook
-5.2 mostra o painel e a tabela acima, e a investigação fica em aberto até se ler Allan & Teja
-(1991) na fonte ou se ter o código do autor. Se se confirmar outra regra, entra como opção com
-bandeira em `FlashOptions`/`ComponentSet` (regra 2).
+## Sensibilidade do Apêndice A horizontal a μ_L (informação, não correção)
+
+Teste direto (`allan_teja_viscosity` × 3, 10 casos horizontais e 5 verticais do lote
+`batches/dp_comparison.json`, método 3.2 em JAX): a mediana cmfsim/dissertação horizontal sobe de
+0,43 para 0,52 (mais nos casos de 4 in, intermitentes; quase nada nos de 8–10 in, estratificados);
+a vertical fica em 1,05. A viscosidade do líquido não é a causa do défice horizontal (issue 005).
+
+## Decisão e lição
+
+Nada muda no simulador. A comparação por quantis dos notebooks 5.1 e 5.2 passa a fundir os nossos
+valores como a figura (curva a cheio) e a mostrar a distribuição crua a tracejado; o número de
+marcadores lido e o fundido ficam na tabela. Regra para o futuro: um Q–Q contra marcadores
+digitalizados sem simular a fusão é enganador sempre que a propriedade se concentra em valores
+baixos.

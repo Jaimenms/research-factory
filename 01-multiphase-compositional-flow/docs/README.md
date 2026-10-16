@@ -102,9 +102,10 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
 
 - **Termodinâmica** (fase 1): PR + flash reproduzem a biblioteca `thermo` a 1e-7; o polimento de
   Newton dá derivadas exatas por AD; num estado a `thermo` falha e o cmfsim acerta (issue 002).
-  Contra o eixo HYSYS das paridades digitalizadas (distribuições, não pares): ρ_L, entalpias e
-  fração vaporizada a 1–4 % na mediana, μ_V 0,89, σ 0,83; a viscosidade do líquido fica 3–4×
-  abaixo do HYSYS e da dissertação (regra de mistura de Allan & Teja, issue 008).
+  Contra o eixo HYSYS das paridades digitalizadas (distribuições com a fusão de marcadores
+  simulada, não pares): ρ_V, ρ_L, entalpias, fração vaporizada, μ_L e σ reproduzem o HYSYS na
+  mediana a < 10 %; μ_V (Pedersen) fica ~15 % abaixo (issue 008, que também confirma a
+  formulação de Allan & Teja da dissertação).
 - **Padrões** (fase 2): os mapas ar–água das Figuras 22–23 reproduzem-se a 91 % e 95 % ponto a
   ponto; a dissertação usou o limite de vazio 0,52 de Taitel (omitido no texto), σ = 0,072 e a
   forma de Taitel em (34) (issue 003).

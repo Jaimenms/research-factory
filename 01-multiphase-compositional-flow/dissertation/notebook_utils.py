@@ -92,28 +92,53 @@ def table(rows, headers, fmt=None):
         print("| " + " | ".join(cells) + " |")
 
 
+def merge_like_figure(values, fig_data, diam_px=None):
+    """Funde os nossos valores como a digitalização funde os marcadores sobrepostos de uma paridade:
+    dois marcadores a menos de um diâmetro (em píxeis da figura, ao longo da diagonal) viram um só.
+    Devolve os valores fundidos (ordenados). `diam_px` por omissão vem da área do marcador na spec."""
+    import numpy as np
+
+    raw = fig_data["raw"]
+    s0 = raw["series"][0]
+    if diam_px is None:
+        area = s0.get("marker_area_px")
+        diam_px = 2.0 * np.sqrt(area / np.pi) if area else 12.0
+    xt = np.array(raw["axes"]["x"]["ticks"], float)
+    px_per_val = abs(xt[-1, 1] - xt[0, 1]) / abs(xt[-1, 0] - xt[0, 0])
+    tol = diam_px / (np.sqrt(2.0) * px_per_val)  # distância ao longo da diagonal x = y
+    v = np.sort(np.asarray(values)[np.isfinite(values)])
+    out = [v[0]]
+    for a in v[1:]:
+        if a - out[-1] > tol:
+            out.append(a)
+    return np.array(out)
+
+
 def qq_parity(ax, fig_data, mine, n_points, unit_scale=1.0, q=50):
     """Q–Q dos nossos valores contra os dois eixos de uma paridade digitalizada «Implementado vs
-    HYSYS» (Figuras 14–21): y = HYSYS (referência) a cheio, x = implementação da dissertação a
-    fino. As distribuições não são emparelhadas (não se sabe a que (P, T) corresponde cada
-    marcador) e os marcadores sobrepostos nas zonas densas fundem-se na digitalização, pelo que
-    o número de marcadores (`n`) fica no título: quanto menor em relação a `n_points`, mais
-    enviesada para os valores raros está a distribuição da figura."""
+    HYSYS» (Figuras 14–21): y = HYSYS (referência), x = implementação da dissertação. As
+    distribuições não são emparelhadas (não se sabe a que (P, T) corresponde cada marcador) e os
+    marcadores sobrepostos nas zonas densas fundem-se na digitalização, pelo que a comparação
+    honesta é com os nossos valores **fundidos da mesma maneira** (`merge_like_figure`), a cheio;
+    os 159 valores tal e qual ficam a tracejado. Devolve (mediana fundida/HYSYS, mediana crua/HYSYS,
+    n marcadores da figura, n marcadores fundidos)."""
     import numpy as np
 
     name, (xd, yd) = next(iter(fig_data["series"].items()))
     raw = fig_data["raw"]
     n_mark = raw["series"][0].get("n_markers", xd.size)
     m = np.sort(np.asarray(mine)[np.isfinite(mine)] * unit_scale)
+    mm = merge_like_figure(m, fig_data)
     qs = np.linspace(0, 1, q)
-    ax.plot(np.quantile(np.sort(yd), qs), np.quantile(m, qs), "o-", ms=3, label="contra o HYSYS (eixo y)")
+    ax.plot(np.quantile(np.sort(yd), qs), np.quantile(mm, qs), "o-", ms=3, label=f"HYSYS × cmfsim fundido ({mm.size})")
+    ax.plot(np.quantile(np.sort(yd), qs), np.quantile(m, qs), "--", lw=0.8, color="C0", label="HYSYS × cmfsim (159)")
     ax.plot(
         np.quantile(np.sort(xd), qs),
-        np.quantile(m, qs),
+        np.quantile(mm, qs),
         "-",
         lw=0.8,
         color="gray",
-        label="contra a dissertação (eixo x)",
+        label="dissertação × cmfsim fundido",
     )
     lo = min(xd.min(), yd.min(), m.min())
     hi = max(xd.max(), yd.max(), m.max())
@@ -124,4 +149,4 @@ def qq_parity(ax, fig_data, mine, n_points, unit_scale=1.0, q=50):
     ax.set_xlabel("quantis da figura digitalizada")
     ax.set_ylabel("quantis do cmfsim")
     ax.grid(alpha=0.3)
-    return float(np.median(m) / np.median(yd)), float(np.median(m) / np.median(xd))
+    return float(np.median(mm) / np.median(yd)), float(np.median(m) / np.median(yd)), int(n_mark), int(mm.size)

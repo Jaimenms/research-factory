@@ -147,18 +147,23 @@ fig, axes = plt.subplots(2, 3, figsize=(14, 8))
 pairs = [(14, st.rho_V), (15, st.rho_L), (16, st.h_V), (17, st.h_L), (18, st.beta)]
 ratios = []
 for ax, (n, mine) in zip(axes.ravel(), pairs):
-    rh, rd = qq_parity(ax, figure(n), mine, T.size)
-    ratios.append((f"Figura {n}", f"{rh:.3f}", f"{rd:.3f}"))
+    rm, rr, n_fig, n_m = qq_parity(ax, figure(n), mine, T.size)
+    ratios.append((f"Figura {n}", n_fig, n_m, f"{rm:.3f}", f"{rr:.3f}"))
 axes.ravel()[0].legend(fontsize=7)
 axes.ravel()[-1].axis("off")
 fig.tight_layout()
 save(fig, "nb_5_1_fig14_18_qq")
-table(ratios, ["figura", "mediana cmfsim / HYSYS", "mediana cmfsim / dissertação"])
+table(
+    ratios,
+    ["figura", "marcadores na figura", "cmfsim fundido", "mediana fundida / HYSYS", "mediana crua / HYSYS"],
+)
 # %% [markdown]
 # Leitura: a referência é o eixo HYSYS (y) das paridades; o eixo x é a implementação da
-# dissertação. Os quantis alinham-se na diagonal quando a distribuição dos nossos valores nos 159
-# pontos é a mesma que a da figura. Não há correspondência ponto a ponto, e os marcadores
-# sobrepostos nas zonas densas fundem-se na digitalização (número de marcadores no título): a
-# distribuição lida fica enviesada para os valores raros, o que exagera os desvios nas caudas
-# (Figuras 14 e 18, com 60 e 72 marcadores). Só valores emparelhados do HYSYS (decisão A2) dariam
-# R² como as Tabelas 10–11; o R² contra a `thermo` acima é a validação que temos.
+# dissertação. Não há correspondência ponto a ponto, e os marcadores sobrepostos nas zonas densas
+# fundem-se na digitalização (número de marcadores no título), o que enviesa a distribuição lida
+# para os valores raros. Por isso a curva a cheio funde os nossos 159 valores da mesma maneira
+# (dois valores a menos de um diâmetro de marcador viram um só) e reproduz o número de marcadores
+# da figura; a tracejada é a distribuição crua, que parece "abaixo" da figura só por causa da
+# fusão (Figura 14: mediana crua 0,70 do HYSYS, fundida 0,9–1,0). Só valores emparelhados do
+# HYSYS (decisão A2) dariam R² como as Tabelas 10–11; o R² contra a `thermo` acima é a validação
+# que temos.

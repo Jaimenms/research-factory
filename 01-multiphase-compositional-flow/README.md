@@ -37,7 +37,7 @@ reproduzem todas as figuras e tabelas da secção com o cmfsim sobreposto.
 | notebook | secção | reproduz | corridas necessárias |
 |---|---|---|---|
 | `nb_5_1_thermo` | 5.1 | Figura 13 (envelope e 159 pontos), Figuras 14–18 (quantis contra o eixo HYSYS e o eixo da dissertação), Tabelas 10–11 (R² contra o oráculo `thermo`) | nenhuma (cálculo termodinâmico instantâneo) |
-| `nb_5_2_viscosity_tension` | 5.2 | Figuras 19–21 (quantis contra o eixo HYSYS), Tabela 12, regra de mistura de Allan & Teja (issue 008) | nenhuma |
+| `nb_5_2_viscosity_tension` | 5.2 | Figuras 19–21 (quantis contra o eixo HYSYS, com a fusão de marcadores simulada), Tabela 12, regras de mistura de Allan & Teja (issue 008) | nenhuma |
 | `nb_5_3_patterns` | 5.3 | Figuras 22–23 (mapas ar–água ponto a ponto e acerto por classe), Tabelas 13–14, sensibilidade às leituras | nenhuma |
 | `nb_5_4_dp_comparison` | 5.4 | Figuras 24–30, Tabelas 15–18, Apêndice A (desvios por modelo) | `batches/dp_comparison.json` |
 | `nb_5_5_offshore` | 5.5 | Figuras 31–37, Tabelas 19–22 | `batches/dissertation.json` (offshore) |
