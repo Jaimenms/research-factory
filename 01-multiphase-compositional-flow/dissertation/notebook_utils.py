@@ -73,10 +73,20 @@ def load_runs(pattern):
 
 
 def save(fig, name):
+    """Grava a figura em `notebooks/figs/<name>.png` e, dentro de um kernel Jupyter, mostra-a também no
+    notebook (o backend é `Agg`, que não desenha sozinho)."""
     path = OUT / f"{name}.png"
     fig.savefig(path, dpi=110, bbox_inches="tight")
     print("figura:", path.relative_to(ROOT))
-    return path
+    try:
+        from IPython import get_ipython
+        from IPython.display import Image, display
+
+        if get_ipython() is not None:
+            display(Image(data=path.read_bytes()))
+    except ImportError:
+        pass
+    plt.close(fig)
 
 
 def table(rows, headers, fmt=None):
