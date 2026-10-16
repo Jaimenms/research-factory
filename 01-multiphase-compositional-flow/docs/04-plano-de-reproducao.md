@@ -190,7 +190,7 @@ paralelo com a 4 (as derivadas por AD servem logo ao método 3.1).
 
 ## O que ficou adiado e como o plano o preparou
 
-*Feito em 2026-10-15 (issue 008): `surrogate/` fora do simulador, com `march_many` a gerar a massa de dados,
+*Feito em 2026-10-15 (issue 009): `surrogate/` fora do simulador, com `march_many` a gerar a massa de dados,
 rede e Adam em JAX, grelha de 135 redes e notebook 5.7; os Apêndices B e C extraídos para CSV servem de
 comparação direta.* O texto original do plano:
 

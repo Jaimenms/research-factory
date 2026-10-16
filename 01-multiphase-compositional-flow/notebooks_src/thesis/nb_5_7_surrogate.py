@@ -13,12 +13,11 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2] if "__file__" in globals() else Path.cwd()
-sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] if "__file__" in globals() else Path.cwd()))
 
 import numpy as np
 
-from dissertation.notebook_utils import DATA, RUNS, figure, plt, save, table
+from dissertation.notebook_utils import DATA, ROOT, RUNS, figure, plt, save, table
 
 from cmfsim import load_run
 from surrogate.dataset import load_dataset

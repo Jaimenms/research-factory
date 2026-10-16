@@ -73,7 +73,7 @@ autores estão em [papers/00-escolha-da-revista.md](papers/00-escolha-da-revista
 | 4 | modelo mecanicista com escorregamento + diferenças finitas + Newton com Jacobiana colorida; consistência com a marcha; lote dos 200 casos do Apêndice A (`batches/dp_comparison.json`) | feito (issue 005); comparação com o Apêndice A em curso |
 | 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave); parâmetros como argumentos (uma compilação por estrutura) e arranque quente do flash ao longo de x (issues 006–007) feitos | em curso |
 | 6 | notebooks de reprodução por secção do capítulo 5 (5.1–5.8), goldens, síntese | notebooks feitos; goldens de texto por fazer |
-| 7 | modelo substituto (cap. 4, §5.7): `surrogate/` (amostragem, massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento), casos e modelos treinados, notebook 5.7 | feito (issue 008) |
+| 7 | modelo substituto (cap. 4, §5.7): `surrogate/` (amostragem, massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento), casos e modelos treinados, notebook 5.7 | feito (issue 009) |
 
 ## Licença
 

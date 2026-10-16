@@ -120,6 +120,11 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
   causas identificadas e resolvidas (issue 005). Apêndice A: vertical com mediana +3 % e 75 % dos
   casos a menos de 10 %; horizontal sistematicamente abaixo (sensível à viscosidade do líquido do
   C7+, hipótese B3 revista para Nc_eff = 20).
+- **Modelo substituto** (fase 7, issue 009): `surrogate/` fora do simulador gera a massa de dados por
+  `march_many` (300 amostras por trecho em ~1 min), treina MLP com Adam em JAX e repete a grelha de 135
+  redes: 131–133 com R² > 0,9 (o autor: 8–35), modelos finais com R² ≥ 0,997 e substituto encadeado a
+  < 0,4 % do modelo físico (o autor: até 4,7 %). O modelo físico do autor, impresso no Apêndice B, é
+  reproduzido no poço e no riser; na linha o autor arrefece 1,4× mais (achado em aberto).
 - **Desempenho** (issues 006–007): uma compilação por estrutura, `march_many` por `vmap`,
   arranque quente do flash ao longo de x (K do flash anterior; resultado idêntico ao arranque
   frio); pelo caminho corrigiu-se a bisseção de Rachford–Rice nos extremos do intervalo.

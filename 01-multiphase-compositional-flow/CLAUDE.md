@@ -61,11 +61,13 @@ make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (buil
 
 ## Estado (2026-10-15)
 
-Fases 0–4 feitas (issues 001–007): termodinâmica validada contra `thermo`, fechamentos e mapas de
+Fases 0–4 e 7 feitas (issues 001–009): termodinâmica validada contra `thermo`, fechamentos e mapas de
 padrão, marcha de não escorregamento com integrador próprio, modelo mecanicista por diferenças
 finitas com Newton (backend de produção: JAX), notebooks por secção do capítulo 5, parâmetros
-como argumentos e `march_many` (vmap), arranque quente do flash ao longo de x. Em aberto: Apêndice A
-horizontal (issue 005), modelo substituto (cap. 4, §5.7; próximo passo). Os perfis térmicos da §5.6
+como argumentos e `march_many` (vmap), arranque quente do flash ao longo de x, modelo substituto
+(`surrogate/`, issue 009: massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento,
+notebook 5.7). Em aberto: Apêndice A horizontal (issue 005), linha do Apêndice B a arrefecer 1,4× mais
+no autor (issue 009). Os perfis térmicos da §5.6
 ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentação da Tabela 25
 (issue 004; casos com U_eff).
 

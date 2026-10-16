@@ -269,7 +269,7 @@ holdup diverge entre modelos, e há **saltos de holdup nas mudanças de inclina�
 troca do mapa de padrões (p. 133), o problema que a issue 008 do mfsim resolveu com
 mistura por ângulo.
 
-## Adiado: modelo substituto (feito em 2026-10-15, issue 008)
+## Adiado: modelo substituto (feito em 2026-10-15, issue 009)
 
 Capítulo 4 (amostragem por hipercubo latino com SMT; redes multicamada em PyTorch; 70/30;
 Adam; busca em grelha de 135 configurações), secção 5.7 (300 amostras por trecho do caso
