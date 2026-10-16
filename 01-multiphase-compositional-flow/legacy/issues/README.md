@@ -5,6 +5,8 @@
 foi lida no código e, quando havia número a confirmar, medida a correr o próprio código original em
 memória, sem o alterar ([`../scripts`](../scripts)). Estado em 2026-10-16.*
 
+**Resumo dos desvios entre o código e a dissertação:** [00-resumo-desvios-codigo-tese.md](00-resumo-desvios-codigo-tese.md).
+
 ## As questões em aberto e as respostas
 
 | questão (onde estava em aberto) | resposta | família |

@@ -116,6 +116,12 @@ figuras foram feitas:
 - **Filtro da Figura 20:** a figura só desenha os pontos com μ_L > 1,8e-5 Pa·s. Hoje esse filtro
   deixa passar os 159. A explicação da issue 008 para os 24 marcadores, a fusão de marcadores
   sobrepostos, mantém-se.
+- **Eixo HYSYS da Figura 18:** o script lê a coluna `vapour_volume_fraction` do ficheiro do HYSYS
+  ([validation_thermo_model.py:112](../masters_code/tests/validation_thermo_model.py#L112)) e desenha-a
+  contra a fração vaporizada **molar** do código. Isto também decide quais estados entram nos 159. Mas a
+  distribuição do eixo HYSYS bate com a fração molar do cmfsim nos mesmos estados (razão crua 1,04) e
+  não com a volumétrica (1,90). O nome da coluna é provavelmente impróprio. Sem o ficheiro não se
+  confirma (L06.3).
 - **Valores do HYSYS:** vêm de `hysys_all_props_values.csv`, num caminho local do autor
   ([`tests/auxiliar/hysys_values.py`](../masters_code/tests/auxiliar/hysys_values.py)). O ficheiro
   **não está no repositório** (L06.3).
