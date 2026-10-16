@@ -16,18 +16,15 @@ sys.path.insert(0, str(ROOT))
 
 import numpy as np
 
-from dissertation.notebook_utils import figure, make_fluid, plt, qq_parity, save, table
+from dissertation.notebook_utils import figure, hysys_states, make_fluid, plt, qq_parity, save, table
 
 from cmfsim.thermo import FlashOptions, phase_state
 from cmfsim.thermo.viscosity import allan_teja_viscosity
 
 cs, z = make_fluid("table6_validation")
-f13 = figure(13)
-pts_T, pts_P = f13["series"]["Pontos analisados (P,T)"]
-# o eixo de temperatura da Figura 13 está em kelvin (os pontos vão de ~130 a ~530 K); a versão
-# anterior deste notebook somava 273,15 e punha 155 dos 159 pontos fora do envelope
-T_is_kelvin = pts_T.max() > 400.0
-T = pts_T if T_is_kelvin else pts_T + 273.15
+# os 159 estados do código original (pt_values.csv): a Figura 13 desenha-os a T − 10 K e a digitalização
+# herdava esse deslocamento (legacy/issues L03.4); em kelvin, 147–526 K e 1–111 bar
+T, pts_P = hysys_states()
 P = pts_P * 1e5
 st = phase_state(T, P, z, cs, FlashOptions(stability_test=True))
 two = st.two_phase > 0
@@ -78,11 +75,13 @@ print(
 # %% [markdown]
 # ## Viscosidade do líquido: a regra de mistura de Allan & Teja (issue 008)
 #
-# Crua, a nossa distribuição de μ_L parece 3–4× abaixo do HYSYS e da dissertação (medianas 0,18
-# contra 0,70 e 0,54 mPa·s). É um artefacto: os 159 valores concentram-se em 0,1–0,3 mPa·s, que na
+# Crua, a nossa distribuição de μ_L parece 3–4× abaixo do HYSYS e da dissertação (medianas 0,17
+# contra 0,70 e 0,54 mPa·s; 0,18 com os estados da Figura 13, que estão 10 K abaixo dos verdadeiros). É um artefacto: os 159 valores concentram-se em 0,1–0,3 mPa·s, que na
 # escala da Figura 20 (0–6 mPa·s em 1013 px) são 17–50 px, e fundem-se em meia dúzia de marcadores;
 # fundidos como a figura, os nossos valores dão 15–25 marcadores (a figura tem 24) com mediana
-# 0,57–0,73 mPa·s, igual à do HYSYS. A formulação impressa na dissertação (pp. 83–84, eqs.
+# 0,57–0,73 mPa·s, igual à do HYSYS (com os estados verdadeiros, 14 marcadores e razão 0,99 na tabela
+# acima). Os valores do autor nos mesmos estados, recalculados com o código original, fundidos da mesma
+# maneira dão 0,62 mPa·s contra os 0,54 do eixo x: a fusão reproduz a figura (legacy/issues L03.4). A formulação impressa na dissertação (pp. 83–84, eqs.
 # 137–141: Nc_m = Σ x_i Nc_i, os mesmos A, B, C e a mesma exponencial) é a que implementámos, e o
 # nC8 puro a 300 K dá 0,50 mPa·s (medido 0,51). Para registo, as regras de mistura alternativas
 # nos mesmos 159 estados (sem fusão):

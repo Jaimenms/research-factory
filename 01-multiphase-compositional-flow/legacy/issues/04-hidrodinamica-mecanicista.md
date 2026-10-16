@@ -122,6 +122,61 @@ diferem das do cmfsim:
 O resto da diferença, de 0,67 a 1,67 caso a caso, vem dos padrões (estratificado sempre, L04.2) e
 dos fechamentos do estratificado (L04.3).
 
+## L04.6 O «no-slip» do autor: atrito por padrão e a pressão da §5.5
+
+O modelo de não escorregamento do código
+([`hydrodynamic.py`](../masters_code/app/hydrodynamic/hydrodynamic.py)) não usa atrito homogéneo. É a
+B15 da issue 004, que o cmfsim resolveu com Churchill na mistura homogénea. O código classifica o padrão
+por Taitel & Dukler com as frações sem escorregamento e aplica uma dissipação diferente em cada padrão.
+Os termos interfaciais cancelam-se na soma:
+
+| padrão | dissipação no momento |
+|---|---|
+| estratificado ([:343-344](../masters_code/app/hydrodynamic/hydrodynamic.py#L343-L344)) | τ_L/D_hL + τ_G/D_hG, τ = f ρ v_S²/2 com f de Darcy e D_h com o perímetro da interface |
+| anular ([:169-194](../masters_code/app/hydrodynamic/hydrodynamic.py#L169-L194)) | só o filme, τ_L/D_hL, com Re pela viscosidade constante da equação de estado |
+| intermitente e bolhas ([:196-247](../masters_code/app/hydrodynamic/hydrodynamic.py#L196-L247)) | f_mistura ρ_L v_m²/2 sobre D_hL, com o perímetro das bolhas π D² α_G/d_b |
+
+**Pressão da §5.5.** Na linha de escoamento, a curva «Modelo no-slip» da Figura 32 perde 3,86 bar em
+6000 m. O código atual perde 8,2 bar. As figuras e as corridas do código original
+([`scripts/flowline_5_5_margin.py`](../scripts/flowline_5_5_margin.py),
+[`scripts/offshore_5_5_pattern.py`](../scripts/offshore_5_5_pattern.py)) mostram o seguinte:
+
+- **Padrão na tese:** a Figura 37 dá o «Modelo no-slip» **estratificado** em toda a linha (1505–7488 m).
+- **Padrão no código atual:** a linha inteira sai **anular**. O critério de Kelvin–Helmholtz
+  ([:164](../masters_code/app/hydrodynamic/hydrodynamic.py#L164)) compara v_SG > v_crit, e v_SG passa
+  v_crit por apenas **1,7–2,5 %**, com h/D = 0,32.
+- **Efeito do salto de padrão:** no anular só conta o filme, com f de Darcy sobre o D_h do filme, cerca
+  de 139 Pa/m. No estratificado a dissipação é cerca de 70 Pa/m. A troca de padrão duplica o gradiente.
+- **Padrão forçado:** com o estratificado forçado e a partir do estado da tese na cabeça do poço, o
+  código reproduz a curva a 0,1–0,4 bar ao longo da linha (115,71 contra 116,11 bar na base do riser).
+- **Critério em sigmoide:** com o critério do módulo com escorregamento, sigmoid(10 (v_SG − v_crit)) ≥
+  1 − 1e-6, que exige 1,38 m/s acima do crítico, a linha sai estratificada. O sistema completo passa
+  de 2,69 para **0,60 bar** de rms contra a Figura 32, com T a 0,43 °C.
+
+| critério no no-slip | rms P (Figura 32) | padrão na linha | P na base do riser, código / tese |
+|---|---|---|---|
+| como no código (>) | 2,69 bar | anular | 111,30 / 116,11 bar |
+| Kelvin–Helmholtz em sigmoide | 0,60 bar | estratificado | 115,23 / 116,11 bar |
+| Kelvin–Helmholtz e Kutateladze em sigmoide | 0,73 bar | estratificado (riser em parte intermitente) | 115,23 / 116,11 bar |
+
+**Leitura.** A curva da tese foi calculada com a linha estratificada. O mais provável é que o no-slip
+usasse então os critérios em sigmoide do módulo com escorregamento, que a dissertação descreve. Há duas
+razões:
+
+- nas Figuras 37 as curvas de padrão dos dois modelos coincidem exatamente;
+- no módulo com escorregamento a comparação simples ficou comentada ao lado da sigmoide
+  ([hydrodynamic_slip.py:478](../masters_code/app/hydrodynamic/hydrodynamic_slip.py#L478)).
+
+Mesmo sem isso, a margem de 2 % torna a classificação um fio da navalha: qualquer diferença de versão,
+do flash ou do estado de entrada a vira. Como a dissipação salta 2× entre padrões, a pressão segue o
+padrão.
+
+**Resíduo:** 0,46 bar no poço, que sai anular nas duas versões: 119,51 bar contra 119,97 bar na cabeça
+do poço. Não foi investigado.
+
+**Para o cmfsim:** nada muda. O no-slip do cmfsim usa atrito homogéneo (hipótese B15), sem padrão, e
+não tem este salto. Por isso fica entre as duas curvas: 114,4 bar na base do riser.
+
 ## Consequências
 
 - O défice horizontal do cmfsim face à dissertação (issue 005) fica explicado. A dissertação

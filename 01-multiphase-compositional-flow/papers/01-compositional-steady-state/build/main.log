@@ -867,27 +867,30 @@ File: figures/generated//envelope_hysys.pdf Graphic file (type pdf)
 File: figures/generated//properties_hysys.pdf Graphic file (type pdf)
 <use figures/generated//properties_hysys.pdf>
  (tables/generated/tab_properties_hysys)
-(tables/generated/tab_properties_hysys_note) [6]
+(tables/generated/tab_properties_hysys_note) [6] [7]
+(tables/generated/tab_dp_horizontal_sensitivity)
+(tables/generated/tab_dp_horizontal_sensitivity_note)
 File: figures/generated//dp_hysys.pdf Graphic file (type pdf)
 <use figures/generated//dp_hysys.pdf>
- (tables/generated/tab_dp_hysys) (tables/generated/tab_dp_hysys_note) [7] [8]
+
+(tables/generated/tab_dp_hysys) (tables/generated/tab_dp_hysys_note) [8]
 File: figures/generated//offshore_hysys.pdf Graphic file (type pdf)
 <use figures/generated//offshore_hysys.pdf>
 
 (tables/generated/tab_offshore_hysys) (tables/generated/tab_offshore_hysys_note
-)
+) [9]
 File: figures/generated//condensate_profiles.pdf Graphic file (type pdf)
 <use figures/generated//condensate_profiles.pdf>
  (tables/generated/tab_condensate) (tables/generated/tab_condensate_note)
-[9] (tables/generated/tab_performance) (tables/generated/tab_performance_note
+(tables/generated/tab_performance) (tables/generated/tab_performance_note
 Overfull \hbox (9.282pt too wide) in paragraph at lines 2--1
  [][] 
  []
 
 ) [10] [11] [12] (tables/generated/tab_components)
 (tables/generated/tab_components_note) (tables/generated/tab_fluids)
-(tables/generated/tab_fluids_note) (main.bbl [13]) [14] (main.aux)
+(tables/generated/tab_fluids_note) [13] (main.bbl [14]) [15] (main.aux)
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  )
-Output written on main.xdv (15 pages, 108940 bytes).
+Output written on main.xdv (16 pages, 115108 bytes).

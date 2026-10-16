@@ -4,7 +4,7 @@
 |---|---|
 | tipo | feature / hipótese / estudo |
 | área | modelo com escorregamento (§2.2, §3.2), solver algébrico (§3.2.6) |
-| estado | feito (2026-10-15); Apêndice A em curso |
+| estado | feito (2026-10-15); Apêndice A horizontal explicado em 2026-10-16 (legacy/issues L04; volume I, tabela de sensibilidade) |
 | onde | `cmfsim/models/mechanistic.py`, `cmfsim/solvers/newton.py`, `cmfsim/simulation.py` (`solve_fd`), `generators/dp_comparison.py` |
 | dados | consistência contra a marcha de não escorregamento; Apêndice A (`dissertation/data/appendix_a_*.csv`) |
 
@@ -81,3 +81,24 @@ o método 3.2 (24 nós) reproduz a marcha 3.1 num gasoduto com condensação a 4
 4 iterações; em numpy com diferenças avançadas, 25 nós convergem e 49 estagnam (precisão das
 diferenças no vinco do orvalho): o backend de produção do método 3.2 é o JAX, o numpy fica como
 referência eager. Apêndice A: ver `notebooks_src/thesis/nb_5_4_dp_comparison.py` (a preencher).
+
+## Atualização (2026-10-16): o código original
+
+O défice horizontal face à coluna «Dissertação» está explicado (`legacy/issues/04-hidrodinamica-mecanicista.md`):
+
+- **Atrito:** o código do autor usa o fator de Darcy (Churchill) em tensões escritas para Fanning, o
+  que dá 4× o atrito.
+- **Compensação:** o efeito é compensado em parte por μ_L = 0,0134 mPa·s (Nc = 0 para o C7+).
+- **Rugosidade:** é 2e-4 m.
+- **Transições:** as sigmoides deslocam as transições, e o horizontal fica sempre estratificado.
+
+Com o atrito de Fanning, Nc_eff = 20 e a nossa rugosidade, o código original fica a 1,12× do cmfsim
+(mediana). O volume I explica o desvio face ao HYSYS com os lotes `dp_roughness` e
+`dp_comparison_darcy` (`generators/dp_comparison.py --sensitivity`), no quadro seguinte:
+
+| variante | efeito |
+|---|---|
+| rugosidade de 0,2 mm | +14 % no ΔP |
+| fator 4 no atrito | 44 % dentro da faixa do HYSYS, 34 % acima |
+| linhas estratificadas | 0,13 da média geométrica do HYSYS |
+| linhas intermitentes | 0,35 da média geométrica do HYSYS |

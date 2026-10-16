@@ -82,7 +82,15 @@ ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentaç�
 - **Apêndice A horizontal:** atrito de Darcy em tensões de Fanning (×4), compensado por uma μ_L de gás,
   porque o Nc de Allan & Teja do C7+ é 0.
 
-Nada mudou no simulador. As decisões pendentes estão no README de `legacy/issues/`.
+Nada mudou no simulador. Decisões do dono (2026-10-16):
+
+- U_eff = 3,42 fica.
+- Não há bandeira para a área de referência de U.
+- O volume I explica o horizontal com uma tabela de sensibilidade. Os lotes são `dp_roughness` e
+  `dp_comparison_darcy`, gerados por `generators/dp_comparison.py --sensitivity`.
+- Os 159 estados vêm de `dissertation/data/hysys_states.csv` e o Apêndice B de
+  `appendix_b_*_full.csv`, ambos do código do autor via `dissertation/extract.py`. Os estados
+  digitalizados da Figura 13 estavam 10 K abaixo dos verdadeiros.
 
 ## Armadilhas conhecidas
 

@@ -30,7 +30,8 @@ def step_datasets(cases_dir, runs_dir, n, seed, criterion):
         case = cases_dir / f"{seg}.json"
         out, meta = generate(case, runs_dir / f"{seg}.npz", n=n, seed=seed, segment=seg, criterion=criterion)
         print(f"[{seg}] amostras próprias: {meta['n_ok']}/{n} válidas, {meta['cpu']:.1f} s")
-        app_b = ROOT / "dissertation" / "data" / f"appendix_b_{seg}.csv"
+        # entradas do Apêndice B em precisão completa (código original, legacy/issues L06.2); o PDF arredonda a 0,1
+        app_b = ROOT / "dissertation" / "data" / f"appendix_b_{seg}_full.csv"
         if app_b.exists():
             out, meta = generate(case, runs_dir / f"{seg}_appendix_b.npz", segment=seg, inputs_csv=app_b)
             print(f"[{seg}] entradas do Apêndice B: {meta['n_ok']} válidas, {meta['cpu']:.1f} s")

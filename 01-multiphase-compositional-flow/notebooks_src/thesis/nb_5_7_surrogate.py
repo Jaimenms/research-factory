@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] if "__file__" in glob
 
 import numpy as np
 
-from dissertation.notebook_utils import DATA, ROOT, RUNS, figure, plt, save, table
+from dissertation.notebook_utils import DATA, ROOT, RUNS, appendix_b, figure, plt, save, table
 
 from cmfsim import load_run
 from surrogate.dataset import load_dataset
@@ -30,7 +30,7 @@ SR = RUNS / "surrogate"
 ST = json.load(open(DATA / "surrogate_tables.json"))
 ds = {s: load_dataset(SR / f"{s}.npz") for s in SEG}
 dsb = {s: load_dataset(SR / f"{s}_appendix_b.npz") for s in SEG if (SR / f"{s}_appendix_b.npz").exists()}
-appb = {s: np.loadtxt(DATA / f"appendix_b_{s}.csv", delimiter=",", skiprows=1) for s in SEG}
+appb = {s: appendix_b(s) for s in SEG}  # precisão completa, do código original (legacy/issues L06.2)
 appc = {s: list(csv.DictReader(open(DATA / f"appendix_c_{s}.csv"))) for s in SEG}
 grid = {s: list(csv.DictReader(open(SR / f"grid_{s}.csv"))) for s in SEG if (SR / f"grid_{s}.csv").exists()}
 models = {s: MLP.load(ROOT / "models" / "surrogate" / f"{s}.json") for s in SEG}
@@ -87,9 +87,16 @@ save(fig, "nb_5_7_fig41_43")
 # %% [markdown]
 # ## Apêndice B — o modelo físico do cmfsim nas entradas do autor
 #
-# O Apêndice B traz as saídas do modelo físico da dissertação para cada amostra. Simuladas as mesmas
-# entradas com o cmfsim (mesmo fluido, mesmos trechos), a comparação mede diretamente o modelo de não
-# escorregamento nos três trechos, sem rede pelo meio.
+# O Apêndice B traz as saídas do modelo físico da dissertação para cada amostra (aqui em precisão
+# completa, dos ficheiros `*_results_rna.csv` do código original; o PDF arredonda a 0,1). Simuladas as
+# mesmas entradas com o cmfsim (mesmo fluido, mesmos trechos), a comparação mede diretamente o modelo
+# de não escorregamento nos três trechos, sem rede pelo meio.
+#
+# A linha arrefece mais no autor por uma razão identificada no código original (legacy/issues L01.3):
+# o termo de perda de calor usa o perímetro externo π (D + 2e), 1,83 × π D na linha e no riser, e o
+# riser tem 250 m (300 m na Tabela 21). O cmfsim usa U referido ao diâmetro interno, como a eq. (100), e
+# fica assim por decisão do dono (2026-10-16: sem bandeira para a área de referência de U). Com
+# U × 1,833 a temperatura de saída da linha passa a −0,37 K da do autor em média.
 # %%
 rows = []
 for s, name in SEG.items():

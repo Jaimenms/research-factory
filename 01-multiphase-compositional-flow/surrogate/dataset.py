@@ -5,7 +5,7 @@ na dissertação: bar, K, kg/s. Grava NPZ (com perfis, caso e proveniência) e C
 
 Uso: uv run python -m surrogate.dataset cases/surrogate/well.json --segment well --n 300 --seed 0 \\
          --out runs/surrogate/well.npz
-     uv run python -m surrogate.dataset cases/surrogate/well.json --inputs dissertation/data/appendix_b_well.csv \\
+     uv run python -m surrogate.dataset cases/surrogate/well.json --inputs dissertation/data/appendix_b_well_full.csv \\
          --out runs/surrogate/well_appendix_b.npz
 """
 

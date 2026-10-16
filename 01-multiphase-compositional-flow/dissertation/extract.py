@@ -1,7 +1,8 @@
 """Extrai do PDF da dissertação os dados numéricos impressos: o Apêndice A (Tabelas 36 e 37,
 200 perdas de carga), o Apêndice B (Tabelas 38–40, 300 amostras do modelo físico por trecho para o
 substituto) e o Apêndice C (Tabelas 41–43, R² das 135 configurações da grelha por trecho) para CSV.
-Reprodutível: `uv run python -m dissertation.extract`.
+Junta ainda, do código original (submódulo legacy/masters_code), os 159 estados da comparação com o
+HYSYS e o Apêndice B em precisão completa. Reprodutível: `uv run python -m dissertation.extract`.
 
 Uso: python -m dissertation.extract [--pdf caminho] [--out dissertation/data]
 """
@@ -209,15 +210,49 @@ def extract_appendix_c(pdf: Path = PDF, out_dir: Path = HERE / "data"):
     return written
 
 
+LEGACY = HERE.parent / "legacy" / "masters_code"
+LEGACY_APPENDIX_B = {"well": "well_results_rna.csv", "line": "flow_results_rna.csv", "riser": "riser_results_rna.csv"}
+
+
+def extract_legacy(legacy: Path = LEGACY, out_dir: Path = HERE / "data"):
+    """Dados do código original (submódulo legacy/masters_code, legacy/issues L06.2) em precisão completa:
+    - `hysys_states.csv`: os 159 estados (P, T) da comparação com o HYSYS (`pt_values.csv`). A Figura 13 da
+      dissertação desenha-os a T − 10 K (tests/plot_test.py); a digitalização herda esse deslocamento;
+    - `appendix_b_{well,line,riser}_full.csv`: as amostras do Apêndice B (`*_results_rna.csv`), com as colunas e a
+      numeração de `appendix_b_*.csv` (o caso 253 falta nos dois); coincidem com o PDF a menos do arredondamento."""
+    if not (legacy / "pt_values.csv").exists():
+        raise FileNotFoundError(f"{legacy}: submódulo por inicializar (git submodule update --init)")
+    written = []
+    path = out_dir / "hysys_states.csv"
+    with open(legacy / "pt_values.csv") as f, open(path, "w", newline="") as g:
+        rows = list(csv.reader(f))[1:]
+        w = csv.writer(g)
+        w.writerow(("state", "P_bar", "T_K"))
+        w.writerows((int(r[0]), float(r[1]), float(r[2])) for r in rows)
+    written.append(path)
+    for seg, name in LEGACY_APPENDIX_B.items():
+        path = out_dir / f"appendix_b_{seg}_full.csv"
+        with open(legacy / name) as f, open(path, "w", newline="") as g:
+            rows = list(csv.reader(f))[1:]
+            w = csv.writer(g)
+            w.writerow(("case", "P_in_bar", "T_in_K", "m_kg_s", "P_out_bar", "T_out_K"))
+            w.writerows([int(r[0])] + [float(v) for v in r[1:6]] for r in rows)
+        written.append(path)
+    return written
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--pdf", type=Path, default=PDF)
     ap.add_argument("--out", type=Path, default=HERE / "data")
+    ap.add_argument("--legacy", type=Path, default=LEGACY)
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
     for fn in (extract_appendix_a, extract_appendix_b, extract_appendix_c):
         for p in fn(a.pdf, a.out):
             print("escrito", p)
+    for p in extract_legacy(a.legacy, a.out):
+        print("escrito", p)
 
 
 if __name__ == "__main__":

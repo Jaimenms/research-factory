@@ -42,6 +42,20 @@ def appendix_a(orientation):
         return list(csv.DictReader(f))
 
 
+def hysys_states():
+    """Os 159 estados (T [K], P [bar]) da comparação de propriedades com o HYSYS (§5.1–5.2), tal como o
+    código original os gerou (`hysys_states.csv`, de pt_values.csv). A Figura 13 desenha-os a T − 10 K, e os
+    pontos digitalizados herdam esse deslocamento: usar estes, não os da figura (legacy/issues L03.4)."""
+    d = np.loadtxt(DATA / "hysys_states.csv", delimiter=",", skiprows=1)
+    return d[:, 2], d[:, 1]
+
+
+def appendix_b(segment):
+    """Amostras do Apêndice B (case, P_in_bar, T_in_K, m_kg_s, P_out_bar, T_out_K) em precisão completa, do
+    código original (`appendix_b_<trecho>_full.csv`); o PDF arredonda a 0,1 (`appendix_b_<trecho>.csv`)."""
+    return np.loadtxt(DATA / f"appendix_b_{segment}_full.csv", delimiter=",", skiprows=1)
+
+
 def components_db():
     return json.load(open(DATA / "components.json"))["components"]
 

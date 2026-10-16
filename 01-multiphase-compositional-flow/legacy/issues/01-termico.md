@@ -128,9 +128,10 @@ A issue 004 já tinha visto que o cmfsim só fecha a §5.5 com D_in: rms 0,65 °
 Isto está confirmado: a figura foi gerada com espessura nula ou com uma versão do termo em π D, como
 `system_ivp_dassl`.
 
-**Pressão:** a pressão na linha não se reproduz com o código atual. O código perde 4,8 bar a mais até
-à base do riser; o cmfsim perde 1,7 bar a mais. Fica em aberto: pode ser outra versão do atrito
-no-slip.
+**Pressão:** a pressão na linha não se reproduz com o código tal como está: perde 4,8 bar a mais até à
+base do riser. A causa não é térmica, é o padrão de escoamento. Na tese a linha é estratificada; no
+código atual é anular, por uma margem de 2 % no critério de Kelvin–Helmholtz. Com o critério em
+sigmoide do módulo com escorregamento, o rms cai de 2,7 para 0,6 bar (L04.6).
 
 ## Resumo das questões térmicas
 

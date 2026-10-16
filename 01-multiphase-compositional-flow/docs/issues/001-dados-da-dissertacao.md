@@ -4,7 +4,7 @@
 |---|---|
 | tipo | hipótese |
 | área | dados de entrada (termodinâmica) |
-| estado | em vigor (2026-10-15); rever se surgirem dados do autor |
+| estado | em vigor (2026-10-15); confrontada com o código do autor em 2026-10-16 (legacy/issues) |
 | onde | `dissertation/data/components.json` (`_assumptions`), `cmfsim/thermo/viscosity.py`, `cmfsim/thermo/pr.py` |
 | dados | Tabelas 2, 7, 8, 9, 20 da dissertação; Pedersen & Fredenslund (1987); Smith et al. (2018) |
 
@@ -34,3 +34,18 @@ massa específica crítica do metano, o ΔT da tangente hiperbólica de (136), e
 
 Casos montáveis sem o autor; cada hipótese é um campo de dados ou uma constante nomeada, trocável sem
 tocar no código do simulador.
+
+## Atualização (2026-10-16): o código original
+
+O código original (submódulo `legacy/masters_code`, observações em `legacy/issues/`) responde a várias
+hipóteses desta tabela. Fica tudo em vigor e nada muda no cmfsim:
+
+- **k_ij:** zero, confirmado (L02.5).
+- **Cp do C7+:** o autor usa o polinómio de entalpia de gás ideal do HYSYS. Dá 1,59–2,02 kJ/(kg K) a
+  300–400 K; a nossa extrapolação fica 3–6 % acima (L02.4).
+- **Nc_eff do C7+:** o autor lê o número de carbonos do nome do componente, e o C7+ conta 0. Isso dá
+  μ_L = 0,0134 mPa·s, um valor de gás (L03.2). O valor 20 mantém-se.
+- **Pedersen:** ρ_c = 162,8 kg/m³, tangente hiperbólica com T − 90,4 K e metano por PR. São iguais às
+  nossas a menos do arredondamento (L03.3).
+- **ρ de referência do C7+:** a ρ de 950 kg/m³ não é usada no código. O holdup 0,85× da Figura 34 vem
+  do ln φ do autor, que não é o de PR (L02.1).

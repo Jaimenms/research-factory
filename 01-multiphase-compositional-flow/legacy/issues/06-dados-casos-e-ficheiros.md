@@ -29,8 +29,8 @@ composição (69/31 contra 70/30 molar) é desprezável.
 | [`data/ideal_gas_prop_hysys.csv`](../masters_code/data/ideal_gas_prop_hysys.csv) | polinómios de entalpia de gás ideal do HYSYS (kJ/kg, A–F); linhas vazias para H2S, C7pseud e outros | Cp do C7+ (L02.4) |
 | [`data/ideal_gas_prop.csv`](../masters_code/data/ideal_gas_prop.csv) | Cp de Smith (Tabela 8); o C20pseud tem os coeficientes do nC8 | não entra na entalpia |
 | [`data/validation_hysys/`](../masters_code/data/validation_hysys) | binário C2/nC6 e puros C2, nC6 no HYSYS (PR e COSTALD): ρ, h, μ, composições, Z | validação adicional da termodinâmica |
-| [`pt_values.csv`](../masters_code/pt_values.csv) | os 159 estados (P, T) das Figuras 13–21 | substitui a leitura da Figura 13 |
-| [`well_results_rna.csv`](../masters_code/well_results_rna.csv), [`flow_results_rna.csv`](../masters_code/flow_results_rna.csv), [`riser_results_rna.csv`](../masters_code/riser_results_rna.csv) | 299 amostras por trecho (P, T, ṁ → P, T de saída) em precisão completa | o Apêndice B sem arredondamento a 0,1 |
+| [`pt_values.csv`](../masters_code/pt_values.csv) | os 159 estados (P, T) das Figuras 13–21 (a Figura 13 desenha-os a T − 10 K) | em uso: `dissertation/data/hysys_states.csv` |
+| [`well_results_rna.csv`](../masters_code/well_results_rna.csv), [`flow_results_rna.csv`](../masters_code/flow_results_rna.csv), [`riser_results_rna.csv`](../masters_code/riser_results_rna.csv) | 299 amostras por trecho (P, T, ṁ → P, T de saída) em precisão completa | em uso: `dissertation/data/appendix_b_*_full.csv` (iguais ao PDF a ±0,05) |
 | [`well_samples_optim.csv`](../masters_code/well_samples_optim.csv), `flow_…`, `riser_…` | as entradas das amostras (hipercubo latino) | idem |
 | [`props_hysys.xlsx`](../masters_code/props_hysys.xlsx), [`all_system_data.csv`](../masters_code/all_system_data.csv) | 421 casos de um estudo de casos no HYSYS: P de entrada 150–160 bar (10 níveis), ṁ 1–26,8 kg/s (9), T de entrada 315–350 K (5) → P e T de saída (0,4–64,8 bar; 283–317 K) | comparação do sistema completo contra o HYSYS (volume I); fluido e geometria a confirmar com o autor |
 | [`results_flowline.csv`](../masters_code/results_flowline.csv) e variantes | 422 casos da linha (P, T, ṁ → saída) | idem, só a linha |
@@ -55,10 +55,10 @@ configuração do estudo de casos de `props_hysys.xlsx` (fluido, trechos, modelo
 
 ## L06.4 Para o cmfsim
 
-- **Apêndice B:** os ficheiros `*_results_rna.csv` podem substituir a extração do PDF em
-  `dissertation/extract.py` (precisão completa). Fica para decisão do dono, porque o volume II já não
-  compara com o autor.
-- **Estados das Figuras 13–21:** `pt_values.csv` pode substituir os 159 estados digitalizados nos
-  notebooks 5.1 e 5.2.
+- **Apêndice B e estados das Figuras 13–21:** adotados por decisão do dono (2026-10-16).
+  `dissertation/extract.py` lê do submódulo e escreve `dissertation/data/hysys_states.csv` e
+  `appendix_b_{well,line,riser}_full.csv`. Os consumidores passaram a usá-los: notebooks 5.1, 5.2 e
+  5.7, `surrogate/pipeline.py` e o volume I. O teste `test_legacy_data_match_pdf` confere-os contra o
+  PDF.
 - **Estudo de casos do HYSYS:** `props_hysys.xlsx` daria uma comparação do sistema completo com o
   HYSYS em 421 casos. Falta saber o fluido e a configuração.

@@ -4,7 +4,7 @@
 |---|---|
 | tipo | feature / hipótese / estudo |
 | área | modelo de não escorregamento (§2.2.4, §3.1), integrador em x (§3.1.6) |
-| estado | feito (2026-10-15); achado térmico resolvido no mesmo dia: U_eff = 3,42 × U da Tabela 25 (decisão do dono) |
+| estado | feito (2026-10-15); achado térmico resolvido no mesmo dia: U_eff = 3,42 × U da Tabela 25 (decisão do dono); mecanismos confirmados no código do autor em 2026-10-16 |
 | onde | `cmfsim/models/noslip.py`, `cmfsim/solvers/rk45.py`, `cmfsim/pipe.py`, `cmfsim/simulation.py`, `cases/condensate/`, `batches/dissertation.json` |
 | dados | §5.6 (Tabelas 23–25); Figuras 38–40 digitalizadas (`references/figures/data/fig_38..40.json`) |
 
@@ -165,3 +165,23 @@ está sistematicamente ~1 km depois do físico, e o teste noturno compara-o com 
 
 Caso 5.6 reexecutável em segundos, com derivadas exatas, corrida gravada com o caso completo e
 comparação direta com as figuras digitalizadas (`notebooks_src/thesis/nb_5_6_condensate.py`).
+
+## Atualização (2026-10-16): o código original
+
+- **Fator 3,42 da §5.6:** o script do autor passa o diâmetro externo, 0,365 m, como espessura. O
+  termo de perda de calor é U π (D + 2e), o que dá 3,395 × π D_in. O código original reproduz a
+  Figura 39 a 0,02–0,06 °C (L01.2). Por decisão do dono fica 3,42; 3,395 ficou por decidir.
+- **§5.5 só fecha com D_in:** confirmado com o código original (L01.4).
+- **Figura 34, holdup 0,85×:** o ln φ do autor não é o de Peng–Robinson (a_ij = a_i a_j, sinal trocado
+  no termo de atração). Com o ln φ padrão, o flash do autor dá o mesmo que o cmfsim (L02.1). As
+  hipóteses ρ_L de referência e Pc × 1,25 ficam descartadas.
+- **Figura 40:** o flash do autor, sem teste de estabilidade, converge para a solução trivial até
+  ~2,5 K abaixo do orvalho e chama-lhe vapor. O código original reproduz o salto em 6949, 3394 e
+  4364 m (L02.2).
+- **B15, atrito do no-slip:** o autor não usa atrito homogéneo. O código classifica o padrão (Taitel &
+  Dukler com as frações sem escorregamento) e aplica uma dissipação por padrão. O cmfsim mantém o atrito
+  homogéneo.
+- **Pressão no-slip da §5.5 (Figura 32):** a tese tem a linha estratificada (Figura 37). O código atual
+  dá anular por uma margem de 2 % no critério de Kelvin–Helmholtz, e com isso o atrito duplica. Com o
+  critério em sigmoide do modelo com escorregamento, o código original reproduz a Figura 32 a 0,6 bar
+  rms (legacy/issues L04.6).

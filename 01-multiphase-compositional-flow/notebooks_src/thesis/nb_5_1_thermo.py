@@ -3,7 +3,7 @@
 #
 # A dissertação compara a sua implementação de Peng–Robinson com o HYSYS em 159 pares (P, T) dentro
 # do envelope de fases do fluido da Tabela 6. Não temos os valores do HYSYS (decisão A2), só as
-# figuras digitalizadas: a Figura 13 dá os 159 pontos e o envelope; as Figuras 14–18 dão, no eixo
+# figuras digitalizadas: a Figura 13 dá o envelope (os 159 estados vêm do código original); as Figuras 14–18 dão, no eixo
 # x, os valores calculados pela dissertação (sem a correspondência ponto a ponto). O que se
 # reproduz aqui: (1) o envelope de fases pelo nosso flash contra o digitalizado; (2) as propriedades
 # nos 159 pontos contra o oráculo independente `thermo` (no lugar do HYSYS), com R² como nas
@@ -20,20 +20,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2] if "__file__" in globals() else Path.cwd()
 sys.path.insert(0, str(ROOT))
 
-from dissertation.notebook_utils import figure, make_fluid, plt, qq_parity, save, table
+from dissertation.notebook_utils import figure, hysys_states, make_fluid, plt, qq_parity, save, table
 
 from cmfsim.thermo import FlashOptions, phase_state
 
 cs, z = make_fluid("table6_validation")
 cs_exact = cs.with_exact_pr_constants()
 f13 = figure(13)
-pts_T, pts_P = f13["series"]["Pontos analisados (P,T)"]  # x = T, y = P (bar)
-# o eixo de temperatura da Figura 13 está em kelvin (os pontos vão de ~130 a ~530): converte-se se preciso
-T_is_kelvin = pts_T.max() > 400.0
-T = pts_T if T_is_kelvin else pts_T + 273.15
+# Os 159 estados vêm do código original (pt_values.csv, legacy/issues L03.4). A Figura 13 desenha-os a
+# T − 10 K (tests/plot_test.py do autor): os pontos digitalizados ficam 10 K abaixo dos estados em que o
+# HYSYS foi comparado, e a versão anterior deste notebook avaliava as propriedades nesses estados errados.
+T, pts_P = hysys_states()
+dig_T, dig_P = f13["series"]["Pontos analisados (P,T)"]
+T_is_kelvin = dig_T.max() > 400.0
 P = pts_P * 1e5
 print(
-    f"{pts_T.size} pontos digitalizados; T de {T.min():.0f} a {T.max():.0f} K, P de {pts_P.min():.0f} a {pts_P.max():.0f} bar"
+    f"{T.size} estados; T de {T.min():.0f} a {T.max():.0f} K, P de {pts_P.min():.0f} a {pts_P.max():.0f} bar; "
+    f"digitalizados na Figura 13 a T − {np.median(T) - np.median(dig_T):.1f} K (mediana)"
 )
 st = phase_state(T, P, z, cs_exact, FlashOptions(stability_test=True))
 print(f"bifásicos no nosso flash: {int(st.two_phase.sum())} de {T.size}")
@@ -84,7 +87,8 @@ ax.plot(Tb, Pb, "b:", lw=2, label="bolha (HYSYS, digitalizada)")
 ax.plot(Td, Pd, ":", color="orange", lw=2, label="orvalho (HYSYS, digitalizada)")
 ax.plot(T_grid, P_bub, "b-", label="bolha (cmfsim)")
 ax.plot(T_grid, P_dew, "-", color="orange", label="orvalho (cmfsim)")
-ax.plot(T, pts_P, "k.", ms=4, label="159 pontos analisados")
+ax.plot(T, pts_P, "k.", ms=4, label="159 estados comparados (código original)")
+ax.plot(dig_T, dig_P, "x", color="0.6", ms=3, label="os mesmos na Figura 13 (desenhados a T − 10 K)")
 ax.set_xlabel("T (K)")
 ax.set_ylabel("P (bar)")
 ax.set_title("Figura 13 — envelope de fases do fluido da Tabela 6")
@@ -164,6 +168,9 @@ table(
 # para os valores raros. Por isso a curva a cheio funde os nossos 159 valores da mesma maneira
 # (dois valores a menos de um diâmetro de marcador viram um só) e reproduz o número de marcadores
 # da figura; a tracejada é a distribuição crua, que parece "abaixo" da figura só por causa da
-# fusão (Figura 14: mediana crua 0,70 do HYSYS, fundida 0,9–1,0). Só valores emparelhados do
+# fusão (Figura 14: mediana crua 0,72 do HYSYS, fundida 0,98). A exceção é a Figura 18 (fração
+# vaporizada): a fusão deixa 43 marcadores contra os 72 da figura, funde demais, e a razão fundida
+# (1,31) é artefacto; crua é 1,04. Os valores do autor nos mesmos estados, fundidos da mesma maneira,
+# também passam de 0,317 para 0,386 contra os 0,302 do eixo x (legacy/issues L03.4). Só valores emparelhados do
 # HYSYS (decisão A2) dariam R² como as Tabelas 10–11; o R² contra a `thermo` acima é a validação
 # que temos.

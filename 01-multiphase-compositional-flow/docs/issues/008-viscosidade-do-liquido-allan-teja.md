@@ -4,7 +4,7 @@
 |---|---|
 | tipo | estudo |
 | área | termodinâmica (propriedades de transporte, §2.5.2, eqs. 137–141); método de comparação com as paridades digitalizadas |
-| estado | fechada (2026-10-15): nada a mudar no simulador; comparação por quantis corrigida |
+| estado | fechada (2026-10-15): nada a mudar no simulador; comparação por quantis corrigida; estados corrigidos em 2026-10-16 |
 | onde | `cmfsim/thermo/viscosity.py` (`allan_teja_viscosity`), `dissertation/notebook_utils.py` (`merge_like_figure`, `qq_parity`), `notebooks_src/thesis/nb_5_1_thermo.py`, `nb_5_2_viscosity_tension.py` |
 | dados | Figuras 14–21 digitalizadas (paridades «Implementado vs HYSYS»), 159 estados (P, T) da Figura 13, fluido da Tabela 6; Apêndice A horizontal |
 
@@ -70,3 +70,31 @@ valores como a figura (curva a cheio) e a mostrar a distribuição crua a tracej
 marcadores lido e o fundido ficam na tabela. Regra para o futuro: um Q–Q contra marcadores
 digitalizados sem simular a fusão é enganador sempre que a propriedade se concentra em valores
 baixos.
+
+## Atualização (2026-10-16): o código original
+
+**Estados.** Os 159 estados digitalizados da Figura 13 estão 10 K abaixo dos verdadeiros: o autor
+desenhou-os a T − 10 K. Os notebooks 5.1 e 5.2 e o volume I passaram a usar os estados do código
+original (`dissertation/data/hysys_states.csv`).
+
+| propriedade | estados da Figura 13 | estados verdadeiros |
+|---|---|---|
+| μ_L, mediana crua | 0,18 mPa·s | 0,17 mPa·s |
+| μ_L, razão fundida/HYSYS | — | 0,99 |
+| μ_V, razão fundida/HYSYS | — | 0,88 |
+| σ, razão fundida/HYSYS | — | 1,00 |
+
+A conclusão mantém-se.
+
+**Validação da fusão.** Os valores do autor nos mesmos estados, recalculados com o código original e
+fundidos da mesma maneira, reproduzem o eixo x das figuras:
+
+| figura | fundidos | eixo x da figura | crus |
+|---|---|---|---|
+| μ_L | 0,62 mPa·s | 0,54 mPa·s | 0,16 mPa·s |
+| σ | 9,6 mN/m | 10,3 mN/m | — |
+| ρ_V | 61 kg/m³ | 63 kg/m³ | — |
+| β (Figura 18) | 0,386 | 0,302 | 0,317 |
+
+A exceção é a Figura 18: a fusão exagera e dá 43 marcadores contra 72. Aí vale a razão crua, 1,04
+(L03.4).

@@ -105,6 +105,11 @@ figuras foram feitas:
 - **Estados:** a grelha é P = linspace(1, 140, 20) bar × T = linspace(100, 550, 20) K. Os 159
   estados são os pontos bifásicos no código original **e** no HYSYS.
   [`pt_values.csv`](../masters_code/pt_values.csv) é essa lista: P de 1 a 110,7 bar, T de 147 a 526 K.
+- **Figura 13 deslocada:** [`tests/plot_test.py`](../masters_code/tests/plot_test.py) desenha os 159
+  pontos a **T − 10 K** (`df_pt_values['1'] - 10`). Os pontos digitalizados da Figura 13 coincidem
+  com os de `pt_values.csv` deslocados 10 K: mediana |ΔT| de 0,22 K, contra 10,05 K sem o
+  deslocamento. Os notebooks 5.1 e 5.2 e o volume I avaliavam as propriedades 10 K abaixo dos estados
+  em que o HYSYS foi comparado. Passaram a usar `dissertation/data/hysys_states.csv` (2026-10-16).
 - **Viscosidade do líquido:** com este fluido, nC4–nC8 contam e Nc_m é razoável. Nos 159 estados, a
   viscosidade recalculada com o código original tem mediana 0,157 mPa·s (q10 0,098, q90 0,45). Isto
   está na mesma faixa do cmfsim (mediana 0,18, issue 008).

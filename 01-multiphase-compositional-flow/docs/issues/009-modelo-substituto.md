@@ -4,7 +4,7 @@
 |---|---|
 | tipo | feature / estudo |
 | área | capítulo 4 e §5.7 (modelo substituto), Apêndices B e C |
-| estado | feito (2026-10-15); achados térmicos do Apêndice B em aberto |
+| estado | feito (2026-10-15); achados térmicos do Apêndice B explicados em 2026-10-16 (legacy/issues L01.3) |
 | onde | `surrogate/` (`sampling`, `dataset`, `model`, `train`, `grid`, `predict`, `pipeline`), `generators/surrogate.py`, `cases/surrogate/`, `models/surrogate/`, `dissertation/extract.py` (Apêndices B e C), `dissertation/data/surrogate_tables.json`, `notebooks_src/thesis/nb_5_7_surrogate.py`, `tests/test_surrogate.py` |
 | dados | Tabelas 27–33, Figuras 45–58 digitalizadas, Apêndice B (`appendix_b_{well,line,riser}.csv`) e C (`appendix_c_*.csv`) |
 
@@ -102,3 +102,12 @@ Massa de dados de treino reproduzível a partir de um caso JSON e de uma semente
 ~1 min, uma compilação); treino de uma rede em segundos e grelha de 135 em minutos; modelos
 empíricos treinados como ficheiros JSON autocontidos, com métricas e proveniência; comparação
 direta com as amostras e os R² do autor.
+
+## Atualização (2026-10-16): o código original
+
+- **Arrefecimento da linha:** «arrefece 1,4× mais» vem do perímetro externo π (D + 2e) no termo de
+  perda de calor do autor, 1,83 × π D na linha e no riser. O riser do autor tem 250 m. Com U × 1,833 o
+  cmfsim fica a −0,37 K da temperatura de saída do autor em média (L01.3).
+- **Sem bandeira:** por decisão do dono não se cria bandeira para a área de referência de U.
+- **Dados do Apêndice B:** passou a vir em precisão completa do código original
+  (`dissertation/data/appendix_b_*_full.csv`). As estatísticas acima não mudam à precisão mostrada.

@@ -96,11 +96,47 @@ def batch(models, out_dir="runs/dp_comparison") -> dict:
     return {"out_dir": out_dir, "runs": runs}
 
 
+#: lotes de sensibilidade sobre os mesmos 200 pontos (volume I, §4.2): nome -> (pasta de saída,
+#: orientações, modelos, overrides extra). A rugosidade de 0,2 mm é a dos scripts originais dos casos
+#: (legacy/issues L06.1); o atrito de Darcy em tensões de Fanning (×4) é a bandeira `wall_friction`.
+SENSITIVITY = {
+    "roughness": ("runs/dp_roughness", ("horizontal",), ("mechanistic", "noslip"), ["pipe.profile.0.roughness=0.0002"]),
+    "darcy": (
+        "runs/dp_comparison_darcy",
+        ("horizontal", "vertical"),
+        ("mechanistic",),
+        ["model.regime.wall_friction=darcy_as_printed"],
+    ),
+}
+
+
+def sensitivity_batch(name: str) -> dict:
+    out_dir, orientations, models, extra = SENSITIVITY[name]
+    base = batch(models)
+    runs = [
+        {**r, "set": r["set"] + extra}
+        for r in base["runs"]
+        if any(f"dp_{o}_" in r["name"] for o in orientations) and any(f"_{m}_" in r["name"] for m in models)
+    ]
+    return {"out_dir": out_dir, "runs": runs}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--n", type=int, default=30, help="nós do método das diferenças finitas")
     ap.add_argument("--models", default="mechanistic,noslip")
+    ap.add_argument(
+        "--sensitivity",
+        choices=sorted(SENSITIVITY),
+        help="escreve só o lote de sensibilidade batches/dp_<nome>.json (casos base inalterados)",
+    )
     a = ap.parse_args(argv)
+    if a.sensitivity:
+        name = "dp_comparison_darcy" if a.sensitivity == "darcy" else f"dp_{a.sensitivity}"
+        b = sensitivity_batch(a.sensitivity)
+        (ROOT / "batches" / f"{name}.json").write_text(json.dumps(b, indent=1) + "\n")
+        print(f"lote batches/{name}.json com {len(b['runs'])} corridas")
+        return
     models = a.models.split(",")
     out = ROOT / "cases" / "dp"
     out.mkdir(parents=True, exist_ok=True)

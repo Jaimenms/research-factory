@@ -99,6 +99,19 @@ def test_extracted_appendices_present():
         assert c[0].startswith("case,neurons,learning_rate,activation,layers,r2_P,r2_T") and len(c) - 1 == 135
 
 
+def test_legacy_data_match_pdf():
+    """Apêndice B em precisão completa e os 159 estados, do código original (legacy/issues L06.2): mesmos casos
+    e mesmos valores do PDF a menos do arredondamento a 0,1; estados em kelvin, 10 K acima da Figura 13."""
+    data = ROOT / "dissertation" / "data"
+    for seg in ("well", "line", "riser"):
+        pdf = np.loadtxt(data / f"appendix_b_{seg}.csv", delimiter=",", skiprows=1)
+        full = np.loadtxt(data / f"appendix_b_{seg}_full.csv", delimiter=",", skiprows=1)
+        assert np.array_equal(pdf[:, 0], full[:, 0])
+        assert np.abs(pdf[:, 1:] - full[:, 1:]).max() <= 0.0501
+    st = np.loadtxt(data / "hysys_states.csv", delimiter=",", skiprows=1)
+    assert st.shape == (159, 3) and 147.0 < st[:, 2].min() < 148.0 and 526.0 < st[:, 2].max() < 527.0
+
+
 def test_generated_surrogate_cases_validate():
     for seg in ("well", "line", "riser"):
         d = segment_case(seg)
