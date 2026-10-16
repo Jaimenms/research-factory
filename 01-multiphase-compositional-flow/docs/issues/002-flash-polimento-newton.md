@@ -25,7 +25,10 @@ d(β, x, y)/d(P, T, z) exatas pelo teorema da função implícita, com um flash 
 Com `polish_iter = 0` fica a dissertação tal e qual.
 
 O polimento é um Newton amortecido (melhor de s = 1, 1/2, 1/4 em |G|²) em laço até
-`polish_tol` (1e-26) ou `polish_iter` (10), aplicado só onde o flash negativo tem raiz genuína.
+`polish_tol` (1e-26), `polish_iter` (30 desde a issue 007; era 10) ou falta de progresso,
+aplicado só onde o flash negativo tem raiz genuína; num ponto já convergido à entrada aplica-se
+o passo completo (nulo em valor) para transportar a derivada (issue 007). O custo do flash está
+no polimento (cada iteração ≈ 9 substituições): a issue 007 mede e lista as alavancas.
 
 Duas correções descobertas na validação: (1) a iteração das substituições sucessivas usa o β do
 flash negativo **sem truncar** (dentro dos limites de Rachford–Rice as composições são positivas);

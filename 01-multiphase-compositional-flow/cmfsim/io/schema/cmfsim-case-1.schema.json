@@ -39,7 +39,8 @@
       "tol": {"type": "number", "exclusiveMinimum": 0}, "max_iter": {"type": "integer", "minimum": 1},
       "rr_tol": {"type": "number"}, "rr_max_iter": {"type": "integer"},
       "polish_iter": {"type": "integer", "minimum": 0}, "polish_tol": {"type": "number"}, "fd_step": {"type": "number"},
-      "stability_test": {"type": "boolean"}, "stability_iter": {"type": "integer", "minimum": 1}
+      "stability_test": {"type": "boolean"}, "stability_iter": {"type": "integer", "minimum": 1},
+      "warm_start": {"type": "boolean"}
      },
      "additionalProperties": false
     }

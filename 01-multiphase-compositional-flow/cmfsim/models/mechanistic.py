@@ -150,13 +150,13 @@ class MechanisticModel:
         xp = self.bk.xp
         return (xp.stack([mG, mL, P, T], axis=1) / params["scale"][None, :]).reshape(-1)
 
-    def node_state(self, mG, mL, P, T, params):
+    def node_state(self, mG, mL, P, T, params, lnK0=None):
         """Flash, fechamento e termos por nó. Devolve dict de arrays (n,)."""
         xp = self.bk.xp
         bk = self.bk
         n = P.shape[0]
         zz = xp.broadcast_to(xp.asarray(self.z)[None, :], (n, self.cs.n))
-        st = phase_state(T, P, zz, self.cs, self.flash, bk)
+        st = phase_state(T, P, zz, self.cs, self.flash, bk, lnK0=lnK0)
         D = params["D"]
         A = xp.pi * D**2 / 4.0
         v_SG = mG / (st.rho_V * A)
@@ -200,14 +200,14 @@ class MechanisticModel:
         return dict(st=st, HL=HL, vL=vL, vG=vG, F=F, v_SL=v_SL, v_SG=v_SG, w=w, closure=res, A=A)
 
     # --- derivadas de w_G em (25) --------------------------------------------------------------
-    def dw_dPT(self, P, T):
+    def dw_dPT(self, P, T, lnK0=None):
         xp = self.bk.xp
         bk = self.bk
         n = P.shape[0]
         zz = xp.broadcast_to(xp.asarray(self.z)[None, :], (n, self.cs.n))
 
         def w_of(PP, TT):
-            st = phase_state(TT, PP, zz, self.cs, self.flash, bk)
+            st = phase_state(TT, PP, zz, self.cs, self.flash, bk, lnK0=lnK0)
             return st.w_G if self.opts.mass_basis == "mass" else st.beta
 
         if bk.has_ad:
@@ -221,10 +221,12 @@ class MechanisticModel:
         return wP, wT
 
     # --- resíduos ----------------------------------------------------------------------------
-    def residual(self, u, params):
+    def residual(self, u, params, aux=None):
+        """F(u) escalado; com `aux` (ln K por nó, (n, nc)) devolve (F, ln K novo) (arranque quente)."""
         xp = self.bk.xp
         mG, mL, P, T = self.unpack(u, params)
-        ns = self.node_state(mG, mL, P, T, params)
+        lnK0 = aux if (aux is not None and self.flash.warm_start) else None
+        ns = self.node_state(mG, mL, P, T, params, lnK0=lnK0)
         st = ns["st"]
         M = params["M"]
         m = params["m"]
@@ -232,7 +234,7 @@ class MechanisticModel:
         A = ns["A"]
         # massas (175–178)
         if self.opts.mass_split == "ode":
-            wP, wT = self.dw_dPT(P, T)
+            wP, wT = self.dw_dPT(P, T, lnK0=lnK0)
             MGL = m * (wP * (M @ P) + wT * (M @ T))  # (25) em base mássica: m dw/dx
             r_mG = M @ mG - MGL
             r_mL = M @ mL + MGL
@@ -254,7 +256,7 @@ class MechanisticModel:
         )
         bc = self.boundary_rows(mG, mL, P, T, params)
         R = xp.where(bc["mask"], bc["values"], R)
-        return R.reshape(-1)
+        return (R.reshape(-1), st.lnK) if aux is not None else R.reshape(-1)
 
     def boundary_rows(self, mG, mL, P, T, params):
         """Linhas de contorno: no primeiro nó do troço 0, u - u_spec; nos primeiros nós dos outros
@@ -294,7 +296,7 @@ class MechanisticModel:
 
     # --- estimativa inicial, esparsidade, limites ---------------------------------------------
     def initial_guess(self, params, P=None, T=None):
-        """Perfis P(x), T(x) (arrays nos nós) ou planos; m_G da repartição do flash."""
+        """Perfis P(x), T(x) (arrays nos nós) ou planos; m_G da repartição do flash. Devolve (u0, ln K por nó)."""
         xp = self.bk.xp
         n = self.n_total
         P = xp.full((n,), params["P_ref"]) if P is None else xp.asarray(P, float)
@@ -302,7 +304,7 @@ class MechanisticModel:
         zz = xp.broadcast_to(xp.asarray(self.z)[None, :], (n, self.cs.n))
         st = phase_state(T, P, zz, self.cs, self.flash, self.bk)
         mG = params["m"] * st.w_G
-        return self.pack(mG, params["m"] - mG, P, T, params)
+        return self.pack(mG, params["m"] - mG, P, T, params), st.lnK
 
     def sparsity(self):
         """Cores e máscara: o resíduo de um nó usa os nós a distância <= 2 (derivadas de 2.ª ordem

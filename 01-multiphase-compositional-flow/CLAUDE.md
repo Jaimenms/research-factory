@@ -58,12 +58,13 @@ make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (buil
 
 ## Estado (2026-10-15)
 
-Fases 0–4 feitas (issues 001–005): termodinâmica validada contra `thermo`, fechamentos e mapas de
+Fases 0–4 feitas (issues 001–007): termodinâmica validada contra `thermo`, fechamentos e mapas de
 padrão, marcha de não escorregamento com integrador próprio, modelo mecanicista por diferenças
-finitas com Newton (backend de produção: JAX). Em aberto: comparação com o Apêndice A (lote
-`batches/dp_comparison.json`), `vmap`
-sobre casos, modelo substituto (adiado). Os perfis térmicos da §5.6 ficaram explicados por um só fator
-3,42 em U, tratado como erro de apresentação da Tabela 25 (issue 004; casos com U_eff).
+finitas com Newton (backend de produção: JAX), notebooks por secção do capítulo 5, parâmetros
+como argumentos e `march_many` (vmap), arranque quente do flash ao longo de x. Em aberto: Apêndice A
+horizontal (issue 005), modelo substituto (cap. 4, §5.7; próximo passo). Os perfis térmicos da §5.6
+ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentação da Tabela 25
+(issue 004; casos com U_eff).
 
 ## Armadilhas conhecidas
 
@@ -75,5 +76,7 @@ sobre casos, modelo substituto (adiado). Os perfis térmicos da §5.6 ficaram ex
 - `_COMPILED` em `simulation.py` guarda as funções compiladas por estrutura (fluido, opções,
   malha): mudar só D, P_in, m, U, T_amb não recompila; mudar o fluido ou n recompila.
 - JAX: `where` antes das funções com domínio restrito (sqrt, log, arccos, potências), para tangentes finitas (issue 037 do mfsim).
-- Flash: o resultado das substituições sucessivas entra com `stop_gradient`; as derivadas vêm do polimento de Newton (teorema da função implícita). Com `polish_iter=0` não há derivadas corretas do flash em JAX.
+- Flash: o resultado das substituições sucessivas entra com `stop_gradient`; as derivadas vêm do polimento de Newton (teorema da função implícita; num ponto já convergido aplica-se o passo completo só para transportar a derivada). Com `polish_iter=0` não há derivadas corretas do flash em JAX.
+- JAX: nunca chamar o flash (ou qualquer função com `while_loop`) ansiosamente fora do `jit` no caminho de execução: ~0,7 s por chamada (traçado de novo de cada vez). O flash da entrada e a estimativa inicial do método 3.2 vivem dentro das funções compiladas (issue 007).
+- Arranque quente do flash (`flash.warm_start`, default `True`): a variável auxiliar `aux` (ln K) atravessa `integrate` e `newton_solve`; o resultado é idêntico ao arranque frio. Para o desligar: `--set fluid.flash.warm_start=false`.
 - Constantes de PR: Ω_a = 0,45724 e Ω_b = 0,0778 como impressas na dissertação (a `thermo` usa as exatas: diferenças de ~1e-5).

@@ -1,8 +1,9 @@
 """Newton amortecido para sistemas algébricos não lineares F(u) = 0 (método 3.2 da dissertação,
 no lugar do Powell híbrido sem Jacobiana): Jacobiana por cores (grupos de colunas sem
-sobreposição no padrão de esparsidade: `jvp` no JAX, diferenças centrais no numpy), resolução
-densa, busca linear por bisseção em |F|², limites opcionais. Função pura sobre o backend; o número
-de iterações é dinâmico (`while_loop`)."""
+sobreposição no padrão de esparsidade: `jvp` vetorizado no JAX, diferenças avançadas no numpy),
+resolução densa, busca linear por bisseção em |F|², limites opcionais. Função pura sobre o
+backend; o número de iterações é dinâmico (`while_loop`). Com `aux0`, uma variável auxiliar
+(p. ex. o ln K do flash em cada nó, issue 007) é passada ao resíduo e atualizada por iteração."""
 
 from __future__ import annotations
 
@@ -23,54 +24,60 @@ class NewtonOptions:
 
 
 def colored_jacobian(residual, u, colors, n_colors, bk=NUMPY, fd_step=1e-7):
-    """J (n, n) densa a partir de `n_colors` direções: a coluna j recebe o produto J e_{colors==c}
-    restrito às linhas que lhe pertencem. Exige que colunas da mesma cor não partilhem linhas
-    (padrão de esparsidade conhecido); `rows_of(j)` implícito via máscara `S` não é necessário
-    porque usamos o padrão `band`: linhas i com |i_nó - j_nó| <= largura (ver `band_colors`)."""
+    """V (n_colors, n) com V[c, i] = soma_{j: colors[j] = c} J[i, j], por `n_colors` direções (`jvp`
+    vetorizado no JAX; diferenças avançadas no numpy, um só lado dos pisos/vincos), e as sementes."""
     xp = bk.xp
     n = u.shape[0]
     colors = xp.asarray(colors)
-    J = xp.zeros((n, n))
     seeds = (colors[None, :] == xp.arange(n_colors)[:, None]).astype(float)  # (n_colors, n)
     if bk.has_ad:
         import jax
 
         V = jax.vmap(lambda s: jax.jvp(residual, (u,), (s,))[1])(seeds)  # uma só cópia traçada do resíduo
         return V, seeds
-    else:
-        # diferenças avançadas (um só lado dos pisos/vincos, como a diferenciação automática escolhe
-        # um ramo); passo uniforme por cor nas variáveis escaladas (todas de ordem 1)
-        F0 = residual(u)
-        cols = [(residual(u + fd_step * seeds[c]) - F0) / fd_step for c in range(n_colors)]
-    V = xp.stack(cols, axis=0)  # (n_colors, n): V[c, i] = sum_{j: colors[j]=c} J[i, j]
+    F0 = residual(u)
+    cols = [(residual(u + fd_step * seeds[c]) - F0) / fd_step for c in range(n_colors)]
+    V = xp.stack(cols, axis=0)
     return V, seeds
 
 
 def assemble_from_colors(V, seeds, mask, bk=NUMPY):
     """J[i, j] = V[colors[j], i] onde mask[i, j] (padrão de esparsidade), 0 fora."""
     xp = bk.xp
-    # Jfull[i, j] = sum_c seeds[c, j] V[c, i]
     Jfull = xp.einsum("cj,ci->ij", seeds, V)
     return xp.where(mask, Jfull, 0.0)
 
 
-def newton_solve(residual, u0, colors, n_colors, mask, opts: NewtonOptions = NewtonOptions(), bounds=None, bk=NUMPY):
+def newton_solve(
+    residual, u0, colors, n_colors, mask, opts: NewtonOptions = NewtonOptions(), bounds=None, bk=NUMPY, aux0=None
+):
     """Resolve residual(u) = 0. `colors` (n,) inteiros, `mask` (n, n) booleana (padrão de esparsidade).
-    Devolve (u, info dict com iterações, |F| final e convergência)."""
+    Com `aux0`, o resíduo é `residual(u, aux) -> (F, aux_new)` e a auxiliar é atualizada a cada
+    iteração aceite (a Jacobiana é calculada com a auxiliar fixa). Devolve (u, info)."""
     xp = bk.xp
     u0 = xp.asarray(u0, float)
-    n = u0.shape[0]
+    has_aux = aux0 is not None
+    if has_aux:
+        res_full = residual
+    else:
+
+        def res_full(u, aux):
+            return residual(u), aux
 
     def fnorm(F):
         return xp.sqrt(xp.mean(F * F))
 
     def cond(c):
-        u, F, it, done = c
+        u, F, it, done, aux = c
         return xp.logical_and(xp.logical_not(done), it < opts.max_iter)
 
     def body(c):
-        u, F, it, done = c
-        V, seeds = colored_jacobian(residual, u, colors, n_colors, bk, opts.fd_step)
+        u, F, it, done, aux = c
+
+        def res_fixed(uu):
+            return res_full(uu, aux)[0]
+
+        V, seeds = colored_jacobian(res_fixed, u, colors, n_colors, bk, opts.fd_step)
         J = assemble_from_colors(V, seeds, mask, bk)
         du = -xp.linalg.solve(J, F)
         du = xp.where(xp.isfinite(du), du, 0.0)
@@ -79,29 +86,35 @@ def newton_solve(residual, u0, colors, n_colors, mask, opts: NewtonOptions = New
         # busca linear por bisseção: o primeiro s em {1, 1/2, ...} que reduz |F| (laço do backend:
         # o resíduo é traçado uma só vez)
         def ls_body(i, c):
-            best_u, best_F, best_n, found = c
+            best_u, best_F, best_n, found, best_aux = c
             s = 0.5**i
             u_s = u + s * du
             if bounds is not None:
                 u_s = xp.clip(u_s, bounds[0], bounds[1])
-            F_s = residual(u_s)
+            F_s, aux_s = res_full(u_s, aux)
             n_s = fnorm(F_s)
             n_s = xp.where(xp.isfinite(n_s), n_s, xp.inf)
             better = xp.logical_and(n_s < f0, xp.logical_not(found))
+            if has_aux:
+                best_aux = xp.where(better, aux_s, best_aux)
             return (
                 xp.where(better, u_s, best_u),
                 xp.where(better, F_s, best_F),
                 xp.where(better, n_s, best_n),
                 xp.logical_or(found, better),
+                best_aux,
             )
 
-        best_u, best_F, best_n, found = bk.fori_loop(0, opts.line_search, ls_body, (u, F, f0, xp.asarray(False)))
+        best_u, best_F, best_n, found, aux = bk.fori_loop(
+            0, opts.line_search, ls_body, (u, F, f0, xp.asarray(False), aux)
+        )
         stalled = xp.logical_not(found)
         done_n = xp.logical_or(best_n < opts.tol, stalled)
-        return best_u, best_F, it + 1, done_n
+        return best_u, best_F, it + 1, done_n, aux
 
-    F0 = residual(u0)
-    u, F, it, done = bk.while_loop(cond, body, (u0, F0, xp.asarray(0), xp.asarray(False)))
+    aux_init = xp.asarray(0.0) if aux0 is None else xp.asarray(aux0, float)
+    F0, aux_init = res_full(u0, aux_init)
+    u, F, it, done, aux = bk.while_loop(cond, body, (u0, F0, xp.asarray(0), xp.asarray(False), aux_init))
     return u, dict(iterations=it, residual=fnorm(F), converged=fnorm(F) < opts.tol)
 
 

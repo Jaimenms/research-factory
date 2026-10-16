@@ -52,7 +52,7 @@ def test_colored_jacobian_equals_dense():
     _, dm = _condensing_case(n=6)
     case = Case.from_dict(dm)
     model, params = build_mechanistic(case, NUMPY)
-    u0 = model.initial_guess(params)
+    u0, _ = model.initial_guess(params)
     colors, n_colors, mask = model.sparsity()
     V, seeds = colored_jacobian(lambda u: model.residual(u, params), u0, colors, n_colors, NUMPY, 1e-6)
     Jc = assemble_from_colors(V, seeds, mask, NUMPY)

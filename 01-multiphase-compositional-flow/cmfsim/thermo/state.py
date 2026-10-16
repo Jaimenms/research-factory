@@ -40,12 +40,19 @@ class PhaseState:
     two_phase: np.ndarray
     iterations: np.ndarray
     residual: np.ndarray
+    lnK: np.ndarray = None  # ln K convergido (não truncado): estimativa inicial do flash vizinho (arranque quente)
+    polish_iterations: np.ndarray = None  # iterações do polimento de Newton por ponto
 
     def names(self):
         return [f.name for f in fields(self)]
 
     def to_numpy(self, bk):
-        return PhaseState(**{f.name: bk.to_numpy(getattr(self, f.name)) for f in fields(self)})
+        return PhaseState(
+            **{
+                f.name: (None if getattr(self, f.name) is None else bk.to_numpy(getattr(self, f.name)))
+                for f in fields(self)
+            }
+        )
 
 
 def mass_vapor_fraction(beta, MW_L, MW_V):
@@ -53,7 +60,7 @@ def mass_vapor_fraction(beta, MW_L, MW_V):
     return beta * MW_V / (beta * MW_V + (1.0 - beta) * MW_L)
 
 
-def phase_state(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=NUMPY) -> PhaseState:
+def phase_state(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=NUMPY, lnK0=None) -> PhaseState:
     """Flash e propriedades em (n,) pontos; z (nc,) ou (n, nc)."""
     xp = bk.xp
     T = xp.asarray(T, float)
@@ -61,7 +68,7 @@ def phase_state(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), 
     z = xp.asarray(composition_array(z, T.shape[0]) if not bk.is_jax or isinstance(z, np.ndarray) else z, float)
     if z.ndim == 1:
         z = xp.broadcast_to(z[None, :], (T.shape[0], cs.n))
-    fl = flash_pt(T, P, z, cs, opts, bk)
+    fl = flash_pt(T, P, z, cs, opts, bk, lnK0=lnK0)
     x, y = fl["x"], fl["y"]
     MW_L = molar_mass(x, cs, bk)
     MW_V = molar_mass(y, cs, bk)
@@ -86,4 +93,6 @@ def phase_state(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), 
         two_phase=fl["two_phase"],
         iterations=fl["iterations"],
         residual=fl["residual"],
+        lnK=fl["lnK"],
+        polish_iterations=fl["polish_iterations"],
     )

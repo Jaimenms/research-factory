@@ -27,15 +27,17 @@ from .pr import ln_phi
 @dataclass(frozen=True)
 class FlashOptions:
     tol: float = 1e-6  # critério (123) das substituições sucessivas: soma de (f_L/f_V - 1)^2; o polimento de
-    # Newton leva depois a 1e-26 (tol = 1e-12 e polish_iter = 0 reproduzem a dissertação tal e qual)
+    # Newton leva depois a 1e-26 (tol = 1e-12 e polish_iter = 0 reproduzem a dissertação tal e qual);
+    # 1e-3 + Newton é 3x mais rápido do que 1e-6 + Newton com o mesmo resultado (issue 007)
     max_iter: int = 200  # substituições sucessivas
     rr_tol: float = 1e-14
     rr_max_iter: int = 60
-    polish_iter: int = 10  # máximo de iterações de Newton amortecido no sistema completo (0 = só a dissertação)
+    polish_iter: int = 30  # máximo de iterações de Newton amortecido no sistema completo (0 = só a dissertação)
     polish_tol: float = 1e-26  # paragem do polimento (mesmo critério 123)
     fd_step: float = 1e-7  # passo relativo das diferenças finitas da Jacobiana (backend sem AD)
     stability_test: bool = False  # teste de estabilidade de Michelsen (TPD) antes do flash: melhoria com bandeira
     stability_iter: int = 40
+    warm_start: bool = True  # os modelos passam o K convergido do ponto anterior como estimativa inicial (issue 007)
 
 
 def wilson_K(T, P, cs: ComponentSet, bk=NUMPY):
@@ -88,12 +90,16 @@ def rachford_rice(z, K, bk=NUMPY, tol=1e-14, max_iter=60):
         lo = xp.where(f > 0.0, beta, lo)
         hi = xp.where(f > 0.0, hi, beta)
         df_safe = xp.where(xp.abs(df) < 1e-300, -1e-300, df)
-        bn = beta - f / df_safe
-        inside = xp.logical_and(bn > lo, bn < hi)
-        bn = xp.where(inside, bn, 0.5 * (lo + hi))
-        done_n = xp.logical_or(xp.abs(f) < tol, xp.abs(bn - beta) < 1e-15 * xp.maximum(1.0, xp.abs(beta)))
-        bn = xp.where(done, beta, bn)
-        return bn, lo, hi, it + 1, xp.logical_or(done, done_n)
+        b_newton = beta - f / df_safe
+        # convergido: |f| pequeno ou passo de Newton nulo; nesse caso fica-se em beta (sem saltar
+        # para o ponto médio: quando o intervalo colapsou sobre a raiz, beta é um dos extremos)
+        done_n = xp.logical_or(
+            done, xp.logical_or(xp.abs(f) < tol, xp.abs(b_newton - beta) < 1e-15 * xp.maximum(1.0, xp.abs(beta)))
+        )
+        inside = xp.logical_and(b_newton >= lo, b_newton <= hi)  # inclusivo: a raiz pode estar no extremo
+        bn = xp.where(inside, b_newton, 0.5 * (lo + hi))
+        bn = xp.where(done_n, beta, bn)
+        return bn, lo, hi, it + 1, done_n
 
     init = (beta0, lo0, hi0, xp.asarray(0), xp.zeros(beta0.shape, dtype=bool))
     beta, lo, hi, it, done = bk.while_loop(cond, body, init)
@@ -186,16 +192,27 @@ def stability_tpd(T, P, z, cs: ComponentSet, opts: FlashOptions, bk=NUMPY):
     return tpd, lnK
 
 
-def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=NUMPY):
+def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=NUMPY, lnK0=None):
     """Flash P-T. T, P (n,), z (n, nc). Devolve dict com K (n, nc), beta_raw (não truncado), beta
-    (truncado), x, y (n, nc), two_phase (n,) 0/1, iterations (n,), residual (n,) (critério 123)."""
+    (truncado), x, y (n, nc), two_phase (n,) 0/1, iterations (n,), residual (n,) (critério 123).
+    `lnK0` (n, nc): estimativa inicial de ln K (arranque quente: o K convergido de um estado vizinho);
+    pontos com `lnK0` não finito ou trivial (max |ln K| < 1e-3, solução trivial de um estado
+    supercrítico) voltam à estimativa de Wilson. Com arranque quente o teste de estabilidade não
+    corre (o flash negativo transporta a solução através da fronteira de fases)."""
     xp = bk.xp
     T = xp.asarray(T, float)
     P = xp.asarray(P, float)
     z = xp.asarray(z, float)
     nc = cs.n
-    lnK0 = xp.log(wilson_K(T, P, cs, bk))
-    if opts.stability_test:
+    lnK_w = xp.log(wilson_K(T, P, cs, bk))
+    warm = lnK0 is not None
+    if warm:
+        lnK0 = xp.asarray(lnK0, float)
+        usable = xp.logical_and(xp.all(xp.isfinite(lnK0), axis=1), xp.max(xp.abs(lnK0), axis=1) > 1e-3)
+        lnK0 = xp.where(usable[:, None], lnK0, lnK_w)
+    else:
+        lnK0 = lnK_w
+    if opts.stability_test and not warm:
         # z instável: parte do K da fase de tentativa (converge para a solução bifásica certa);
         # z estável: fica com Wilson e o flash negativo decide a fase
         tpd, lnK_st = stability_tpd(T, P, z, cs, opts, bk)
@@ -250,11 +267,11 @@ def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=
             return xp.sum(g * g, axis=1)
 
         def pcond(c):
-            u, k, active = c
+            u, k, active, n_pol = c
             return xp.logical_and(xp.any(active), k < opts.polish_iter)
 
         def pbody(c):
-            u, k, active = c
+            u, k, active, n_pol = c
             g = G(u)
             J = _jacobian_dirs(G, u, bk, opts.fd_step)
             # fora da região bifásica (ou com Jacobiana não finita) resolve-se um sistema
@@ -265,34 +282,55 @@ def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=
             g_safe = xp.where(mask[:, None], g, 0.0)
             du = -xp.einsum("nij,nj->ni", bk.robust_inv(J_safe), g_safe)  # pseudo-inversa onde singular
             du = xp.where(xp.all(xp.isfinite(du), axis=1)[:, None], du, 0.0)
-            # amortecimento: o melhor de s = 1, 1/2, 1/4 (em |G|^2); nunca pior do que ficar parado
+            # amortecimento: o melhor de s = 1, 1/2, 1/4 (em |G|^2); nunca pior do que ficar parado,
+            # exceto num ponto já convergido à entrada (arranque quente que cai sobre a solução): aí
+            # aplica-se o passo completo, nulo em valor, porque é ele que transporta a derivada
+            # exata (teorema da função implícita) através do `stop_gradient` das substituições
             g0 = gnorm(g)
+            converged0 = g0 <= opts.polish_tol
             best_u, best_n = u, g0
             for s in (1.0, 0.5, 0.25):
                 u_s = u + s * du
                 n_s = gnorm(G(u_s))
                 n_s = xp.where(xp.isfinite(n_s), n_s, xp.inf)
-                better = n_s < best_n
+                if s == 1.0:
+                    better = xp.logical_or(n_s < best_n, converged0)
+                else:
+                    better = xp.logical_and(n_s < best_n, xp.logical_not(converged0))
                 best_u = xp.where(better[:, None], u_s, best_u)
                 best_n = xp.where(better, n_s, best_n)
             u_new = xp.where(mask[:, None], best_u, u)
-            still = xp.logical_and(mask, best_n > opts.polish_tol)
-            return u_new, k + 1, still
+            # continua só enquanto há progresso (no piso de arredondamento |G|^2 deixa de descer)
+            still = xp.logical_and(mask, xp.logical_and(best_n > opts.polish_tol, best_n < g0))
+            return u_new, k + 1, still, n_pol + xp.where(mask, 1, 0)
 
         u0 = xp.concatenate([lnK, beta[:, None]], axis=1)
-        u, _, _ = bk.while_loop(pcond, pbody, (u0, xp.asarray(0), two_phase_like))
+        u, _, _, polish_iterations = bk.while_loop(
+            pcond, pbody, (u0, xp.asarray(0), two_phase_like, xp.zeros(T.shape, dtype=int))
+        )
         lnK, beta = _unpack(u, nc)
+    else:
+        polish_iterations = xp.zeros(T.shape, dtype=int)
     K = xp.exp(lnK)
     beta = xp.where(xp.isfinite(beta), beta, 0.5)
-    two_phase_b = xp.logical_and(beta > 0.0, beta < 1.0)
-    if opts.stability_test:
+    # ln K a guardar para o arranque quente do vizinho: o convergido só onde o flash negativo tem
+    # raiz genuína (dentro dos limites de Rachford–Rice, com margem); onde a bisseção encostou ao
+    # limite (sem raiz) o K é arbitrário e deriva de chamada para chamada, e reentrar na região
+    # bifásica a partir dele falha: aí guarda-se Wilson (o arranque frio)
+    # solução trivial (K ~ 1: puros e misturas supercríticas): as fases são idênticas, não há
+    # bifásico; Rachford–Rice tem f = 0 em todo o beta e fica no ponto de partida (0,5)
+    trivial = xp.max(xp.abs(lnK), axis=1) < 1e-5
+    lo_g, hi_g = rr_bounds(K, bk)
+    genuine = xp.logical_and(beta > lo_g + 1e-6 * (hi_g - lo_g), beta < hi_g - 1e-6 * (hi_g - lo_g))
+    genuine = xp.logical_and(genuine, xp.logical_not(trivial))
+    lnK_store = xp.where(xp.logical_and(genuine, xp.all(xp.isfinite(lnK), axis=1))[:, None], lnK, lnK_w)
+    two_phase_b = xp.logical_and(xp.logical_and(beta > 0.0, beta < 1.0), xp.logical_not(trivial))
+    if opts.stability_test and not warm:
         # a estabilidade manda: z estável -> fase única mesmo que o flash negativo tenha raiz em (0, 1)
         two_phase_b = xp.logical_and(two_phase_b, unstable)
         beta = xp.where(unstable, beta, xp.where(beta >= 0.5, 1.0, 0.0))
-    # rótulo da fase única: pelo sinal do flash negativo, exceto quando as substituições
-    # colapsaram na solução trivial (K ~ 1: puros e misturas supercríticas), em que decide a
-    # temperatura pseudocrítica de Kay (T > sum z_i Tc_i: vapor denso)
-    trivial = xp.max(xp.abs(lnK), axis=1) < 1e-5
+    # rótulo da fase única: pelo sinal do flash negativo, exceto na solução trivial, em que decide
+    # a temperatura pseudocrítica de Kay (T > sum z_i Tc_i: vapor denso)
     T_pc = z @ xp.asarray(cs.Tc)
     vapor = xp.where(trivial, T > T_pc, beta >= 0.5)
     beta_single = xp.where(vapor, 1.0, 0.0)
@@ -305,11 +343,13 @@ def flash_pt(T, P, z, cs: ComponentSet, opts: FlashOptions = FlashOptions(), bk=
     two_phase = xp.where(two_phase_b, 1.0, 0.0)
     return dict(
         K=K,
+        lnK=lnK_store,
         beta_raw=beta_raw,
         beta=beta_c,
         x=x,
         y=y,
         two_phase=two_phase,
         iterations=iterations,
+        polish_iterations=polish_iterations,
         residual=residual,
     )

@@ -16,7 +16,6 @@ from .models.noslip import NoSlipModel, mixture_state
 from .solvers.newton import newton_solve
 from .results import Results
 from .solvers.rk45 import integrate
-from .thermo import phase_state
 
 _COMPILED = {}  # funções compiladas por estrutura (fluido, opções, malha): uma compilação serve muitos casos
 
@@ -48,19 +47,28 @@ def march_noslip(case: Case, bk, x_out=None):
     u0 = xp.asarray([case.inlet["P"], case.inlet["T"]], float)
     scale = xp.asarray([1e5, 1.0])
     t0 = time.time()
+    warm = case.flash.warm_start
+
+    def run(u, p):
+        # o flash da entrada (semente do arranque quente) fica dentro da função compilada: em JAX
+        # um flash ansioso fora do jit custa ~0,7 s (traçado do while_loop a cada chamada)
+        aux0 = model.state(u, 0, p)[2] if warm else None
+        return integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,), aux0=aux0)
+
     if bk.is_jax:
         import jax
 
-        key = ("march", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes())
-        run = _COMPILED.get(key)
-        if run is None:
-            xo, sg = xp.asarray(x_out), xp.asarray(segs)
-            run = jax.jit(lambda u, p: integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,)))
-            _COMPILED[key] = run
-        U, info = run(u0, params)
+        key = ("march", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes(), warm)
+        xo, sg = xp.asarray(x_out), xp.asarray(segs)
+        compiled = _COMPILED.get(key)
+        if compiled is None:
+            compiled = jax.jit(run)
+            _COMPILED[key] = compiled
+        U, info = compiled(u0, params)
         jax.block_until_ready(U)
     else:
-        U, info = integrate(model.rhs, u0, x_out, segs, case.rk45, scale=scale, bk=bk, args=(params,))
+        xo, sg = x_out, segs
+        U, info = run(u0, params)
     info = {k: int(bk.to_numpy(v)) for k, v in info.items()}
     info["cpu"] = time.time() - t0
     return x_out, bk.to_numpy(U), info
@@ -150,33 +158,47 @@ def solve_fd(case: Case, bk):
     model, params = build_mechanistic(case, bk)
     t0 = time.time()
     x_nodes = bk.to_numpy(params["x"])
+    n = model.n_total
     if case.initial_guess == "march_noslip" and not case.outlet:
         xg, Ug, _ = march_noslip(case, bk, x_out=x_nodes)
-        u0 = model.initial_guess(params, P=Ug[:, 0], T=Ug[:, 1])
+        P0, T0 = Ug[:, 0], Ug[:, 1]
     else:
-        u0 = model.initial_guess(params)
+        P0 = np.full(n, float(bk.to_numpy(params["P_ref"])))
+        T0 = np.full(n, float(bk.to_numpy(params["T_ref"])))
+    warm = case.flash.warm_start
     colors, n_colors, mask = model.sparsity()
+
+    def solve(P, T, p):
+        # a estimativa inicial (um flash por nó) fica dentro da função compilada (ver march_noslip)
+        u, lnK0 = model.initial_guess(p, P=P, T=T)
+        if not warm:
+            return newton_solve(lambda uu: model.residual(uu, p), u, cc, n_colors, mm, case.newton, model.bounds(p), bk)
+        return newton_solve(
+            lambda uu, aa: model.residual(uu, p, aa),
+            u,
+            cc,
+            n_colors,
+            mm,
+            case.newton,
+            model.bounds(p),
+            bk,
+            aux0=lnK0,
+        )
+
     if bk.is_jax:
         import jax
 
-        key = ("fd", _fluid_key(case), case.closures, case.mechanistic, case.newton, model.n_seg, model.outlet_P)
-        solve = _COMPILED.get(key)
-        if solve is None:
-            cc, mm = xp.asarray(colors), xp.asarray(mask)
-
-            def solve(u, p):
-                return newton_solve(
-                    lambda uu: model.residual(uu, p), u, cc, n_colors, mm, case.newton, model.bounds(p), bk
-                )
-
-            solve = jax.jit(solve)
-            _COMPILED[key] = solve
-        u, info = solve(u0, params)
+        key = ("fd", _fluid_key(case), case.closures, case.mechanistic, case.newton, model.n_seg, model.outlet_P, warm)
+        cc, mm = xp.asarray(colors), xp.asarray(mask)
+        compiled = _COMPILED.get(key)
+        if compiled is None:
+            compiled = jax.jit(solve)
+            _COMPILED[key] = compiled
+        u, info = compiled(xp.asarray(P0), xp.asarray(T0), params)
         jax.block_until_ready(u)
     else:
-        u, info = newton_solve(
-            lambda uu: model.residual(uu, params), u0, colors, n_colors, mask, case.newton, model.bounds(params), bk
-        )
+        cc, mm = colors, mask
+        u, info = solve(P0, T0, params)
     out = {}
     for k, v in info.items():
         v = bk.to_numpy(v)
@@ -284,7 +306,7 @@ def march_many(case: Case, variations: dict, backend="jax"):
         if v is None:
             return jnp.broadcast_to(jnp.asarray(default)[None], (N,) + jnp.asarray(default).shape)
         v = jnp.asarray(v, float)
-        return jnp.broadcast_to(v[:, None], (N, ns)) if (ns > 1 and v.ndim == 1) or ns == 1 and v.ndim == 1 else v
+        return jnp.broadcast_to(v[:, None], (N, ns)) if v.ndim == 1 else v
 
     params = {k: expand(k, params0[k]) for k in ("D", "roughness", "theta", "U", "T_amb")}
     params["m"] = jnp.asarray(variations.get("m", np.full(N, case.inlet["m"])), float)
@@ -293,10 +315,15 @@ def march_many(case: Case, variations: dict, backend="jax"):
     u0 = jnp.stack([P_in, T_in], axis=1)
     xo, sg = xp.asarray(x_out), xp.asarray(segs)
     scale = xp.asarray([1e5, 1.0])
-    key = ("march_many", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes())
+    warm = case.flash.warm_start
+    key = ("march_many", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes(), warm)
     run = _COMPILED.get(key)
     if run is None:
-        single = lambda u, p: integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,))
+
+        def single(u, p):
+            aux0 = model.state(u, 0, p)[2] if warm else None
+            return integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,), aux0=aux0)
+
         run = jax.jit(jax.vmap(single))
         _COMPILED[key] = run
     t0 = time.time()

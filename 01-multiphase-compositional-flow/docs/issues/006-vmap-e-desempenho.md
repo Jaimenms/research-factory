@@ -41,7 +41,8 @@ substituições sucessivas + polimento + jvp); ganha em GPU/TPU e em conveniênc
 ## Próximos ganhos (não feitos)
 
 1. **Arranque quente do flash** ao longo de x (K do passo anterior em vez de Wilson): 20 → 2–3
-   substituições; é o maior ganho (×3–5 na marcha).
+   substituições; é o maior ganho (×3–5 na marcha). **Feito na issue 007** (com `tol` 1e-3 o
+   arranque frio já só precisa de 4 substituições, e o quente de 1; o ganho medido está lá).
 2. Tolerância do flash nas iterações de Newton do método 3.2 relaxada nas primeiras iterações.
 3. `vmap` com `lax.scan` de passo fixo (sem `while`) para lotes homogéneos.
 4. Pós-processamento (flash e fechamentos nos pontos de saída) também compilado.
