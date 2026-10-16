@@ -107,6 +107,27 @@ def save(fig, out_dir, name, png=True):
     return pdf
 
 
+def tex_table(out_dir, name, header, rows, align=None, notes=None):
+    """Grava `out_dir/name.tex` com um `tabular` booktabs (células já formatadas) e `out_dir/name_note.tex`
+    com a nota (vazio se não houver), para a nota ficar fora de um eventual `\\resizebox` no manuscrito."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    align = align or "l" + "r" * (len(header) - 1)
+    lines = ["% gerado pelo guião de figuras do artigo; não editar à mão", f"\\begin{{tabular}}{{@{{}}{align}@{{}}}}", "\\toprule", " & ".join(header) + r" \\", "\\midrule"]
+    lines += [" & ".join(str(c) for c in r) + r" \\" for r in rows]
+    lines += ["\\bottomrule", "\\end{tabular}"]
+    path = out_dir / f"{name}.tex"
+    path.write_text("\n".join(lines) + "\n")
+    (out_dir / f"{name}_note.tex").write_text(("\\par\\smallskip\\footnotesize " + notes + "\n") if notes else "")
+    print("tabela:", path)
+    return path
+
+
+def fmt(v, spec="{:.2f}"):
+    """Formata um número ou devolve «--» para None/NaN (corridas em falta)."""
+    return "--" if v is None or (isinstance(v, float) and np.isnan(v)) else spec.format(v)
+
+
 def run_cli(figures, description, tables=None):
     """Linha de comando comum: `--out DIR` (obrigatório), `--tables DIR` (fragmentos LaTeX das tabelas),
     `--only NOME` (repetível), `--no-png`.

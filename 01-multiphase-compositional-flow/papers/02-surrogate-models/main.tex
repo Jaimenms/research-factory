@@ -1,0 +1,303 @@
+%% Artigo 02 do tema 01 — volume II: os substitutos (dados pela marcha vetorizada, redes, encadeamento, perfil
+%% com a posição axial como entrada, PINN com o resíduo do modelo, validação). Cita o volume I
+%% (papers/01-compositional-steady-state) para o simulador.
+%%
+%% Revista alvo: Geoenergy Science and Engineering (Elsevier). Construção: `make` nesta pasta (ver ../README.md):
+%% figures/make_figures.py gera todas as figuras (figures/generated/) e os fragmentos de tabela
+%% (tables/generated/*.tex, lidos por \input) a partir de runs/surrogate/ e models/surrogate/.
+%% Regras do guia da revista já embutidas (ver o cabeçalho do artigo 01).
+
+\documentclass[a4paper,fleqn]{cas-sc}
+%\documentclass[a4paper,fleqn,review]{cas-sc}
+
+\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{siunitx}
+
+\graphicspath{{figures/generated/}{figures/static/}}
+
+% Macros do artigo
+\newcommand{\mdot}{\dot{m}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\bPhi}{\boldsymbol{\Phi}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\bJ}{\mathbf{J}}
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+
+\begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+\shorttitle{Compositional pipe-flow simulation, Part II: neural and physics-informed surrogates}
+\shortauthors{G.A. Carvalho et~al.}
+
+\title[mode = title]{Steady-state compositional gas--liquid flow in production pipelines. Part II: neural and physics-informed surrogates with the axial position as a feature}
+
+% Autores e afiliações. TODO: confirmar afiliações, moradas e o e-mail do autor correspondente.
+\author[1]{Gustavo Alves de Carvalho}
+\credit{Conceptualization, Methodology, Software, Investigation, Writing -- original draft}
+
+\author[1]{Andr\'e Luiz Hemerly Costa}
+\credit{Conceptualization, Methodology, Supervision, Writing -- review \& editing}
+
+\author[1]{Giovani Cavalcanti Nunes}
+\credit{Conceptualization, Supervision, Writing -- review \& editing}
+
+\author[1]{Jaime Neiva Miranda de Souza}
+\cormark[1]
+\ead{corresponding.author@example.org}  % TODO
+\credit{Conceptualization, Software, Validation, Writing -- review \& editing}
+
+\affiliation[1]{organization={Programa de P\'os-Gradua\c{c}\~ao em Engenharia Qu\'imica, Instituto de Qu\'imica, Universidade do Estado do Rio de Janeiro},
+                addressline={Rua S\~ao Francisco Xavier 524},
+                city={Rio de Janeiro},
+                postcode={20550-900},
+                state={RJ},
+                country={Brazil}}
+
+\cortext[1]{Corresponding author.}
+
+\begin{abstract}
+% <= 250 palavras, autocontido, sem referências (texto literal).
+Surrogate models replace a compositional steady-state pipe-flow simulator where thousands of evaluations are needed, in optimisation, uncertainty quantification or real-time use. This second part of the work builds such surrogates on the differentiable simulator of the first part, whose vectorised march generates 300 converged training samples per pipe segment in about one minute. Multilayer perceptrons trained with Adam on inlet pressure, inlet temperature and mass flow rate reproduce the outlet pressure and temperature of the well, flowline and riser of an offshore production system with a coefficient of determination above 0.997; the full hyperparameter grid of the reference work, 135 networks per segment, is trained in minutes, and the three surrogates chained in series stay within 0.3\,\% of the physical model while evaluating in tens of microseconds, four to six orders of magnitude faster than the simulator. The axial position is then added as an input so that a network returns the whole pressure and temperature profiles, with the inlet condition imposed by construction, and a physics-informed variant adds to the loss the residual of the governing equations at collocation points that are never simulated. The residual is built from the simulator's own flux formulation, scaled by the typical gradients, and its gradient with respect to the network parameters is obtained without back-propagating through the iterative flash. With one tenth of the training profiles, the residual term halves to quarters the test error and brings the violation of the conservation equations below that of the network trained on all the data. Learning curves, cross-validation, bias and three test-set strategies quantify overfitting: a split along the axial position underestimates the generalisation error by one to two orders of magnitude, and a block split exposes a bias that random splits hide.
+\end{abstract}
+
+% 3 a 5 pontos, no máximo 85 caracteres cada (contando espaços).
+\begin{highlights}
+\item Vectorised differentiable march generates 300 training profiles per segment per minute
+\item Neural surrogates reach R2 > 0.997 and evaluate 10,000 times faster than the simulator
+\item Axial position as a network input yields whole profiles with the inlet condition exact
+\item Residual of the flow equations from the simulator, differentiated without the flash
+\item Test-set strategy changes the reported error by 10--50x; split by profile is the honest one
+\end{highlights}
+
+% 1 a 7 palavras-chave, de preferência de uma palavra.
+\begin{keywords}
+surrogate models \sep neural networks \sep physics-informed neural networks \sep multiphase flow \sep compositional simulation \sep pipelines
+\end{keywords}
+
+\maketitle
+
+\section*{Nomenclature}
+\begin{tabular}{@{}ll@{}}
+$\mathbf{f}$ & right-hand side of the marching form, $\dd\bu/\dd x$ (\si{\pascal\per\metre}, \si{\kelvin\per\metre}) \\
+$\mathbf{g}_{\btheta}$ & network predicting the drop per unit position \\
+$\bJ$ & Jacobian $\partial\bPhi/\partial\bu$ \\
+$L$ & segment length (\si{\metre}) \\
+$\mdot$ & mass flow rate (\si{\kilogram\per\second}) \\
+$N_c$, $N_d$ & numbers of collocation points and of data rows \\
+$P$ & pressure (\si{\pascal}; tables and figures in bar) \\
+$\br$ & scaled residual of the governing equations \\
+$s$ & dimensionless axial position, $x/L$ \\
+$\bS$ & source vector \\
+$T$ & temperature (\si{\kelvin}) \\
+$\bu$ & state vector $(P, T)$ \\
+$x$ & axial coordinate (\si{\metre}) \\
+$\btheta$ & network parameters \\
+$\lambda$ & weight of the residual term in the loss \\
+$\boldsymbol{\sigma}$ & residual scale, median slope of the recorded profiles \\
+$\bPhi$ & conserved flux vector \\
+\end{tabular}
+
+\section{Introduction}\label{sec:intro}
+
+Steady-state compositional simulation of gas--liquid flow in wells, flowlines and risers couples a cubic equation of state \citep{peng1976} and an isothermal flash \citep{michelsen1982a,michelsen1982b} to mixture momentum and energy balances closed by homogeneous or flow-pattern-dependent mechanistic relations \citep{taitel1976,xiao1990,gomez2000}. The flash dominates the cost of such simulators, and the thousands of evaluations required by optimisation, uncertainty quantification, history matching or real-time monitoring multiply it. Surrogate models \citep{hornik1989,kanin2019} answer this need by learning the input--output map of the simulator from a set of simulated samples, and \citet{carvalho2022} trained multilayer perceptrons on 300 samples per segment of an offshore production system, obtaining coefficients of determination of 0.91--0.98 and an evaluation cost of tens of milliseconds against seconds for the physical model. Two questions remain open in that workflow. First, the surrogate carries no notion of the conservation laws, and its error grows quickly when training data are scarce; physics-informed neural networks \citep{raissi2019,karniadakis2021} promise to supply what missing data cannot by penalising the residual of the governing equations at collocation points, but the residual of a compositional model contains an iterative flash through which the usual reverse-mode differentiation is not available. Second, the synthetic data are cheap, which invites training on ever larger sets without a measure of overfitting, bias or of the adequacy of the test set.
+
+The companion paper \citep{carvalho2026a}, hereafter Part~I, presented a reimplementation of the model of \citet{carvalho2022} on an array backend with automatic differentiation \citep{jax2018}: the physics is written once in flux form, the derivatives of the flash and the Jacobians are exact, and the compiled march is vectorised over cases, so that hundreds of converged profiles are produced per minute. This article uses that simulator in three ways. Section~\ref{sec:data} generates the training data with the vectorised march and repeats the surrogate workflow of the reference end to end, including its full hyperparameter grid, with the surrogates chained along the production system and their speed-up measured (Sections~\ref{sec:training} and \ref{sec:chain}). Section~\ref{sec:pinn} adds the axial position as an input so that a network returns the whole profile with the inlet condition imposed by construction, builds a residual of the governing equations from the simulator's own right-hand side, evaluates it at collocation points that need no simulation, and differentiates it without back-propagating through the flash; a sparse-data study measures what the residual term buys. Section~\ref{sec:validation} quantifies overfitting and bias with learning curves and cross-validation and compares three strategies for choosing the test set, including the question of whether the points along the axis of a profile may be split.
+
+\section{The physical model and its differentiable implementation}\label{sec:model}
+
+The simulator of Part~I writes both flow models (no-slip and mechanistic) as
+\begin{equation}\label{eq:flux}
+\frac{\dd \bPhi}{\dd x} = \bS(\bu), \qquad \bu = (P, T),
+\end{equation}
+where $\bPhi$ collects the mixture momentum flux plus pressure and the mass-weighted mixture enthalpy, and $\bS$ the wall friction, the hydrostatic term, the heat exchanged with the surroundings and the potential-energy term; for a given composition and mass flow rate $\mdot$, every quantity is a local function of $\bu$ through the flash and the closures. With $\bJ = \partial\bPhi/\partial\bu$, obtained exactly by forward-mode linearisation, the no-slip model is marched as the initial-value problem
+\begin{equation}\label{eq:march}
+\frac{\dd\bu}{\dd x} = \mathbf{f}(x, \bu; \mdot) = \bJ^{-1}\bS, \qquad \bu(0) = (P_\mathrm{in}, T_\mathrm{in}),
+\end{equation}
+with an adaptive Dormand--Prince pair \citep{dormand1980} and a warm-started flash. The successive-substitution iterations of the flash are excluded from the derivative graph and its Newton polishing carries the derivatives of the vapour fraction and of the phase compositions by the implicit function theorem, so that $\bJ$ is the Jacobian of the converged solution. The compiled march takes the pipe and inlet parameters as arguments and is vectorised over cases: one compilation serves any number of cases with the same fluid and grid, and a batch of 300 cases costs roughly the time of the slowest one. Part~I cross-verified this march against finite-difference and finite-volume nodal solvers to \SI{0.01}{\bar} and \SI{0.1}{\kelvin} and compared it with the reference implementation on 200 pressure-drop lines, the offshore system used below and a gas-condensate pipeline. Here the march is the data generator (Section~\ref{sec:data}) and its right-hand side $\mathbf{f}$ is the residual provider of the physics-informed networks (Section~\ref{sec:residual}).
+
+\section{Data generation}\label{sec:data}
+
+Following the reference, each segment of the offshore system of Part~I (a vertical well of \SI{1500}{\metre} and \SI{127}{\milli\metre}, a horizontal flowline of \SI{6000}{\metre} and \SI{152.4}{\milli\metre}, and a vertical riser of \SI{300}{\metre}) was treated as a separate unit with the 11-component fluid of the reference's thermodynamic validation, the no-slip model, inputs $(P_\mathrm{in}, T_\mathrm{in}, \mdot)$ and outputs $(P_\mathrm{out}, T_\mathrm{out})$. Three hundred input triples per segment were drawn by Latin hypercube sampling \citep{mckay1979} within the ranges of the reference (Table~\ref{tab:ranges}) and simulated in one vectorised call per segment: 300 converged profiles in \SIrange{67}{104}{\second} including compilation, that is, \SI{0.28}{\second} per sample. The reference published its 299 samples per segment with the outputs of its own physical model; simulating the same inputs (Table~\ref{tab:appendix_b}) reproduces its outlet pressure and temperature in the well ($R^2$ of 0.98 and 1.00, mean deviations of \SI{1.4}{\bar} on an \SI{84}{\bar} drop and \SI{0.1}{\kelvin}) and in the riser, which is a direct check of the physical model on 598 independent cases. In the flowline the reference cools $1.4\times$ more than the present model (\SI{34}{\kelvin} against \SI{24}{\kelvin} on average) while losing \SI{19}{\percent} less pressure; as for the gas-condensate pipeline of Part~I, the thermal discrepancy is confined to a horizontal flowline, and it is reported as open.
+
+\begin{table}[htbp]
+\caption{Sampling ranges of the inputs for the three segments.}\label{tab:ranges}
+\footnotesize
+\input{tables/generated/tab_ranges}
+\input{tables/generated/tab_ranges_note}
+\end{table}
+
+\begin{table}[htbp]
+\caption{The physical model of Part~I on the training inputs published by the reference (Appendix B of \citet{carvalho2022}).}\label{tab:appendix_b}
+\footnotesize
+\resizebox{\textwidth}{!}{\input{tables/generated/tab_appendix_b}}
+\input{tables/generated/tab_appendix_b_note}
+\end{table}
+
+\section{Networks, training and hyperparameter search}\label{sec:training}
+
+The surrogate of each segment is a multilayer perceptron with fully connected layers of equal width and a linear output, inputs and outputs standardised with the training statistics, weights initialised uniformly in $\pm 1/\sqrt{\text{fan-in}}$ \citep{paszke2019} and trained with Adam \citep{kingma2015} on the mean squared error in full batch, 70\,\% of the samples for training and 30\,\% for testing. The training loop runs inside the same compiled framework as the simulator, with the epochs unrolled by a scan, so that a network trains in seconds. The hyperparameter grid of the reference, one to three hidden layers, sigmoid, hyperbolic-tangent or rectified-linear activation, 5 to 25 neurons and learning rates of 0.1, 0.01 and 0.001, 135 networks per segment, was trained in full with the same data split and 2000 epochs (Fig.~\ref{fig:grid}, Table~\ref{tab:grid}). With these data 131 to 133 of the 135 networks reach $R^2 > 0.9$ on both outputs, against 8 to 35 in the reference, where many configurations diverged at the largest learning rate or did not converge at the smallest; the difference is explained by the amount of optimisation rather than by the data, since the reference's training curves stop at about 200 iterations. The configuration adopted by the reference, one hidden layer of 20 rectified-linear units and a learning rate of 0.01, is kept for the final models for comparability; it is within $10^{-3}$ in $R^2$ of the best network of the grid. Fig.~\ref{fig:training} shows the training and test errors and Fig.~\ref{fig:parity} the test parity; Table~\ref{tab:test} gives $R^2$ of 0.9996--0.9999 for pressure and 0.997--0.999 for temperature, with mean errors below \SI{0.4}{\percent}, against 0.96--0.98 and 0.91--0.94 in the reference.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{surrogate_grid}
+\caption{Coefficient of determination on the test set of the 135 networks of the hyperparameter grid, this work against the reference, for (a--c) pressure and (d--f) temperature in the well, flowline and riser; values below $-1$ are clipped.}\label{fig:grid}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Hyperparameter grid: networks with $R^2 > 0.9$ on both outputs and best configuration per segment.}\label{tab:grid}
+\footnotesize
+\input{tables/generated/tab_surrogate_grid}
+\input{tables/generated/tab_surrogate_grid_note}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{surrogate_training}
+\caption{Training and test mean squared error (standardised outputs) per epoch for the final surrogates of the (a) well, (b) flowline and (c) riser.}\label{fig:training}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{surrogate_parity}
+\caption{Test parity of the final surrogates: (a--c) outlet pressure and (d--f) outlet temperature in the well, flowline and riser.}\label{fig:parity}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Test metrics of the final surrogates against the reference values.}\label{tab:test}
+\footnotesize
+\input{tables/generated/tab_surrogate_test}
+\input{tables/generated/tab_surrogate_test_note}
+\end{table}
+
+\section{Chained prediction and performance gain}\label{sec:chain}
+
+The three surrogates chained in series, the outlet of one segment feeding the next with the same mass flow rate, replace the physical model of the whole system (Fig.~\ref{fig:chain}, Table~\ref{tab:chain}). For the inlet of the reference figures (\SI{170}{\bar}, \SI{80}{\celsius}, \SI{20}{\kilogram\per\second}) the chain stays within \SI{0.25}{\percent} in pressure and \SI{0.1}{\percent} in temperature of the physical model, against \SIrange{1}{4.7}{\percent} and \SIrange{0.3}{0.6}{\percent} in the reference. The reference physical profile in Fig.~\ref{fig:chain} ends \SI{8}{\kelvin} colder than the present one, which is the flowline cooling difference of Table~\ref{tab:appendix_b}. One chained evaluation costs tens of microseconds in plain NumPy and below one microsecond per case when batched (Table~\ref{tab:speed}), against three vectorised marches of \SI{0.28}{\second} each: four to six orders of magnitude, which turns parametric studies, optimisation loops and uncertainty propagation over the production system into interactive tasks. The surrogate, however, is only as good as its training domain and carries no notion of the conservation laws, which motivates the extension of the next section.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.85\linewidth]{surrogate_chain}
+\caption{Chained surrogate against the physical model along the offshore system with the 11-component fluid: (a) temperature and (b) pressure, this work (solid line and circles) and the reference (dotted line and squares).}\label{fig:chain}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Chained surrogate against the physical model at the segment boundaries.}\label{tab:chain}
+\footnotesize
+\input{tables/generated/tab_chain}
+\input{tables/generated/tab_chain_note}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Evaluation cost of the physical model and of the chained surrogate.}\label{tab:speed}
+\footnotesize
+\input{tables/generated/tab_speed}
+\input{tables/generated/tab_speed_note}
+\end{table}
+
+\section{Physics-informed surrogates of the profiles}\label{sec:pinn}
+
+\subsection{The axial position as a feature}\label{sec:profile}
+
+A surrogate that returns only the outlet of a segment cannot locate the dew point, the point where a pattern changes or the temperature at a given depth. Adding the dimensionless position $s = x/L$ to the inputs, $(P_\mathrm{in}, T_\mathrm{in}, \mdot, s)$, lets the network return the whole profile, and the known inlet condition can be imposed exactly instead of learned \citep{lagaris1998}: the network $\mathbf{g}_{\btheta}$ predicts the drop per unit position and the profile is
+\begin{equation}\label{eq:profile}
+\bu_{\btheta}(s) = \bu_\mathrm{in} - s\,\mathbf{g}_{\btheta}(P_\mathrm{in}, T_\mathrm{in}, \mdot, s),
+\end{equation}
+so that $\bu_{\btheta}(0) = \bu_\mathrm{in}$ for any $\btheta$. The networks (two hidden layers of 32 hyperbolic-tangent units, 1282 parameters, Adam at 0.01 for 3000 epochs) were trained on the 300 profiles per segment recorded at 51 axial points, 210 profiles for training and 90 for testing, with the targets standardised. Fig.~\ref{fig:profile} and the first rows of Table~\ref{tab:pinn} show that the profile is recovered along the whole segment with root-mean-square errors of \SIrange{0.02}{0.11}{\bar} and \SIrange{0.08}{0.24}{\kelvin}, of the same order as the outlet surrogates of Section~\ref{sec:training}; chaining the three profile surrogates along the system, with the outlet of one as the inlet of the next, keeps the error below \SI{0.2}{\bar} and \SI{0.1}{\kelvin} everywhere.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{surrogate_profile}
+\caption{Profile surrogate with the axial position as an input along the whole offshore system (\SI{170}{\bar}, \SI{80}{\celsius}, \SI{20}{\kilogram\per\second}; shaded bands mark the flowline): (a) pressure and (b) temperature from the physical model and from the three segment surrogates, each fed with the physical inlet of its segment or chained to the previous surrogate; (c, d) the corresponding errors.}\label{fig:profile}
+\end{figure}
+
+\subsection{A residual with physical meaning}\label{sec:residual}
+
+A physics-informed network \citep{raissi2019,karniadakis2021} adds to the data loss the residual of the governing equations at collocation points that need not be simulated. For the present problem the residual must mean conservation of momentum and energy with the same thermodynamics and closures as the simulator, which the flux form of Eq.~\eqref{eq:flux} provides directly: with $\mathbf{f}$ the right-hand side of the marching form, Eq.~\eqref{eq:march}, the scaled residual of the network profile at a collocation point $(P_\mathrm{in}, T_\mathrm{in}, \mdot, s)$ is
+\begin{equation}\label{eq:residual}
+\br_{\btheta} = \frac{1}{\boldsymbol{\sigma}}\left[\frac{1}{L}\frac{\partial\bu_{\btheta}}{\partial s} - \mathbf{f}\!\left(sL, \bu_{\btheta}(s); \mdot\right)\right],
+\end{equation}
+where $\partial\bu_{\btheta}/\partial s$ is the exact derivative of the network with respect to its position input, obtained by a forward-mode tangent, $\mathbf{f}$ is evaluated by the simulator's own compiled right-hand side (flash, closures and the exact $\bJ$ included), and $\boldsymbol{\sigma}$ is the median slope $|\dd\bu/\dd x|$ of the recorded profiles, so that the two components, in \si{\pascal\per\metre} and \si{\kelvin\per\metre}, are of order one when the error is of the order of the typical gradient. The residual thus vanishes exactly when the network profile solves the flow equations for that inlet condition and flow rate; it is not a penalty on a simplified or linearised model but on the full compositional model. Collocation points are drawn by Latin hypercube sampling in the box of the inputs times $s \in (0, 1]$, and the loss is
+\begin{equation}\label{eq:loss}
+\mathcal{L}(\btheta) = \underbrace{\frac{1}{N_d}\sum_{\text{data}}\left\|\hat{\mathbf{y}}_{\btheta} - \mathbf{y}\right\|^2}_{\text{simulated profiles}} + \lambda\,\underbrace{\frac{1}{N_c}\sum_{\text{collocation}}\left\|\br_{\btheta}\right\|^2}_{\text{governing equations}},
+\end{equation}
+with the data term on the standardised targets of Eq.~\eqref{eq:profile}.
+
+Differentiating the residual term with respect to $\btheta$ raises a difficulty specific to compositional models: $\mathbf{f}$ contains the flash, an iterative loop, through which reverse-mode differentiation is not available, and a second level of differentiation on top of the linearisation that produces $\bJ$ exhausts memory at compile time. The gradient is obtained instead without differentiating through $\mathbf{f}$ at all. At each step the network values $\bu_{\btheta}$ and $\partial\bu_{\btheta}/\partial s$ are evaluated at the collocation points, then $\mathbf{f}$ and its Jacobian $\partial\mathbf{f}/\partial\bu$ are evaluated there as plain numbers (the Jacobian by forward differences with the steps \SI{1}{\kilo\pascal} and \SI{0.01}{\kelvin}, as in the reference), and the residual $\br_0$ and the Jacobian $\mathbf{J}_0$ are detached from the graph. The auxiliary scalar
+\begin{equation}\label{eq:surrogate_loss}
+\tilde{\mathcal{L}}(\btheta) = \frac{2}{N_c}\sum_{\text{collocation}} \frac{\br_0}{\boldsymbol{\sigma}}\cdot\left[\frac{1}{L}\frac{\partial\bu_{\btheta}}{\partial s} - \mathbf{J}_0\,\bu_{\btheta}\right]
+\end{equation}
+has, at the current parameters, exactly the gradient of the residual term of Eq.~\eqref{eq:loss}, by the chain rule, and involves only the network; its reverse-mode gradient is cheap. Each epoch therefore costs three right-hand-side evaluations per collocation point, about \SI{20}{\milli\second} per point on a laptop CPU, and the step compiles in a few minutes.
+
+\subsection{Sparse-data study}\label{sec:pinn_results}
+
+To test whether the residual term supplies what missing data cannot, the profile networks were retrained with only 20 of the 210 training profiles, with and without the residual term ($N_c = 60$ collocation points, $\lambda = 1$, 300 epochs), starting either from the weights of the data-only network or from a random initialisation, and evaluated on the same 90 test profiles and on the residual at the collocation set (Table~\ref{tab:pinn}). With 20 profiles the data-only network loses one order of magnitude with respect to the full data set: root-mean-square errors of \SI{0.18}{\bar} and \SI{1.3}{\kelvin} in the well, \SI{0.83}{\bar} and \SI{3.1}{\kelvin} in the flowline and \SI{0.11}{\bar} and \SI{0.22}{\kelvin} in the riser, with scaled residuals of 0.08--0.37, that is, the fitted profiles violate the balances by up to a third of the typical gradient. Adding the residual term with the same 20 profiles brings the errors to \SI{0.15}{\bar} and \SI{0.61}{\kelvin}, \SI{0.17}{\bar} and \SI{1.1}{\kelvin}, and \SI{0.08}{\bar} and \SI{0.16}{\kelvin}: the temperature error is halved in the well and divided by three in the flowline, the flowline pressure error by five, and the residual drops to 0.006--0.010, below that of the network trained on 210 profiles (0.005--0.046), which was never asked to satisfy the equations. Training from a random initialisation with the full loss reaches similar errors with a residual of 0.008--0.046. The gain is largest where the data-only network is worst, the flowline, whose temperature drop spans \SI{40}{\kelvin}; the remaining error is concentrated in the two-phase part of the profiles, where the gradients change fastest. Fig.~\ref{fig:pinn} shows the error of the three networks along the whole system, each segment fed with the physical inlet of that segment.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{pinn_study}
+\caption{Sparse-data study along the whole offshore system (same case as Fig.~\ref{fig:profile}, each segment fed with its physical inlet): error in (a) pressure and (b) temperature of the data-only network trained on 20 profiles, of the physics-informed network trained on the same 20 profiles plus the residual at 60 collocation points, and of the data-only network trained on 210 profiles.}\label{fig:pinn}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Profile surrogates: errors on the 90 test profiles and residual of the governing equations on the collocation set.}\label{tab:pinn}
+\footnotesize
+\input{tables/generated/tab_profile_pinn}
+\input{tables/generated/tab_profile_pinn_note}
+\end{table}
+
+\section{Overfitting, bias and the choice of the test set}\label{sec:validation}
+
+Synthetic data are cheap here, which invites training on ever larger sets without asking whether the network generalises or merely interpolates its training points. Three measures are reported (Fig.~\ref{fig:validation}, Tables~\ref{tab:validation} and \ref{tab:residual}). First, learning curves: the test and training errors as functions of the number of training profiles, over repeated random splits, where the test--train gap measures overfitting and the spread between repetitions the variance of the estimate; a five-fold cross-validation of the outlet surrogate gives the same quantities on disjoint test folds. Second, the bias, the mean signed error on the test set, which a symmetric error measure hides. Third, three ways of choosing the test set for the profile surrogate, because the training rows are not independent samples: the 50 axial points of one profile share the same inlet condition. Splitting by profile keeps whole profiles out of training and tests generalisation to new inlet conditions, which is the use case; splitting by axial position keeps all profiles but hides \SI{30}{\percent} of the axial points, which tests interpolation along $x$ only and is the split a careless row-wise shuffle would effectively produce; a block split holds out the profiles with the highest \SI{30}{\percent} of inlet pressures and tests extrapolation. For the physics-informed network the residual of the governing equations is evaluated both on the collocation set used in training and on a second set never seen, which is a test that needs no simulated data at all.
+
+The learning curves (Fig.~\ref{fig:validation}) show the expected regime change. With ten training samples the outlet surrogate interpolates them exactly (training error zero) while the test error is \SIrange{1}{2.7}{\bar} and \SIrange{1.7}{4}{\kelvin}, pure overfitting; the test error then falls steadily with the number of samples and the gap to the training error closes to \SIrange{0.04}{0.3}{\bar} at 210 samples. Five-fold cross-validation puts the outlet test error at $0.14 \pm 0.05$, $0.55 \pm 0.23$ and $0.07 \pm 0.02$\,bar and $0.38 \pm 0.21$, $0.42 \pm 0.07$ and $0.21 \pm 0.10$\,K for the well, flowline and riser, with biases below \SI{0.07}{\bar} and \SI{0.02}{\kelvin}: the spread between folds is \SIrange{30}{50}{\percent} of the mean, so a single split, as in Table~\ref{tab:test}, overstates the precision of the error estimate even when it does not bias it. For the profile surrogate the three test-set strategies give very different answers (Table~\ref{tab:validation}). Splitting by axial position reports errors of a few hundredths of a bar and a few hundredths of a kelvin even with ten training profiles, equal to the training error: interpolation along $x$ within known profiles is trivial for a network that takes $s$ as an input, and a row-wise shuffle would report this number as the generalisation error, \num{10} to \num{50} times too small. Splitting by profile gives the honest figure, \SI{0.19}{\bar} and \SI{1.2}{\kelvin} in the well with 20 profiles and \SI{0.03}{\bar} and \SI{0.15}{\kelvin} with 210, consistent with Section~\ref{sec:pinn_results}. The block split, which asks the network to extrapolate to inlet pressures above its training range, costs a further factor of two to five in the pressure error of the riser and exposes a systematic bias ($+0.22$\,bar with 20 profiles, $+0.04$\,bar with 210) that the random splits hide; temperature, which depends weakly on the inlet pressure, is almost unaffected. Finally, the residual of the governing equations on a collocation set never used (Table~\ref{tab:residual}) is \numrange{0.03}{0.12} for the physics-informed networks against \numrange{0.006}{0.010} on their own collocation set: the network satisfies the equations where it was asked to, and partially elsewhere, which is the counterpart of overfitting for the physics term; the remedy is cheap, since collocation points cost no simulation, and even so the held-out residual of the physics-informed networks stays two to four times below that of the data-only networks trained on the same 20 profiles.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\linewidth]{surrogate_validation}
+\caption{Learning curves: root-mean-square test error (mean and standard deviation over three random splits) of the outlet surrogate and of the profile surrogate against the number of training profiles, for (a--c) pressure and (d--f) temperature in the well, flowline and riser; dotted lines are the training errors; the profile surrogate is shown for the three test-set strategies, and the star marks the physics-informed network trained on 20 profiles.}\label{fig:validation}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{Test error, overfitting gap and bias of the surrogates for different training sets and test-set strategies.}\label{tab:validation}
+\footnotesize
+\resizebox{\textwidth}{!}{\input{tables/generated/tab_validation}}
+\input{tables/generated/tab_validation_note}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Residual of the governing equations of the profile surrogates on the training and on a held-out collocation set.}\label{tab:residual}
+\footnotesize
+\input{tables/generated/tab_residual}
+\input{tables/generated/tab_residual_note}
+\end{table}
+
+\section{Conclusions}\label{sec:conclusions}
+
+The vectorised differentiable simulator of Part~I made the surrogate workflow of the reference reproducible end to end: 300 converged training profiles per segment in about one minute, the full hyperparameter grid of 135 networks trained in minutes with 131 to 133 of them above $R^2 = 0.9$, final networks that reproduce the physical model to $R^2 > 0.997$, and a chained surrogate of the well--flowline--riser system within \SI{0.3}{\percent} of the physical model at a cost of microseconds, four to six orders of magnitude below the simulator. Adding the axial position as an input gave a surrogate of the whole profile with the inlet condition built in, at the same accuracy as the outlet surrogates. The residual of the governing equations, taken from the simulator's own right-hand side at collocation points, scaled by the typical gradients and differentiated without back-propagating through the flash, is a construction that applies to any model with an iterative thermodynamic kernel; with one tenth of the training profiles it halved to quartered the test errors and brought the violation of the conservation equations below that of the network trained on all the data, so that the physics term buys accuracy that the data alone would require many more simulations to deliver. Finally, cheap synthetic data call for explicit measures of overfitting and bias: learning curves and cross-validation showed a test--train gap that closes only with hundreds of samples and a fold-to-fold spread of \SIrange{30}{50}{\percent}, and the choice of the test set changed the reported error by one to two orders of magnitude, with the split by whole profiles as the honest one and the block split as the one that reveals bias.
+
+\section*{Acknowledgements}
+% TODO: bolsa PRH/ANP e outras fontes de financiamento.
+The authors thank the Programa de P\'os-Gradua\c{c}\~ao em Engenharia Qu\'imica of the Universidade do Estado do Rio de Janeiro.
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+% Obrigatória na submissão; ajustar ao uso real.
+During the preparation of this work the authors used AI-assisted tools for code development, for the extraction of tabulated data from the reference document and for language editing. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
+\section*{Data availability}
+% TODO: DOI do repositório (Zenodo) ou endereço público do código e dos casos.
+The surrogate-model package, the training sets, the trained networks and the script that produces every figure and table of this article are available in a public repository together with the simulator of Part~I.
+
+\printcredits
+
+\bibliographystyle{cas-model2-names}
+\bibliography{../_common/references,refs}
+
+\end{document}

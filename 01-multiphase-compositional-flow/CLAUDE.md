@@ -29,7 +29,7 @@ simulador, alimentado por `march_many` (jit + vmap).
 | `surrogate/` | modelo substituto (§5.7), fora do simulador: `sampling` (hipercubo latino), `dataset` (massa de dados por `march_many`), `model`/`train` (MLP + Adam em JAX), `grid`, `predict` (encadeamento), `profile` (perfil com s = x/L como entrada), `pinn` (resíduo do modelo na perda, gradiente sem modo inverso pelo flash), `pipeline` (tudo num processo). |
 | `models/` | modelos empíricos treinados (`surrogate/{well,line,riser}.json`, com métricas e proveniência em `meta`). |
 | `tools/` | `make_nb.py` (fontes → notebooks), `new_paper.py` (artigo novo a partir de `papers/_template`). |
-| `papers/` | artigos para revistas, um por pasta `NN-<slug>/` (LaTeX Elsevier CAS, `make` com tectonic ou latexmk, figuras geradas por código a partir de `runs/`); escolha da revista e guia de autores em `papers/00-escolha-da-revista.md`; regras em `papers/README.md`. |
+| `papers/` | artigos para revistas, um por pasta `NN-<slug>/` (LaTeX Elsevier CAS, `make` com tectonic ou latexmk, figuras e fragmentos de tabela gerados por um só script a partir de `runs/` e `models/`): `01` volume I (simulador), `02` volume II (substitutos); escolha da revista e guia de autores em `papers/00-escolha-da-revista.md`; regras em `papers/README.md`. |
 | `docs/` | o estudo (README + 01–06), `issues/NNN-*.md` + `INDEX.md`. |
 
 ## Comandos
@@ -41,7 +41,8 @@ uv run pytest -m nightly                       # noturna
 uv run black --check cmfsim tests tools generators dissertation
 uv run python -m dissertation.extract          # Apêndices A, B e C -> CSV
 uv run python -m surrogate.pipeline            # §5.7: massa de dados, grelha e modelos -> runs/surrogate, models/surrogate
-make -C papers/01-compositional-steady-state   # artigo 1: figuras e fragmentos de tabela (um só script) + PDF em build/main.pdf
+make -C papers/01-compositional-steady-state   # volume I (simulador): figuras e fragmentos de tabela (um só script) + PDF em build/main.pdf
+make -C papers/02-surrogate-models             # volume II (substitutos, cita o I): idem
 ```
 
 ## Regras acordadas com o dono (não negociar sem perguntar)

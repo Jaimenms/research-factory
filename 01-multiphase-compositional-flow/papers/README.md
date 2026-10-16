@@ -9,7 +9,8 @@ CAS, citações autor–ano).
 |---|---|
 | `_common/` | `paper.mk` (regras de `make`), `figlib.py` (apoio às figuras: caminhos, estilo, paleta, gravação PDF+PNG), `cmfsim-paper.mplstyle`, `references.bib` (bibliografia canónica do tema), `latex/` (ícones da classe CAS) |
 | `_template/` | esqueleto de artigo novo (`tools/new_paper.py` copia-o) |
-| `01-compositional-steady-state/` | artigo 1: o simulador composicional em regime permanente com 2 modelos × 3 solvers verificados entre si e JAX em destaque, o modelo substituto (§5.7) e a extensão de perfil + PINN (issue 010); manuscrito completo, 9 figuras e 11 tabelas geradas |
+| `01-compositional-steady-state/` | **volume I**: o simulador composicional em regime permanente, 2 modelos × 3 solvers × 2 backends verificados entre si, JAX em destaque, validação contra a dissertação e desempenho; manuscrito completo, 3 figuras e 6 tabelas geradas |
+| `02-surrogate-models/` | **volume II** (cita o I): substitutos por redes neuronais com dados da marcha vetorizada, grelha de hiperparâmetros, encadeamento e ganho de desempenho, substituto de perfil com s = x/L, PINN com o resíduo do modelo e validação (sobreajuste, viés, divisões treino/teste); manuscrito completo, 7 figuras e 9 tabelas geradas |
 
 Dentro de cada artigo:
 
@@ -38,7 +39,8 @@ descarrega os pacotes à primeira compilação e corre o BibTeX sozinho). As cor
 precisam: `uv run cmfsim batch batches/dissertation.json` (§5.5) e
 `uv run python -m generators.dp_comparison && uv run cmfsim batch batches/dp_comparison.json` (Apêndice A),
 `uv run cmfsim batch batches/solver_matrix.json` (matriz de solvers), `uv run cmfsim batch batches/performance.json` e
-`uv run python -m surrogate.pipeline --steps datasets,reference,grid,models,profiles,profile_models,pinn` (substituto).
+`uv run python -m surrogate.pipeline --steps datasets,reference,grid,models,profiles,profile_models,pinn` e
+`uv run python -m surrogate.validation` (volume II). Os dois volumes citam-se por `carvalho2026a`/`carvalho2026b` em `_common/references.bib`.
 Sem corridas, as figuras saem com um aviso no lugar dos dados, as tabelas com «--», e o PDF compila na mesma.
 
 ## Artigo novo
