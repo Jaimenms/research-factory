@@ -1,0 +1,199 @@
+\begin{thebibliography}{21}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\href}[2]{#2}
+\providecommand{\path}[1]{#1}
+\providecommand{\DOIprefix}{doi:}
+\providecommand{\ArXivprefix}{arXiv:}
+\providecommand{\URLprefix}{URL: }
+\providecommand{\Pubmedprefix}{pmid:}
+\providecommand{\doi}[1]{\href{http://dx.doi.org/#1}{\path{#1}}}
+\providecommand{\Pubmed}[1]{\href{pmid:#1}{\path{#1}}}
+\providecommand{\bibinfo}[2]{#2}
+\ifx\xfnm\relax \def\xfnm[#1]{\unskip,\space#1}\fi
+%Type = Article
+\bibitem[{Allan and Teja(1991)}]{allan1991}
+\bibinfo{author}{Allan, J.M.}, \bibinfo{author}{Teja, A.S.},
+  \bibinfo{year}{1991}.
+\newblock \bibinfo{title}{Correlation and prediction of the viscosity of
+  defined and undefined hydrocarbon liquids}.
+\newblock \bibinfo{journal}{Can. J. Chem. Eng.} \bibinfo{volume}{69},
+  \bibinfo{pages}{986--991}.
+\newblock \DOIprefix\doi{10.1002/cjce.5450690422}.
+%Type = Misc
+\bibitem[{{Aspen Technology, Inc.}()}]{aspenhysys}
+\bibinfo{author}{{Aspen Technology, Inc.}}, .
+\newblock \bibinfo{title}{Aspen {HYSYS}}.
+\newblock \bibinfo{howpublished}{Process simulation software, Aspen Technology,
+  Inc., Bedford, MA}.
+\newblock \bibinfo{note}{Peng--Robinson property package and pipe segment}.
+%Type = Article
+\bibitem[{Aziz et~al.(1972)Aziz, Govier and Fogarasi}]{aziz1972}
+\bibinfo{author}{Aziz, K.}, \bibinfo{author}{Govier, G.W.},
+  \bibinfo{author}{Fogarasi, M.}, \bibinfo{year}{1972}.
+\newblock \bibinfo{title}{Pressure drop in wells producing oil and gas}.
+\newblock \bibinfo{journal}{J. Can. Pet. Technol.} \bibinfo{volume}{11},
+  \bibinfo{pages}{38--48}.
+\newblock \DOIprefix\doi{10.2118/72-03-04}.
+%Type = Article
+\bibitem[{Beggs and Brill(1973)}]{beggs1973}
+\bibinfo{author}{Beggs, H.D.}, \bibinfo{author}{Brill, J.P.},
+  \bibinfo{year}{1973}.
+\newblock \bibinfo{title}{A study of two-phase flow in inclined pipes}.
+\newblock \bibinfo{journal}{J. Pet. Technol.} \bibinfo{volume}{25},
+  \bibinfo{pages}{607--617}.
+\newblock \DOIprefix\doi{10.2118/4007-PA}.
+%Type = Misc
+\bibitem[{Bell and {Contributors}(2024)}]{thermo2024}
+\bibinfo{author}{Bell, C.}, \bibinfo{author}{{Contributors}},
+  \bibinfo{year}{2024}.
+\newblock \bibinfo{title}{Thermo: Chemical properties component of {C}hemical
+  {E}ngineering {D}esign {L}ibrary ({ChEDL})}.
+\newblock \bibinfo{howpublished}{\url{https://github.com/CalebBell/thermo}}.
+%Type = Misc
+\bibitem[{Bradbury et~al.(2018)Bradbury, Frostig, Hawkins, Johnson, Leary,
+  Maclaurin, Necula, Paszke, VanderPlas, Wanderman-Milne and Zhang}]{jax2018}
+\bibinfo{author}{Bradbury, J.}, \bibinfo{author}{Frostig, R.},
+  \bibinfo{author}{Hawkins, P.}, \bibinfo{author}{Johnson, M.J.},
+  \bibinfo{author}{Leary, C.}, \bibinfo{author}{Maclaurin, D.},
+  \bibinfo{author}{Necula, G.}, \bibinfo{author}{Paszke, A.},
+  \bibinfo{author}{VanderPlas, J.}, \bibinfo{author}{Wanderman-Milne, S.},
+  \bibinfo{author}{Zhang, Q.}, \bibinfo{year}{2018}.
+\newblock \bibinfo{title}{{JAX}: composable transformations of {Python+NumPy}
+  programs}.
+\newblock \bibinfo{howpublished}{\url{http://github.com/google/jax}}.
+\newblock \bibinfo{note}{[software]}.
+%Type = Masterthesis
+\bibitem[{Carvalho(2022)}]{carvalho2022}
+\bibinfo{author}{Carvalho, G.A.d.}, \bibinfo{year}{2022}.
+\newblock \bibinfo{title}{Modelagem e simula{\c{c}}{\~a}o composicional do
+  escoamento multif{\'a}sico em tubula{\c{c}}{\~o}es com gera{\c{c}}{\~a}o de
+  modelos substitutos}.
+\newblock Master's thesis. Instituto de Qu{\'i}mica, Universidade do Estado do
+  Rio de Janeiro. \bibinfo{address}{Rio de Janeiro, Brazil}.
+\newblock \bibinfo{note}{M.Sc. dissertation, in Portuguese}.
+%Type = Unpublished
+\bibitem[{Carvalho et~al.(2026)Carvalho, Costa, Nunes and
+  Souza}]{carvalho2026b}
+\bibinfo{author}{Carvalho, G.A.d.}, \bibinfo{author}{Costa, A.L.H.},
+  \bibinfo{author}{Nunes, G.C.}, \bibinfo{author}{Souza, J.N.M.d.},
+  \bibinfo{year}{2026}.
+\newblock \bibinfo{title}{Steady-state compositional gas--liquid flow in
+  production pipelines. {P}art {II}: neural and physics-informed surrogates
+  with the axial position as a feature}.
+\newblock \bibinfo{note}{Companion paper, submitted to Geoenergy Science and
+  Engineering}.
+%Type = Article
+\bibitem[{Churchill(1977)}]{churchill1977}
+\bibinfo{author}{Churchill, S.W.}, \bibinfo{year}{1977}.
+\newblock \bibinfo{title}{Friction-factor equation spans all fluid-flow
+  regimes}.
+\newblock \bibinfo{journal}{Chem. Eng.} \bibinfo{volume}{84},
+  \bibinfo{pages}{91--92}.
+%Type = Article
+\bibitem[{Dormand and Prince(1980)}]{dormand1980}
+\bibinfo{author}{Dormand, J.R.}, \bibinfo{author}{Prince, P.J.},
+  \bibinfo{year}{1980}.
+\newblock \bibinfo{title}{A family of embedded {Runge--Kutta} formulae}.
+\newblock \bibinfo{journal}{J. Comput. Appl. Math.} \bibinfo{volume}{6},
+  \bibinfo{pages}{19--26}.
+\newblock \DOIprefix\doi{10.1016/0771-050X(80)90013-3}.
+%Type = Article
+\bibitem[{Gomez et~al.(2000)Gomez, Shoham, Schmidt, Chokshi and
+  Northug}]{gomez2000}
+\bibinfo{author}{Gomez, L.E.}, \bibinfo{author}{Shoham, O.},
+  \bibinfo{author}{Schmidt, Z.}, \bibinfo{author}{Chokshi, R.N.},
+  \bibinfo{author}{Northug, T.}, \bibinfo{year}{2000}.
+\newblock \bibinfo{title}{Unified mechanistic model for steady-state two-phase
+  flow: horizontal to vertical upward flow}.
+\newblock \bibinfo{journal}{SPE J.} \bibinfo{volume}{5},
+  \bibinfo{pages}{339--350}.
+\newblock \DOIprefix\doi{10.2118/65705-PA}.
+%Type = Article
+\bibitem[{Mandhane et~al.(1974)Mandhane, Gregory and Aziz}]{mandhane1974}
+\bibinfo{author}{Mandhane, J.M.}, \bibinfo{author}{Gregory, G.A.},
+  \bibinfo{author}{Aziz, K.}, \bibinfo{year}{1974}.
+\newblock \bibinfo{title}{A flow pattern map for gas--liquid flow in horizontal
+  pipes}.
+\newblock \bibinfo{journal}{Int. J. Multiphase Flow} \bibinfo{volume}{1},
+  \bibinfo{pages}{537--553}.
+\newblock \DOIprefix\doi{10.1016/0301-9322(74)90006-8}.
+%Type = Article
+\bibitem[{Michelsen(1982a)}]{michelsen1982a}
+\bibinfo{author}{Michelsen, M.L.}, \bibinfo{year}{1982}a.
+\newblock \bibinfo{title}{The isothermal flash problem. {Part I}. {Stability}}.
+\newblock \bibinfo{journal}{Fluid Phase Equilib.} \bibinfo{volume}{9},
+  \bibinfo{pages}{1--19}.
+\newblock \DOIprefix\doi{10.1016/0378-3812(82)85001-2}.
+%Type = Article
+\bibitem[{Michelsen(1982b)}]{michelsen1982b}
+\bibinfo{author}{Michelsen, M.L.}, \bibinfo{year}{1982}b.
+\newblock \bibinfo{title}{The isothermal flash problem. {Part II}.
+  {Phase-split} calculation}.
+\newblock \bibinfo{journal}{Fluid Phase Equilib.} \bibinfo{volume}{9},
+  \bibinfo{pages}{21--40}.
+\newblock \DOIprefix\doi{10.1016/0378-3812(82)85002-4}.
+%Type = Article
+\bibitem[{Pedersen and Fredenslund(1987)}]{pedersen1987}
+\bibinfo{author}{Pedersen, K.S.}, \bibinfo{author}{Fredenslund, A.},
+  \bibinfo{year}{1987}.
+\newblock \bibinfo{title}{An improved corresponding states model for the
+  prediction of oil and gas viscosities and thermal conductivities}.
+\newblock \bibinfo{journal}{Chem. Eng. Sci.} \bibinfo{volume}{42},
+  \bibinfo{pages}{182--186}.
+\newblock \DOIprefix\doi{10.1016/0009-2509(87)80225-7}.
+%Type = Article
+\bibitem[{Peng and Robinson(1976)}]{peng1976}
+\bibinfo{author}{Peng, D.Y.}, \bibinfo{author}{Robinson, D.B.},
+  \bibinfo{year}{1976}.
+\newblock \bibinfo{title}{A new two-constant equation of state}.
+\newblock \bibinfo{journal}{Ind. Eng. Chem. Fundam.} \bibinfo{volume}{15},
+  \bibinfo{pages}{59--64}.
+\newblock \DOIprefix\doi{10.1021/i160057a011}.
+%Type = Article
+\bibitem[{Rachford and Rice(1952)}]{rachford1952}
+\bibinfo{author}{Rachford, H.H.}, \bibinfo{author}{Rice, J.D.},
+  \bibinfo{year}{1952}.
+\newblock \bibinfo{title}{Procedure for use of electronic digital computers in
+  calculating flash vaporization hydrocarbon equilibrium}.
+\newblock \bibinfo{journal}{J. Pet. Technol.} \bibinfo{volume}{4},
+  \bibinfo{pages}{19--20}.
+\newblock \DOIprefix\doi{10.2118/952327-G}.
+%Type = Article
+\bibitem[{Taitel et~al.(1980)Taitel, Barnea and Dukler}]{taitel1980}
+\bibinfo{author}{Taitel, Y.}, \bibinfo{author}{Barnea, D.},
+  \bibinfo{author}{Dukler, A.E.}, \bibinfo{year}{1980}.
+\newblock \bibinfo{title}{Modelling flow pattern transitions for steady upward
+  gas-liquid flow in vertical tubes}.
+\newblock \bibinfo{journal}{AIChE J.} \bibinfo{volume}{26},
+  \bibinfo{pages}{345--354}.
+\newblock \DOIprefix\doi{10.1002/aic.690260304}.
+%Type = Article
+\bibitem[{Taitel and Dukler(1976)}]{taitel1976}
+\bibinfo{author}{Taitel, Y.}, \bibinfo{author}{Dukler, A.E.},
+  \bibinfo{year}{1976}.
+\newblock \bibinfo{title}{A model for predicting flow regime transitions in
+  horizontal and near horizontal gas-liquid flow}.
+\newblock \bibinfo{journal}{AIChE J.} \bibinfo{volume}{22},
+  \bibinfo{pages}{47--55}.
+\newblock \DOIprefix\doi{10.1002/aic.690220105}.
+%Type = Inproceedings
+\bibitem[{Xiao et~al.(1990)Xiao, Shoham and Brill}]{xiao1990}
+\bibinfo{author}{Xiao, J.J.}, \bibinfo{author}{Shoham, O.},
+  \bibinfo{author}{Brill, J.P.}, \bibinfo{year}{1990}.
+\newblock \bibinfo{title}{A comprehensive mechanistic model for two-phase flow
+  in pipelines}, in: \bibinfo{booktitle}{SPE Annual Technical Conference and
+  Exhibition}, \bibinfo{address}{New Orleans, Louisiana}.
+\newblock \DOIprefix\doi{10.2118/20631-MS}. \bibinfo{note}{sPE-20631-MS}.
+%Type = Article
+\bibitem[{Zhang et~al.(2003)Zhang, Wang, Sarica and Brill}]{zhang2003}
+\bibinfo{author}{Zhang, H.Q.}, \bibinfo{author}{Wang, Q.},
+  \bibinfo{author}{Sarica, C.}, \bibinfo{author}{Brill, J.P.},
+  \bibinfo{year}{2003}.
+\newblock \bibinfo{title}{Unified model for gas--liquid pipe flow via slug
+  dynamics---{P}art 1: Model development}.
+\newblock \bibinfo{journal}{J. Energy Resour. Technol.} \bibinfo{volume}{125},
+  \bibinfo{pages}{266--273}.
+\newblock \DOIprefix\doi{10.1115/1.1615246}.
+
+\end{thebibliography}

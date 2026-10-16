@@ -20,7 +20,8 @@ Dentro de cada artigo:
 | `refs.bib` | referências só deste artigo; as comuns vêm de `../_common/references.bib` |
 | `figures/make_figures.py` | **um só guião** gera as figuras em `figures/generated/` (PDF vetorial + PNG) e os fragmentos de tabela em `tables/generated/` (`<nome>.tex` com o `tabular` e `<nome>_note.tex` com a nota, lidos por `\input` no `main.tex`) **só a partir de corridas gravadas** em `runs/`, dos modelos treinados em `models/`, das figuras digitalizadas e dos dados da dissertação; não simula. `figlib.run_cli(FIGURES, descrição, tables=TABLES)` trata a linha de comando (`--out`, `--tables`, `--only`) |
 | `figures/static/` | figuras que não vêm de código (esquemas), no git |
-| `figures/generated/`, `tables/generated/`, `build/` | saídas reproduzíveis, fora do git |
+| `build/` | saída do LaTeX, **no git** (o PDF de cada volume fica versionado); recompilar com `make` antes de cada commit que mude o artigo |
+| `figures/generated/`, `tables/generated/` | saídas reproduzíveis, fora do git |
 | `Makefile` | três linhas: `PAPER = main` e `include ../_common/paper.mk` |
 
 ## Construir

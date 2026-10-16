@@ -9,6 +9,5 @@ __pycache__/
 01-multiphase-compositional-flow/runs/
 01-multiphase-compositional-flow/notebooks/*.ipynb
 # artigos: saídas do LaTeX e figuras geradas (reproduzíveis com `make` em papers/<artigo>/)
-01-multiphase-compositional-flow/papers/*/build/
 01-multiphase-compositional-flow/papers/*/figures/generated/
 01-multiphase-compositional-flow/papers/*/tables/generated/
