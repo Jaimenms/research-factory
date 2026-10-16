@@ -124,8 +124,16 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
   `march_many` (300 amostras por trecho em ~1 min), treina MLP com Adam em JAX e repete a grelha de 135
   redes: 131–133 com R² > 0,9 (o autor: 8–35), modelos finais com R² ≥ 0,997 e substituto encadeado a
   < 0,4 % do modelo físico (o autor: até 4,7 %). O modelo físico do autor, impresso no Apêndice B, é
-  reproduzido no poço e no riser; na linha o autor arrefece 1,4× mais (achado em aberto).
+  reproduzido no poço e no riser; na linha o autor arrefece 1,4× mais (achado em aberto). Extensões (issue 010):
+  substituto de perfil com s = x/L como entrada e a condição de entrada exata por construção, e PINN com o
+  resíduo do modelo de não escorregamento em pontos de colocação não simulados, cujo gradiente evita o modo
+  inverso pelo flash; artigo 01 em `papers/` com todas as figuras e tabelas geradas por um só script.
 - **Desempenho** (issues 006–007): uma compilação por estrutura, `march_many` por `vmap`,
   arranque quente do flash ao longo de x (K do flash anterior; resultado idêntico ao arranque
   frio); pelo caminho corrigiu-se a bisseção de Rachford–Rice nos extremos do intervalo.
+- **Matriz de métodos** (issue 011): os dois modelos escrevem-se como d(Φ)/dx = S sobre uma
+  interface comum e resolvem-se por marcha (RK45), diferenças finitas ou volumes finitos, em numpy
+  ou JAX; os seis caminhos coincidem a 1–3 Pa no caso de condensação, os volumes finitos fecham os
+  balanços globais a precisão de máquina e toda a corrida traz o fecho dos balanços em `info`.
+  O notebook 5.8 substitui a Figura 59 por um estudo de convergência de malha.
 - **Adiado**: modelo substituto (cap. 4, §5.7); `vmap` eficiente em CPU; grafo de rede.

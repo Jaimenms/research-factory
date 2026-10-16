@@ -23,6 +23,7 @@ from ..closures import ClosureOptions, FlowInputs, flow_closure
 from ..closures.common import G, WALL_FRICTION_MULT
 from ..closures.friction import fanning, vabs
 from ..thermo import ComponentSet, FlashOptions, phase_state
+from .base import FluxModel
 
 N_VARS = 4
 I_MG, I_ML, I_P, I_T = 0, 1, 2, 3
@@ -67,7 +68,7 @@ def gradient_matrix(x, edge_order=2):
     return M
 
 
-class MechanisticModel:
+class MechanisticModel(FluxModel):
     """Resíduos escalados F(u, params) = 0 do sistema discretizado; `u` é o vetor plano de todos os
     troços. A estrutura (nós por troço, condições de contorno) é estática; os parâmetros do caso
     (malha, operador de derivada, tubo por nó, entrada/saída, escalas) vão em `params`
@@ -86,6 +87,8 @@ class MechanisticModel:
     ):
         self.cs, self.z, self.bk = cs, np.asarray(z, float), bk
         self.flash, self.closures, self.opts = flash, closures, opts
+        # derivadas de Phi na marcha (interface FluxModel): AD no JAX; no numpy, diferenças como 169–170
+        self.derivatives, self.fd_dP, self.fd_dT = "autodiff", opts.fd_step_dP, opts.fd_step_dT
         self.n_seg = tuple(int(n) for n in n_seg)
         self.offsets = np.concatenate([[0], np.cumsum(self.n_seg)])
         self.n_total = int(self.offsets[-1])
@@ -198,6 +201,28 @@ class MechanisticModel:
             s = uu * uu * (3.0 - 2.0 * uu)  # 0 em fase única (< 1e-4), 1 a partir de 1,1e-3
             F = s * F + (1.0 - s) * F1
         return dict(st=st, HL=HL, vL=vL, vG=vG, F=F, v_SL=v_SL, v_SG=v_SG, w=w, closure=res, A=A)
+
+    # --- interface FluxModel (marcha, diferenças finitas nos fluxos e volumes finitos) -------------
+    def fluxes_sources(self, P, T, D, eps, theta, U, T_amb, m, lnK0=None):
+        """Vetorizado em n pontos, com a repartição algébrica m_G = m w_G(P, T) (a forma (25) integra
+        exatamente para esta; `mass_split` só distingue o método 3.2 original, `solver.type = fd`).
+        Phi = [(m_L v_L + m_G v_G)/A + P, (m_L h_L + m_G h_V)/m], S = [-F, Q_w/m - g sin theta]."""
+        xp = self.bk.xp
+        n = P.shape[0]
+        zz = xp.broadcast_to(xp.asarray(self.z)[None, :], (n, self.cs.n))
+        st0 = phase_state(T, P, zz, self.cs, self.flash, self.bk, lnK0=lnK0)
+        w = st0.w_G if self.opts.mass_basis == "mass" else st0.beta
+        mG = m * w
+        mL = m - mG
+        q = dict(D=D, roughness=eps, theta=theta)
+        ns = self.node_state(mG, mL, P, T, q, lnK0=lnK0)
+        st = ns["st"]
+        A = ns["A"]
+        phi = xp.stack([(mL * ns["vL"] + mG * ns["vG"]) / A + P, (mL * st.h_L + mG * st.h_V) / m], axis=1)
+        Qw = -U * xp.pi * D * (T - T_amb)
+        S = xp.stack([-ns["F"], Qw / m - G * xp.sin(theta)], axis=1)
+        ns.update(mG=mG, mL=mL)
+        return phi, S, st.lnK, ns
 
     # --- derivadas de w_G em (25) --------------------------------------------------------------
     def dw_dPT(self, P, T, lnK0=None):

@@ -18,7 +18,21 @@ sys.path.insert(0, str(ROOT))
 import numpy as np
 from scipy.optimize import curve_fit
 
-from dissertation.notebook_utils import RUNS, figure, load_runs, make_fluid, plt, save, table, tables
+from dissertation.notebook_utils import (
+    figure,
+    load_runs,
+    make_fluid,
+    MATRIX_HEADERS,
+    matrix_rows,
+    MODEL_LABEL,
+    parity_line,
+    plt,
+    RUNS,
+    save,
+    SOLVER_LABEL,
+    table,
+    tables,
+)
 
 from cmfsim.thermo import FlashOptions, phase_state
 
@@ -326,3 +340,69 @@ table(
         "x_cond cmfsim [m]",
     ],
 )
+
+# %% [markdown]
+# ## Matriz de métodos no caso 3 (issue 011)
+#
+# O mesmo caso resolvido pelos dois modelos e pelos três solvers (64 nós nos sistemas nodais; JAX).
+# A fração vaporizada perto do início da condensação é onde as discretizações mais se distinguem.
+# %%
+mruns = load_runs("solver_matrix/condensate3_*.npz")
+print("corridas:", sorted(mruns))
+rows = []
+for name in sorted(mruns):
+    r = mruns[name]
+    bm = beta_molar(r)
+    xc = r.x[bm < 0.9999][0] if np.any(bm < 0.9999) else np.nan
+    b = r.info.get("balances", {})
+    rows.append(
+        (
+            MODEL_LABEL[r.info["model"]],
+            SOLVER_LABEL[r.info["solver"]],
+            f"{r.P[-1] / 1e5:.4f}",
+            f"{r.T[-1] - 273.15:.3f}",
+            f"{xc:.0f}",
+            f"{bm[-1]:.5f}",
+            f"{b.get('momentum_Pa', float('nan')):+.1e}",
+            f"{b.get('energy_J_kg', float('nan')):+.1e}",
+            f"{r.info['cpu']:.2f}",
+        )
+    )
+table(
+    rows,
+    [
+        "modelo",
+        "solver",
+        "P_out [bar]",
+        "T_out [°C]",
+        "x_cond [m]",
+        "β_out",
+        "balanço momento [Pa]",
+        "balanço energia [J/kg]",
+        "tempo [s]",
+    ],
+)
+# %%
+if mruns:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    styles = {"march": "-", "fd": "--", "fv": ":"}
+    for name in sorted(mruns):
+        r = mruns[name]
+        c = "C0" if r.info["model"] == "noslip" else "C3"
+        ax.plot(
+            r.x,
+            beta_molar(r),
+            styles[r.info["solver"]],
+            color=c,
+            label=f"{MODEL_LABEL[r.info['model']]}, {SOLVER_LABEL[r.info['solver']]}",
+        )
+    if "3" in figs[40]["series"]:
+        ax.plot(*figs[40]["series"]["3"], ":", lw=2, color="gray", label="dissertação (Figura 40, caso 3)")
+    ax.set_xlim(2500, 8000)
+    ax.set_ylim(0.955, 1.001)
+    ax.set_xlabel("x (m)")
+    ax.set_ylabel("fração vaporizada molar")
+    ax.legend(fontsize=7, ncol=2)
+    ax.grid(alpha=0.3)
+    ax.set_title("Caso 3: início da condensação pelos seis caminhos (JAX)")
+    save(fig, "nb_5_6_solver_matrix")

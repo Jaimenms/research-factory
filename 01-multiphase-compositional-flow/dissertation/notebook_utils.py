@@ -160,3 +160,71 @@ def qq_parity(ax, fig_data, mine, n_points, unit_scale=1.0, q=50):
     ax.set_ylabel("quantis do cmfsim")
     ax.grid(alpha=0.3)
     return float(np.median(mm) / np.median(yd)), float(np.median(m) / np.median(yd)), int(n_mark), int(mm.size)
+
+
+SOLVER_LABEL = {"march": "marcha (RK45)", "fd": "diferenças finitas", "fv": "volumes finitos"}
+MODEL_LABEL = {"noslip": "não escorregamento", "mechanistic": "mecanicista"}
+
+
+def matrix_rows(runs, prefix, x_end=None):
+    """Linhas de uma tabela modelo × solver × backend a partir de corridas `runs/solver_matrix/<prefix>_*`:
+    (modelo, solver, backend, P_out [bar], T_out [°C], iterações/passos, |F| ou rejeitados, balanço de
+    quantidade de movimento [Pa], balanço de energia [J/kg], tempo [s])."""
+    import numpy as np
+
+    rows = []
+    for name in sorted(runs):
+        if not name.startswith(prefix):
+            continue
+        r = runs[name]
+        i = r.info
+        if x_end is None:
+            k = -1
+        else:
+            k = int(np.argmin(np.abs(r.x - x_end)))
+        b = i.get("balances", {})
+        its = (
+            f"{i['n_accepted']}+{i['n_rejected']} passos"
+            if i["solver"] == "march"
+            else f"Newton {i['iterations']}, |F| {i['residual']:.0e}"
+        )
+        rows.append(
+            (
+                MODEL_LABEL.get(i["model"], i["model"]),
+                SOLVER_LABEL.get(i["solver"], i["solver"]),
+                i["backend"],
+                f"{r.P[k] / 1e5:.4f}",
+                f"{r.T[k] - 273.15:.3f}",
+                its,
+                f"{b.get('momentum_Pa', float('nan')):+.1e}",
+                f"{b.get('energy_J_kg', float('nan')):+.1e}",
+                f"{i['cpu']:.2f}",
+            )
+        )
+    return rows
+
+
+MATRIX_HEADERS = [
+    "modelo",
+    "solver",
+    "backend",
+    "P_out [bar]",
+    "T_out [°C]",
+    "iterações",
+    "balanço momento [Pa]",
+    "balanço energia [J/kg]",
+    "tempo [s]",
+]
+
+
+def parity_line(runs, a, b):
+    """Diferença máxima de P e T entre duas corridas (interpoladas na malha da primeira)."""
+    import numpy as np
+
+    if a not in runs or b not in runs:
+        return f"{a} × {b}: corrida em falta"
+    ra, rb = runs[a], runs[b]
+    return (
+        f"{a} × {b}: max|ΔP| = {np.max(np.abs(ra.P - np.interp(ra.x, rb.x, rb.P))):.2e} Pa, "
+        f"max|ΔT| = {np.max(np.abs(ra.T - np.interp(ra.x, rb.x, rb.T))):.2e} K"
+    )

@@ -24,6 +24,7 @@ from ..backend import NUMPY
 from ..closures.common import G, WALL_FRICTION_MULT
 from ..closures.friction import fanning, vabs
 from ..thermo import ComponentSet, FlashOptions, phase_state
+from .base import FluxModel
 
 
 @dataclass(frozen=True)
@@ -49,75 +50,48 @@ def mixture_state(P, T, z, cs: ComponentSet, flash: FlashOptions, bk=NUMPY, lnK0
     return rho_mix, h_mix, mu_mix, lam_G, st
 
 
-class NoSlipModel:
-    """du/dx para u = (P, T). `params`: dict de arrays por troço (D, roughness, theta, U, T_amb) e `m`."""
+class NoSlipModel(FluxModel):
+    """Modelo de não escorregamento sobre a interface `FluxModel`: u = (P, T), Phi = [G v + P, h_mix
+    (+ v^2/2 com `kinetic_energy`)], S = [-(F_atrito + rho g sin theta), Q_w/m - g sin theta]."""
 
     def __init__(
         self, cs: ComponentSet, z, flash: FlashOptions = FlashOptions(), opts: NoSlipOptions = NoSlipOptions(), bk=NUMPY
     ):
         self.cs, self.z = cs, np.asarray(z, float)
         self.flash, self.opts, self.bk = flash, opts, bk
+        self.derivatives, self.fd_dP, self.fd_dT = opts.derivatives, opts.dP, opts.dT
 
     @staticmethod
     def params_from(pipe_arrays, m, bk=NUMPY):
-        xp = bk.xp
-        p = {k: xp.asarray(v, float) for k, v in pipe_arrays.items()}
-        p["m"] = xp.asarray(float(m))
-        return p
+        return FluxModel.point_params(pipe_arrays, m, bk)
 
-    @staticmethod
-    def _seg(params, seg):
-        p = params
-        return p["D"][seg], p["roughness"][seg], p["theta"][seg], p["U"][seg], p["T_amb"][seg]
-
-    def state(self, u, seg, params, lnK0=None):
-        """Um só flash: fluxos conservados Phi (2,), fontes S (2,) e ln K convergido (nc,)."""
+    def fluxes_sources(self, P, T, D, eps, theta, U, T_amb, m, lnK0=None):
+        """Vetorizado em n pontos: Phi (n, 2), S (n, 2), ln K (n, nc), estado (dict)."""
         xp = self.bk.xp
         bk = self.bk
-        D, eps, theta, U, T_amb = self._seg(params, seg)
-        m = params["m"]
+        n = P.shape[0]
         A = xp.pi * D**2 / 4.0
         Gm = m / A
-        P, T = u[0], u[1]
-        lnK0 = None if lnK0 is None else lnK0[None, :]
-        rho_mix, h_mix, mu_mix, lam_G, st = mixture_state(
-            P[None], T[None], self.z[None, :], self.cs, self.flash, bk, lnK0=lnK0
-        )
-        rho = rho_mix[0]
-        v = Gm / rho
-        e = h_mix[0] + (0.5 * v**2 if self.opts.kinetic_energy else 0.0)
-        phi = xp.stack([Gm * v + P, e])
-        f, _ = fanning(v, rho, mu_mix[0], D, eps, bk=bk)
+        zz = xp.broadcast_to(xp.asarray(self.z)[None, :], (n, self.cs.n))
+        rho_mix, h_mix, mu_mix, lam_G, st = mixture_state(P, T, zz, self.cs, self.flash, bk, lnK0=lnK0)
+        v = Gm / rho_mix
+        e = h_mix + (0.5 * v**2 if self.opts.kinetic_energy else 0.0)
+        phi = xp.stack([Gm * v + P, e], axis=1)
+        f, _ = fanning(v, rho_mix, mu_mix, D, eps, bk=bk)
         f = f * WALL_FRICTION_MULT[self.opts.wall_friction]
-        F_fric = f * rho * v * vabs(v, bk) / 2.0 * 4.0 / D
-        F_grav = rho * G * xp.sin(theta)
+        F_fric = f * rho_mix * v * vabs(v, bk) / 2.0 * 4.0 / D
+        F_grav = rho_mix * G * xp.sin(theta)
         Qw = -U * xp.pi * D * (T - T_amb)
-        S = xp.stack([-(F_fric + F_grav), Qw / m - G * xp.sin(theta)])
-        return phi, S, st.lnK[0]
+        S = xp.stack([-(F_fric + F_grav), Qw / m - G * xp.sin(theta)], axis=1)
+        state = dict(st=st, rho_mix=rho_mix, h_mix=h_mix, mu_mix=mu_mix, lam_G=lam_G, v=v, A=A)
+        return phi, S, st.lnK, state
+
+    # compatibilidade com o código anterior (testes e pós-processamento)
+    def state(self, u, seg, params, lnK0=None):
+        return self.point(u, seg, params, lnK0)
 
     def fluxes(self, u, seg, params, lnK0=None):
-        return self.state(u, seg, params, lnK0)[0]
+        return self.point(u, seg, params, lnK0)[0]
 
     def sources(self, u, seg, params, lnK0=None):
-        return self.state(u, seg, params, lnK0)[1]
-
-    def rhs(self, x, u, seg, params, aux=None):
-        """du/dx = J^-1 S. Com `aux` (ln K do flash anterior) devolve (du, ln K novo)."""
-        xp = self.bk.xp
-        lnK0 = aux if (aux is not None and self.flash.warm_start) else None
-        if self.opts.derivatives == "autodiff" and self.bk.has_ad:
-            import jax
-
-            (phi, S, lnK), f_lin = jax.linearize(lambda uu: self.state(uu, seg, params, lnK0), u)
-            cols = [f_lin(self.bk.set(xp.zeros((2,)), k, 1.0))[0] for k in range(2)]
-            J = xp.stack(cols, axis=1)
-        else:
-            d = (self.opts.dP, self.opts.dT)
-            phi, S, lnK = self.state(u, seg, params, lnK0)
-            cols = []
-            for k in range(2):
-                e = self.bk.set(xp.zeros((2,)), k, d[k])
-                cols.append((phi - self.fluxes(u - e, seg, params, lnK0)) / d[k])  # para trás, como (169–170)
-            J = xp.stack(cols, axis=1)
-        du = xp.linalg.solve(J, S)
-        return (du, lnK) if aux is not None else du
+        return self.point(u, seg, params, lnK0)[1]

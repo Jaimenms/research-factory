@@ -120,7 +120,7 @@
    "type": "object",
    "required": ["type"],
    "properties": {
-    "type": {"enum": ["march", "fd"]},
+    "type": {"enum": ["march", "fd", "fv"]},
     "integrator": {"enum": ["rk45"]},
     "rtol": {"type": "number", "exclusiveMinimum": 0}, "atol": {"type": "number", "exclusiveMinimum": 0},
     "first_step": {"type": "number", "exclusiveMinimum": 0}, "max_step": {"type": ["number", "null"]},

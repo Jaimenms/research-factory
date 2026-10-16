@@ -1,6 +1,9 @@
 """Caminho único de execução: `simulate(case)` lê tudo do caso (`Case`, de um JSON) e devolve
-`Results` com os perfis ao longo do tubo. Modelos: `noslip` (marcha em x, §3.1). O modelo
-mecanicista com escorregamento (§3.2) entra na fase 4."""
+`Results` com os perfis ao longo do tubo e os balanços globais. Matriz de métodos: dois modelos
+(`noslip`, `mechanistic`) × três solvers (`march`: integrador RK45 em x; `fd`: diferenças finitas
++ Newton; `fv`: volumes finitos + Newton) × dois backends (numpy, JAX). `mechanistic` + `fd` é o
+método 3.2 da dissertação tal e qual (4 incógnitas por nó, `mass_split`); os outros cinco caminhos
+assentam na interface comum `FluxModel` (fluxos e fontes, 2 incógnitas por nó)."""
 
 from __future__ import annotations
 
@@ -15,6 +18,7 @@ from .models.mechanistic import MechanisticModel
 from .models.noslip import NoSlipModel, mixture_state
 from .solvers.newton import newton_solve
 from .results import Results
+from .solvers.nodal import NodalSystem, mesh
 from .solvers.rk45 import integrate
 
 _COMPILED = {}  # funções compiladas por estrutura (fluido, opções, malha): uma compilação serve muitos casos
@@ -38,10 +42,28 @@ def build_noslip(case: Case, bk):
     return model, params
 
 
-def march_noslip(case: Case, bk, x_out=None):
-    """Integra o modelo de não escorregamento de x = 0 a L; devolve (x_out, U (n, 2), info)."""
+def build_point_model(case: Case, bk, model_type=None):
+    """Modelo sobre a interface `FluxModel` (marcha, `fd` nodal, `fv`) e os `params` da marcha."""
+    model_type = model_type or case.model_type
+    if model_type == "noslip":
+        return build_noslip(case, bk)
+    counts, _ = mesh(case.pipe, case.n_nodes)
+    model = MechanisticModel(
+        case.cs, case.z, counts, bool(case.outlet), case.flash, case.closures, case.mechanistic, bk=bk
+    )
+    return model, model.point_params(case.pipe.arrays(), case.inlet["m"], bk)
+
+
+def _model_key(case: Case, model_type):
+    return (model_type, case.noslip) if model_type == "noslip" else (model_type, case.closures, case.mechanistic)
+
+
+def march(case: Case, bk, x_out=None, model_type=None):
+    """Integra d(Phi)/dx = S de x = 0 a L com o modelo pedido (por omissão o do caso); devolve
+    (x_out, U (n, 2) = [P, T], info)."""
     xp = bk.xp
-    model, params = build_noslip(case, bk)
+    model_type = model_type or case.model_type
+    model, params = build_point_model(case, bk, model_type)
     x_out = case.pipe.output_grid(case.dx_out) if x_out is None else np.asarray(x_out, float)
     segs = case.pipe.interval_segments(x_out)
     u0 = xp.asarray([case.inlet["P"], case.inlet["T"]], float)
@@ -52,13 +74,21 @@ def march_noslip(case: Case, bk, x_out=None):
     def run(u, p):
         # o flash da entrada (semente do arranque quente) fica dentro da função compilada: em JAX
         # um flash ansioso fora do jit custa ~0,7 s (traçado do while_loop a cada chamada)
-        aux0 = model.state(u, 0, p)[2] if warm else None
+        aux0 = model.point(u, 0, p)[2] if warm else None
         return integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,), aux0=aux0)
 
     if bk.is_jax:
         import jax
 
-        key = ("march", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes(), warm)
+        key = (
+            "march",
+            _fluid_key(case),
+            _model_key(case, model_type),
+            case.rk45,
+            x_out.tobytes(),
+            segs.tobytes(),
+            warm,
+        )
         xo, sg = xp.asarray(x_out), xp.asarray(segs)
         compiled = _COMPILED.get(key)
         if compiled is None:
@@ -72,6 +102,11 @@ def march_noslip(case: Case, bk, x_out=None):
     info = {k: int(bk.to_numpy(v)) for k, v in info.items()}
     info["cpu"] = time.time() - t0
     return x_out, bk.to_numpy(U), info
+
+
+def march_noslip(case: Case, bk, x_out=None):
+    """Marcha do modelo de não escorregamento (também a estimativa inicial dos sistemas nodais)."""
+    return march(case, bk, x_out=x_out, model_type="noslip")
 
 
 def postprocess(case: Case, x, P, T, bk):
@@ -252,36 +287,198 @@ def postprocess_mechanistic(case: Case, u):
     return x, P, T, prof
 
 
+def solve_nodal(case: Case, bk, scheme: str):
+    """`fd` (diferenças finitas nos fluxos) ou `fv` (volumes finitos) sobre a interface `FluxModel`,
+    para qualquer dos dois modelos; devolve (x, P, T, info)."""
+    xp = bk.xp
+    model, _ = build_point_model(case, bk)
+    counts, _ = mesh(case.pipe, case.n_nodes)
+    system = NodalSystem(model, counts, bool(case.outlet), scheme, bk=bk)
+    params = NodalSystem.params_from(
+        case.pipe,
+        case.inlet,
+        case.outlet or None,
+        case.n_nodes,
+        case.cs,
+        case.z,
+        case.flash,
+        case.mechanistic.edge_order,
+        bk,
+    )
+    t0 = time.time()
+    x_nodes = bk.to_numpy(params["x"])
+    n = system.n_total
+    if case.initial_guess == "march_noslip" and not case.outlet:
+        _, Ug, _ = march_noslip(case, bk, x_out=x_nodes)
+        P0, T0 = Ug[:, 0], Ug[:, 1]
+    else:
+        P0 = np.full(n, float(bk.to_numpy(params["P_ref"])))
+        T0 = np.full(n, float(bk.to_numpy(params["T_ref"])))
+    warm = case.flash.warm_start
+    colors, n_colors, mask = system.sparsity()
+
+    def solve(P, T, p):
+        u, lnK0 = system.initial_guess(p, P=P, T=T)
+        if not warm:
+            return newton_solve(
+                lambda uu: system.residual(uu, p), u, cc, n_colors, mm, case.newton, system.bounds(p), bk
+            )
+        return newton_solve(
+            lambda uu, aa: system.residual(uu, p, aa), u, cc, n_colors, mm, case.newton, system.bounds(p), bk, aux0=lnK0
+        )
+
+    if bk.is_jax:
+        import jax
+
+        key = (
+            "nodal",
+            scheme,
+            _fluid_key(case),
+            _model_key(case, case.model_type),
+            case.newton,
+            counts,
+            bool(case.outlet),
+            warm,
+        )
+        cc, mm = xp.asarray(colors), xp.asarray(mask)
+        compiled = _COMPILED.get(key)
+        if compiled is None:
+            compiled = jax.jit(solve)
+            _COMPILED[key] = compiled
+        u, info = compiled(xp.asarray(P0), xp.asarray(T0), params)
+        jax.block_until_ready(u)
+    else:
+        cc, mm = colors, mask
+        u, info = solve(P0, T0, params)
+    out = {}
+    for k, v in info.items():
+        v = bk.to_numpy(v)
+        out[k] = float(v) if k == "residual" else bool(v) if k == "converged" else int(v)
+    out["cpu"] = time.time() - t0
+    out["n_nodes"] = int(n)
+    P, T = system.unpack(u, params)
+    return x_nodes, bk.to_numpy(P), bk.to_numpy(T), out
+
+
+def _node_params(case: Case, x):
+    seg = case.pipe.segment_of(x)
+    arr = case.pipe.arrays()
+    return {k: np.asarray(v)[seg] for k, v in arr.items()}
+
+
+def postprocess_mechanistic_PT(case: Case, x, P, T):
+    """Perfis do modelo mecanicista a partir de (P, T) nos nós (repartição algébrica m_G = m w_G)."""
+    from .backend import NUMPY
+
+    model, _ = build_point_model(case, NUMPY, "mechanistic")
+    q = _node_params(case, x)
+    with np.errstate(all="ignore"):
+        _, _, _, ns = model.nodes(np.asarray(P, float), np.asarray(T, float), q, float(case.inlet["m"]))
+    return mechanistic_profiles(case, x, q, ns)
+
+
+def mechanistic_profiles(case: Case, x, q, ns):
+    from .backend import NUMPY
+
+    st = ns["st"]
+    mG, mL = ns["mG"], ns["mL"]
+    vol_G = st.w_G / st.rho_V
+    w = ns["w"]
+    return dict(
+        z=case.pipe.elevation(x),
+        D=np.asarray(q["D"]),
+        theta=np.asarray(q["theta"]),
+        beta=st.beta,
+        w_G=mG / (mG + mL),
+        w_G_eq=st.w_G,
+        two_phase=st.two_phase,
+        H_L=ns["HL"],
+        H_L_noslip=1.0 - vol_G / (vol_G + (1.0 - st.w_G) / st.rho_L),
+        rho_L=st.rho_L,
+        rho_V=st.rho_V,
+        h_L=st.h_L,
+        h_V=st.h_V,
+        mu_L=st.mu_L,
+        mu_V=st.mu_V,
+        sigma=st.sigma,
+        v_L=ns["vL"],
+        v_G=ns["vG"],
+        v_SL=ns["v_SL"],
+        v_SG=ns["v_SG"],
+        m_G=mG,
+        m_L=mL,
+        F=ns["F"],
+        x_comp=st.x,
+        y_comp=st.y,
+        pattern_weights=w,
+        pattern_code=np.where(st.two_phase > 0, pattern_code(w, NUMPY), np.nan),
+        flash_iterations=st.iterations,
+    )
+
+
+def balances(case: Case, x, P, T, model_type=None):
+    """Balanços globais na malha dada: por equação (quantidade de movimento, energia), a diferença
+    entre a variação do fluxo conservado e o integral da fonte (trapézio), troço a troço (o fluxo
+    por área muda com o diâmetro), em valor absoluto (Pa, J/kg) e relativo à escala (P_ref, |h_in|);
+    e a massa, que a formulação conserva por construção (m_G + m_L = m)."""
+    from .backend import NUMPY
+
+    model, _ = build_point_model(case, NUMPY, model_type)
+    x = np.asarray(x, float)
+    q = _node_params(case, x)
+    with np.errstate(all="ignore"):
+        phi, S, _, ns = model.nodes(np.asarray(P, float), np.asarray(T, float), q, float(case.inlet["m"]))
+    seg = case.pipe.segment_of(x)
+    imbalance = np.zeros(2)
+    for k in range(case.pipe.n_segments):
+        i = np.where(seg == k)[0]
+        if i.size < 2:
+            continue
+        xs = x[i]
+        dphi = phi[i[-1]] - phi[i[0]]
+        src = np.sum(0.5 * (S[i[1:]] + S[i[:-1]]) * np.diff(xs)[:, None], axis=0)
+        imbalance += dphi - src
+    P_ref = float(case.inlet.get("P", case.outlet.get("P", P[0])))
+    h_in = float(phi[0, 1])
+    m = float(case.inlet["m"])
+    mass = ns["mG"] + ns["mL"] - m if "mG" in ns else np.zeros_like(P)
+    return dict(
+        momentum_Pa=float(imbalance[0]),
+        momentum_rel=float(imbalance[0] / P_ref),
+        energy_J_kg=float(imbalance[1]),
+        energy_rel=float(imbalance[1] / max(abs(h_in), 1e5)),
+        mass_rel=float(np.max(np.abs(mass)) / m),
+    )
+
+
 def simulate(case: Case, backend=None, progress=True) -> Results:
     bk = get_backend(backend or case.backend)
-    if case.model_type == "noslip" and case.solver_type == "march":
-        x, U, info = march_noslip(case, bk)
+    mt, stp = case.model_type, case.solver_type
+    if stp == "march":
+        x, U, info = march(case, bk)
         P, T = U[:, 0], U[:, 1]
-        prof = postprocess(case, x, P, T, bk)
-        info.update(backend=bk.name, model=case.model_type, solver=case.solver_type, n_out=int(x.size))
-        if progress:
-            print(
-                f"[{case.name}] {bk.name} {case.solver_type}: passos {info['n_accepted']} "
-                f"(+{info['n_rejected']} rejeitados) | {info['cpu']:.2f} s"
-            )
-    elif case.model_type == "mechanistic" and case.solver_type == "fd":
+        prof = postprocess(case, x, P, T, bk) if mt == "noslip" else postprocess_mechanistic_PT(case, x, P, T)
+        line = f"passos {info['n_accepted']} (+{info['n_rejected']} rejeitados)"
+    elif mt == "mechanistic" and stp == "fd":
         model, params, u, info = solve_fd(case, bk)
         x, P, T, prof = postprocess_mechanistic(case, u)
-        info.update(
-            backend=bk.name,
-            model=case.model_type,
-            solver=case.solver_type,
-            n_out=int(x.size),
-            n_nodes=int(model.n_total),
-        )
-        if progress:
-            print(
-                f"[{case.name}] {bk.name} fd: {model.n_total} nós, Newton {info['iterations']} it, "
-                f"|F| {info['residual']:.1e}, convergiu {info['converged']} | {info['cpu']:.2f} s"
-            )
+        info["n_nodes"] = int(model.n_total)
+        line = f"{model.n_total} nós, Newton {info['iterations']} it, |F| {info['residual']:.1e}, convergiu {info['converged']}"
+    elif stp in ("fd", "fv"):
+        x, P, T, info = solve_nodal(case, bk, stp)
+        prof = postprocess(case, x, P, T, bk) if mt == "noslip" else postprocess_mechanistic_PT(case, x, P, T)
+        line = f"{info['n_nodes']} nós, Newton {info['iterations']} it, |F| {info['residual']:.1e}, convergiu {info['converged']}"
     else:
-        raise NotImplementedError(f"modelo {case.model_type} com solver {case.solver_type}")
-    return Results(x=x, P=P, T=T, profiles=prof, info=info, case_dict=case.raw)
+        raise NotImplementedError(f"modelo {mt} com solver {stp}")
+    info.update(backend=bk.name, model=mt, solver=stp, n_out=int(np.asarray(x).size))
+    info["balances"] = balances(case, x, P, T)
+    if progress:
+        b = info["balances"]
+        print(
+            f"[{case.name}] {bk.name} {mt}/{stp}: {line} | balanços: momento {b['momentum_Pa']:+.2e} Pa, "
+            f"energia {b['energy_J_kg']:+.2e} J/kg | {info['cpu']:.2f} s"
+        )
+    return Results(x=np.asarray(x), P=np.asarray(P), T=np.asarray(T), profiles=prof, info=info, case_dict=case.raw)
 
 
 def march_many(case: Case, variations: dict, backend="jax"):
@@ -295,7 +492,7 @@ def march_many(case: Case, variations: dict, backend="jax"):
 
     bk = get_backend(backend)
     xp = bk.xp
-    model, params0 = build_noslip(case, bk)
+    model, params0 = build_point_model(case, bk)
     x_out = case.pipe.output_grid(case.dx_out)
     segs = case.pipe.interval_segments(x_out)
     N = len(next(iter(variations.values())))
@@ -316,12 +513,20 @@ def march_many(case: Case, variations: dict, backend="jax"):
     xo, sg = xp.asarray(x_out), xp.asarray(segs)
     scale = xp.asarray([1e5, 1.0])
     warm = case.flash.warm_start
-    key = ("march_many", _fluid_key(case), case.noslip, case.rk45, x_out.tobytes(), segs.tobytes(), warm)
+    key = (
+        "march_many",
+        _fluid_key(case),
+        _model_key(case, case.model_type),
+        case.rk45,
+        x_out.tobytes(),
+        segs.tobytes(),
+        warm,
+    )
     run = _COMPILED.get(key)
     if run is None:
 
         def single(u, p):
-            aux0 = model.state(u, 0, p)[2] if warm else None
+            aux0 = model.point(u, 0, p)[2] if warm else None
             return integrate(model.rhs, u, xo, sg, case.rk45, scale=scale, bk=bk, args=(p,), aux0=aux0)
 
         run = jax.jit(jax.vmap(single))

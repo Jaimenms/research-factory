@@ -1,0 +1,254 @@
+{
+ "out_dir": "runs/convergence",
+ "runs": [
+  {
+   "name": "offshore_noslip_ref",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.rtol=1e-10",
+    "solver.atol=1e-10",
+    "outputs.dx_out=10.0"
+   ]
+  },
+  {
+   "name": "offshore_slip_ref",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=march",
+    "solver.rtol=1e-10",
+    "solver.atol=1e-10",
+    "outputs.dx_out=10.0"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n6",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=6",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n6",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=6"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n6",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=6",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n6",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=6"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n12",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=12",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n12",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=12"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n12",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=12",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n12",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=12"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n24",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=24",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n24",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=24"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n24",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=24",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n24",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=24"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n48",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=48",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n48",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=48"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n48",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=48",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n48",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=48"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n96",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=96",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n96",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=96"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n96",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=96",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n96",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=96"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fd_n192",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=192",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd_n192",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=192"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_n192",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=192",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fv_n192",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=192"
+   ]
+  }
+ ]
+}

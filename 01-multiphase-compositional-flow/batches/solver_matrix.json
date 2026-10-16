@@ -1,0 +1,127 @@
+{
+ "out_dir": "runs/solver_matrix",
+ "runs": [
+  {
+   "name": "offshore_noslip_march",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax"
+  },
+  {
+   "name": "offshore_noslip_fd",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=78",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=78",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_noslip_fv_numpy",
+   "case": "cases/offshore/offshore_5_5_noslip.json",
+   "backend": "numpy",
+   "set": [
+    "solver.type=fv",
+    "solver.n=78",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "offshore_slip_fd",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax"
+  },
+  {
+   "name": "offshore_slip_fv",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv"
+   ]
+  },
+  {
+   "name": "offshore_slip_march",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=march"
+   ]
+  },
+  {
+   "name": "offshore_slip_march_numpy",
+   "case": "cases/offshore/offshore_5_5_slip.json",
+   "backend": "numpy",
+   "set": [
+    "solver.type=march"
+   ]
+  },
+  {
+   "name": "condensate3_noslip_march",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax"
+  },
+  {
+   "name": "condensate3_noslip_fd",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fd",
+    "solver.n=64",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "condensate3_noslip_fv",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax",
+   "set": [
+    "solver.type=fv",
+    "solver.n=64",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "condensate3_slip_march",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax",
+   "set": [
+    "model.type=mechanistic",
+    "model.mass_split=algebraic"
+   ]
+  },
+  {
+   "name": "condensate3_slip_fd",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax",
+   "set": [
+    "model.type=mechanistic",
+    "model.mass_split=algebraic",
+    "solver.type=fd",
+    "solver.n=64",
+    "solver.initial_guess=march_noslip"
+   ]
+  },
+  {
+   "name": "condensate3_slip_fv",
+   "case": "cases/condensate/condensate_5_6_case3.json",
+   "backend": "jax",
+   "set": [
+    "model.type=mechanistic",
+    "model.mass_split=algebraic",
+    "solver.type=fv",
+    "solver.n=64",
+    "solver.initial_guess=march_noslip"
+   ]
+  }
+ ]
+}

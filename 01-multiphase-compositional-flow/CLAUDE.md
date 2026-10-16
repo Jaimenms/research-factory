@@ -20,13 +20,13 @@ simulador, alimentado por `march_many` (jit + vmap).
 
 | pasta | papel |
 |---|---|
-| `cmfsim/` | o simulador, genérico: só lê casos JSON (`cmfsim-case/1`). `backend/` (cópia do mfsim), `thermo/`, `closures/`, `models/`, `solvers/`, `io/`. |
+| `cmfsim/` | o simulador, genérico: só lê casos JSON (`cmfsim-case/1`). `backend/` (cópia do mfsim), `thermo/`, `closures/`, `models/` (`base.FluxModel`: interface comum de fluxos e fontes; `noslip`, `mechanistic`), `solvers/` (`rk45` marcha, `nodal` diferenças finitas e volumes finitos, `newton`), `io/`. `simulation.simulate` despacha a matriz modelo × solver e calcula os balanços globais. |
 | `dissertation/` | ponte com a dissertação, fora do simulador: `extract.py` (Apêndice A → CSV), `data/` (tabelas transcritas, CSV). |
 | `references/` | o PDF e as figuras digitalizadas (`figures/`, JSON + sobreposições). |
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
-| `tests/` | rotina (`uv run pytest`, ~4 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
+| `tests/` | rotina (`uv run pytest`, ~10 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
 | `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
-| `surrogate/` | modelo substituto (§5.7), fora do simulador: `sampling` (hipercubo latino), `dataset` (massa de dados por `march_many`), `model`/`train` (MLP + Adam em JAX), `grid`, `predict` (encadeamento), `pipeline` (tudo num processo). |
+| `surrogate/` | modelo substituto (§5.7), fora do simulador: `sampling` (hipercubo latino), `dataset` (massa de dados por `march_many`), `model`/`train` (MLP + Adam em JAX), `grid`, `predict` (encadeamento), `profile` (perfil com s = x/L como entrada), `pinn` (resíduo do modelo na perda, gradiente sem modo inverso pelo flash), `pipeline` (tudo num processo). |
 | `models/` | modelos empíricos treinados (`surrogate/{well,line,riser}.json`, com métricas e proveniência em `meta`). |
 | `tools/` | `make_nb.py` (fontes → notebooks), `new_paper.py` (artigo novo a partir de `papers/_template`). |
 | `papers/` | artigos para revistas, um por pasta `NN-<slug>/` (LaTeX Elsevier CAS, `make` com tectonic ou latexmk, figuras geradas por código a partir de `runs/`); escolha da revista e guia de autores em `papers/00-escolha-da-revista.md`; regras em `papers/README.md`. |
@@ -41,7 +41,7 @@ uv run pytest -m nightly                       # noturna
 uv run black --check cmfsim tests tools generators dissertation
 uv run python -m dissertation.extract          # Apêndices A, B e C -> CSV
 uv run python -m surrogate.pipeline            # §5.7: massa de dados, grelha e modelos -> runs/surrogate, models/surrogate
-make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (build/main.pdf)
+make -C papers/01-compositional-steady-state   # artigo 1: figuras e fragmentos de tabela (um só script) + PDF em build/main.pdf
 ```
 
 ## Regras acordadas com o dono (não negociar sem perguntar)
@@ -57,17 +57,19 @@ make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (buil
 9. Um único tubo com parâmetros que variam axialmente (`pipe.profile`); sem grafo por agora.
 10. **Um notebook por secção do capítulo 5** (`notebooks_src/thesis/nb_5_X_*.py`), que reproduz
     todas as figuras e tabelas da secção sem simular (lê `runs/`, `references/figures/data/`,
-    `dissertation/data/`); `uv run cmfsim nb fonte.py --execute`. O 5.7 vem com o substituto.
+    `dissertation/data/`); `uv run cmfsim nb fonte.py --execute`. O 5.7 vem com o substituto. Estudos
+    para além da dissertação ficam em `notebooks_src/studies/` (mesmas regras).
 
 ## Estado (2026-10-15)
 
-Fases 0–4 e 7 feitas (issues 001–009): termodinâmica validada contra `thermo`, fechamentos e mapas de
+Fases 0–4 e 7 feitas (issues 001–011): termodinâmica validada contra `thermo`, fechamentos e mapas de
 padrão, marcha de não escorregamento com integrador próprio, modelo mecanicista por diferenças
 finitas com Newton (backend de produção: JAX), notebooks por secção do capítulo 5, parâmetros
 como argumentos e `march_many` (vmap), arranque quente do flash ao longo de x, modelo substituto
 (`surrogate/`, issue 009: massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento,
-notebook 5.7). Em aberto: Apêndice A horizontal (issue 005), linha do Apêndice B a arrefecer 1,4× mais
-no autor (issue 009). Os perfis térmicos da §5.6
+notebook 5.7; issue 010: substituto de perfil com s = x/L e PINN com o resíduo do modelo), matriz de métodos 2 modelos × 3 solvers (marcha, diferenças finitas, volumes finitos) × 2
+backends com balanços globais em toda a corrida (issue 011). Em aberto: Apêndice A horizontal (issue 005),
+linha do Apêndice B a arrefecer 1,4× mais no autor (issue 009). Os perfis térmicos da §5.6
 ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentação da Tabela 25
 (issue 004; casos com U_eff).
 
@@ -78,6 +80,9 @@ ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentaç�
   e `uv run --project "$P"`. Encadear `pytest` sem `| tail` antes de um commit (estado de saída).
 - Método 3.2 em numpy: diferenças avançadas na Jacobiana; converge em malhas grossas (≤ 25 nós) e
   pode estagnar nas finas no vinco do ponto de orvalho; o backend de produção é o JAX (`jvp` exato).
+  Preferir `solver.type = fv` nos sistemas nodais (conservativo, banda 1, sem derivar fluxos nos vincos; issue 011).
+- `info["balances"]`: fecho dos balanços globais em toda a corrida; nos volumes finitos tem de ser
+  ~1e-9 relativo, nos outros é o erro de tolerância ou de malha (1e-7 a 1e-4).
 - `_COMPILED` em `simulation.py` guarda as funções compiladas por estrutura (fluido, opções,
   malha): mudar só D, P_in, m, U, T_amb não recompila; mudar o fluido ou n recompila.
 - JAX: `where` antes das funções com domínio restrito (sqrt, log, arccos, potências), para tangentes finitas (issue 037 do mfsim).
@@ -85,3 +90,6 @@ ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentaç�
 - JAX: nunca chamar o flash (ou qualquer função com `while_loop`) ansiosamente fora do `jit` no caminho de execução: ~0,7 s por chamada (traçado de novo de cada vez). O flash da entrada e a estimativa inicial do método 3.2 vivem dentro das funções compiladas (issue 007).
 - Arranque quente do flash (`flash.warm_start`, default `True`): a variável auxiliar `aux` (ln K) atravessa `integrate` e `newton_solve`; o resultado é idêntico ao arranque frio. Para o desligar: `--set fluid.flash.warm_start=false`.
 - Constantes de PR: Ω_a = 0,45724 e Ω_b = 0,0778 como impressas na dissertação (a `thermo` usa as exatas: diferenças de ~1e-5).
+- PINN (`surrogate/pinn.py`): não retropropagar pelo `rhs` (flash em `while_loop`) nem pôr um segundo nível de AD por cima da
+  linearização interna do `rhs`: a compilação esgota a memória (código 137). f e ∂f/∂u (diferenças avançadas) entram como
+  valores e o gradiente passa só pela rede, por uma perda auxiliar com o mesmo gradiente.

@@ -21,8 +21,13 @@ from dissertation.notebook_utils import (
     fluids_db,
     load_runs,
     make_fluid,
+    MATRIX_HEADERS,
+    matrix_rows,
+    MODEL_LABEL,
+    parity_line,
     plt,
     save,
+    SOLVER_LABEL,
     table,
     tables,
 )
@@ -238,3 +243,48 @@ if "noslip" in runs:
     rows.append(("ρ_L necessária com o nosso flash [kg/m³]", *[f"{v:.0f}" for v in rho_need]))
     rows.append(("ρ_L da PR [kg/m³]", *[f"{v:.0f}" for v in st0.rho_L]))
     table(rows, ["hipótese", f"x = {r.x[idx[0]]:.0f} m", f"{r.x[idx[1]]:.0f} m", f"{r.x[idx[2]]:.0f} m"])
+
+# %% [markdown]
+# ## Matriz de métodos: dois modelos × três solvers × dois backends (issue 011)
+#
+# Os dois modelos escrevem-se como d(Φ)/dx = S com fechamentos locais, e os três solvers são três
+# discretizações da mesma coisa: a marcha (RK45 adaptativo em x), as diferenças finitas nos fluxos
+# (M Φ = S, Tabela 4 da dissertação) e os volumes finitos (Φ_{i+1} − Φ_i = ∫ S, conservativos por
+# construção). Corridas do lote `batches/solver_matrix.json` (`runs/solver_matrix/`), 78 nós como
+# a dissertação; JAX em destaque, numpy só na linha de paridade. Os balanços globais são
+# (Φ_out − Φ_in) − ∫ S na malha do próprio solver: nos volumes finitos fecham a precisão de máquina.
+# %%
+mruns = load_runs("solver_matrix/offshore_*.npz")
+print("corridas:", sorted(mruns))
+table(matrix_rows(mruns, "offshore_", x_end=7800.0), MATRIX_HEADERS)
+print(parity_line(mruns, "offshore_noslip_fv", "offshore_noslip_fv_numpy"))
+print(parity_line(mruns, "offshore_slip_march", "offshore_slip_march_numpy"))
+print(parity_line(mruns, "offshore_noslip_march", "offshore_noslip_fv"))
+print(parity_line(mruns, "offshore_slip_fd", "offshore_slip_fv"))
+# %%
+if mruns:
+    fig, axes = plt.subplots(3, 1, figsize=(10, 11), sharex=True)
+    styles = {"march": "-", "fd": "--", "fv": ":"}
+    for name in sorted(mruns):
+        if name.endswith("_numpy"):
+            continue
+        r = mruns[name]
+        c = "C0" if r.info["model"] == "noslip" else "C3"
+        lab = f"{MODEL_LABEL[r.info['model']]}, {SOLVER_LABEL[r.info['solver']]}"
+        axes[0].plot(r.x, r.P / 1e5, styles[r.info["solver"]], color=c, label=lab)
+        axes[1].plot(r.x, r.T - 273.15, styles[r.info["solver"]], color=c)
+        axes[2].plot(r.x, r["H_L"], styles[r.info["solver"]], color=c)
+    for n, key, ax in ((32, "P", axes[0]), (33, "T", axes[1]), (34, "H_L", axes[2])):
+        for nm in ("Modelo no-slip", "Modelo"):
+            s = series_of(n, nm)
+            if s is not None:
+                ax.plot(*s, ":", lw=2, color="gray", label=f"dissertação «{nm}»" if ax is axes[0] else None)
+    axes[0].set_ylabel("P (bar)")
+    axes[1].set_ylabel("T (°C)")
+    axes[2].set_ylabel("holdup H_L")
+    axes[2].set_xlabel("x (m)")
+    axes[0].legend(fontsize=7, ncol=2)
+    for ax in axes:
+        ax.grid(alpha=0.3)
+    fig.suptitle("§5.5: os seis caminhos (JAX) sobrepostos; azul = não escorregamento, vermelho = mecanicista")
+    save(fig, "nb_5_5_solver_matrix")
