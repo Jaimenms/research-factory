@@ -15,6 +15,7 @@ decisões estão em [docs/README.md](docs/README.md). O guia de sessão é [CLAU
 ## Começar
 
 ```bash
+git submodule update --init                                    # código original da dissertação em legacy/masters_code (só consulta)
 uv sync
 uv run pytest                                                  # rotina (~2 min)
 uv run python -m generators.condensate                         # casos JSON de §5.6

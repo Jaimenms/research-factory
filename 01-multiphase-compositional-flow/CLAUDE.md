@@ -23,6 +23,7 @@ simulador, alimentado por `march_many` (jit + vmap).
 | `cmfsim/` | o simulador, genérico: só lê casos JSON (`cmfsim-case/1`). `backend/` (cópia do mfsim), `thermo/`, `closures/`, `models/` (`base.FluxModel`: interface comum de fluxos e fontes; `noslip`, `mechanistic`), `solvers/` (`rk45` marcha, `nodal` diferenças finitas e volumes finitos, `newton`), `io/`. `simulation.simulate` despacha a matriz modelo × solver e calcula os balanços globais. |
 | `dissertation/` | ponte com a dissertação, fora do simulador: `extract.py` (Apêndice A → CSV), `data/` (tabelas transcritas, CSV). |
 | `references/` | o PDF e as figuras digitalizadas (`figures/`, JSON + sobreposições). |
+| `legacy/masters_code/` | **submódulo git** com o código-fonte original do Gustavo (github.com/Gualcar/masters_code), só para consulta: o nosso repositório guarda o URL e o commit, não o conteúdo; não editar nem importar a partir do `cmfsim`. Inicializar com `git submodule update --init`. |
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
 | `tests/` | rotina (`uv run pytest`, ~10 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
 | `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
