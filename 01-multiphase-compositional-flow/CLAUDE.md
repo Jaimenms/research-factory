@@ -24,6 +24,7 @@ simulador, alimentado por `march_many` (jit + vmap).
 | `dissertation/` | ponte com a dissertação, fora do simulador: `extract.py` (Apêndice A → CSV), `data/` (tabelas transcritas, CSV). |
 | `references/` | o PDF e as figuras digitalizadas (`figures/`, JSON + sobreposições). |
 | `legacy/masters_code/` | **submódulo git** com o código-fonte original do Gustavo (github.com/Gualcar/masters_code), só para consulta: o nosso repositório guarda o URL e o commit, não o conteúdo; não editar nem importar a partir do `cmfsim`. Inicializar com `git submodule update --init`. |
+| `legacy/issues/`, `legacy/scripts/` | o que o código original revela, por família (L01 térmico, L02 termodinâmica e flash, L03 propriedades de transporte, L04 hidrodinâmica, L05 numérica, L06 dados), com as respostas às questões em aberto; scripts que correm o código original no submódulo sem o alterar (ambiente numpy 1.x em `requirements-legacy.txt`, saídas em `runs/legacy/`). |
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
 | `tests/` | rotina (`uv run pytest`, ~10 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
 | `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
@@ -70,10 +71,18 @@ finitas com Newton (backend de produção: JAX), notebooks por secção do capí
 como argumentos e `march_many` (vmap), arranque quente do flash ao longo de x, modelo substituto
 (`surrogate/`, issue 009: massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento,
 notebook 5.7; issue 010: substituto de perfil com s = x/L e PINN com o resíduo do modelo), matriz de métodos 2 modelos × 3 solvers (marcha, diferenças finitas, volumes finitos) × 2
-backends com balanços globais em toda a corrida (issue 011). Em aberto: Apêndice A horizontal (issue 005),
-linha do Apêndice B a arrefecer 1,4× mais no autor (issue 009). Os perfis térmicos da §5.6
+backends com balanços globais em toda a corrida (issue 011). Os perfis térmicos da §5.6
 ficaram explicados por um só fator 3,42 em U, tratado como erro de apresentação da Tabela 25
-(issue 004; casos com U_eff).
+(issue 004; casos com U_eff). Com o código original (2026-10-16, `legacy/issues/README.md`):
+
+- **§5.6, fator 3,42:** é o D_ext passado como espessura, fator 3,395.
+- **Linha do Apêndice B:** U referido ao D_ext, 1,83×.
+- **Holdup da §5.5 a 0,85×:** o ln φ do autor não é o de PR.
+- **Figura 40:** o flash cai na solução trivial perto do orvalho.
+- **Apêndice A horizontal:** atrito de Darcy em tensões de Fanning (×4), compensado por uma μ_L de gás,
+  porque o Nc de Allan & Teja do C7+ é 0.
+
+Nada mudou no simulador. As decisões pendentes estão no README de `legacy/issues/`.
 
 ## Armadilhas conhecidas
 

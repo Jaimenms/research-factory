@@ -1,0 +1,9 @@
+# Ambiente para correr o código original (legacy/masters_code): numpy 1.x (o flash atribui arrays de
+# tamanho 1 a escalares, o que o numpy 2 recusa), scipy e pandas da mesma época.
+#   uv venv --python 3.10 .venv-legacy
+#   VIRTUAL_ENV=.venv-legacy uv pip install -r legacy/scripts/requirements-legacy.txt
+numpy<1.24
+scipy<1.11
+pandas<2.0
+matplotlib<3.8
+openpyxl

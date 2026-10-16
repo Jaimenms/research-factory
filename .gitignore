@@ -1,5 +1,6 @@
 # ambientes e caches
 .venv/
+.venv-legacy/
 __pycache__/
 *.pyc
 .pytest_cache/
