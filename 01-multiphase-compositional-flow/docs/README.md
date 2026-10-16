@@ -107,8 +107,10 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
   forma de Taitel em (34) (issue 003).
 - **Não escorregamento** (fase 3): o caso offshore (§5.5) bate as curvas no-slip da dissertação
   (119,98 contra 119,97 bar no topo do poço; T a 1,5 °C; anular em todo o percurso). No gasoduto
-  (§5.6) o ponto de orvalho coincide (33–34 °C) mas os perfis térmicos da dissertação arrefecem
-  2,7× mais depressa do que o balanço de energia permite; fica como achado em aberto (issue 004).
+  (§5.6) o ponto de orvalho coincide (33–34 °C) e os perfis térmicos, exponenciais puros, pedem um
+  só fator 3,42 no termo de perda de calor, igual nos seis casos; o dono decidiu tratá-lo como erro
+  de apresentação de U na Tabela 25 e os casos usam U_eff = 3,42 × U, com as Figuras 38–40
+  reproduzidas a 0,1–0,3 °C e 0,04 bar (issue 004).
 - **Com escorregamento** (fase 4): diferenças finitas + Newton com Jacobiana colorida convergem
   em 2–4 iterações; o que travava a dissertação (fases que aparecem e desaparecem) tem duas
   causas identificadas e resolvidas (issue 005). Apêndice A: vertical com mediana +3 % e 75 % dos

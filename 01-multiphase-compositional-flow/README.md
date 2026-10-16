@@ -41,7 +41,7 @@ reproduzem todas as figuras e tabelas da secção com o cmfsim sobreposto.
 | `nb_5_3_patterns` | 5.3 | Figuras 22–23 (mapas ar–água ponto a ponto e acerto por classe), Tabelas 13–14, sensibilidade às leituras | nenhuma |
 | `nb_5_4_dp_comparison` | 5.4 | Figuras 24–30, Tabelas 15–18, Apêndice A (desvios por modelo) | `batches/dp_comparison.json` |
 | `nb_5_5_offshore` | 5.5 | Figuras 31–37, Tabelas 19–22 | `batches/dissertation.json` (offshore) |
-| `nb_5_6_condensate` | 5.6 | Figuras 38–40, Tabelas 23–26, hipótese do Cp em °C | `batches/dissertation.json`, `batches/dissertation_celsius.json` |
+| `nb_5_6_condensate` | 5.6 | Figuras 38–40, Tabelas 23–26, ajuste exponencial dos perfis térmicos (U_eff = 3,42 × U) | `batches/dissertation.json` |
 | `nb_5_8_performance` | 5.8 | Tabelas 34–35, Figura 59 | `batches/performance.json` |
 
 O 5.7 (modelo substituto) vem com o capítulo 4, adiado.
@@ -62,7 +62,7 @@ autores estão em [papers/00-escolha-da-revista.md](papers/00-escolha-da-revista
 | 0 | rede de segurança: git (raiz do monorepo), `uv`, esqueleto, backend copiado, Apêndice A e tabelas em `dissertation/data`, figuras digitalizadas em `references/figures` | feito (2026-10-15) |
 | 1 | `cmfsim/thermo`: PR, flash, propriedades, derivadas exatas em JAX; validação contra a biblioteca `thermo` | feito (issues 001–002) |
 | 2 | padrões e fechamentos | feito (issue 003) |
-| 3 | modelo de não escorregamento + marcha em x (integrador próprio); caso 5.6 contra as Figuras 38–40 | feito (issue 004); achado térmico em aberto |
+| 3 | modelo de não escorregamento + marcha em x (integrador próprio); caso 5.6 contra as Figuras 38–40 | feito (issue 004; perfis térmicos da §5.6 reproduzidos com U_eff = 3,42 × U da Tabela 25) |
 | 4 | modelo mecanicista com escorregamento + diferenças finitas + Newton com Jacobiana colorida; consistência com a marcha; lote dos 200 casos do Apêndice A (`batches/dp_comparison.json`) | feito (issue 005); comparação com o Apêndice A em curso |
 | 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave); parâmetros como argumentos (uma compilação por estrutura) já feito | em curso |
 | 6 | notebooks de reprodução por secção do capítulo 5 (5.1–5.6, 5.8), goldens, síntese | notebooks feitos; goldens de texto por fazer |

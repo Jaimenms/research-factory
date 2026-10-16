@@ -104,7 +104,7 @@
     "D": 0.3048,
     "roughness": 4.57e-05,
     "angle_deg": 0.0,
-    "U": 1.0,
+    "U": 3.42,
     "T_amb": 298.15
    },
    {
@@ -141,6 +141,9 @@
   "dx_out": 100.0
  },
  "meta": {
-  "source": "dissertação §5.6, Tabelas 23–25; alvos: Figuras 38–40 (references/figures/data/fig_38..40.json), Tabela 26"
+  "source": "dissertação §5.6, Tabelas 23–25; alvos: Figuras 38–40 (references/figures/data/fig_38..40.json), Tabela 26",
+  "U_table25": 1.0,
+  "U_factor": 3.42,
+  "U_note": "U = U_factor x U da Tabela 25: os perfis da Figura 39 exigem 3,42x o U impresso (issue 004)"
  }
 }

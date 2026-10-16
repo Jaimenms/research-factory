@@ -1,5 +1,6 @@
 {
  "_source": "tabelas de entrada e alguns resultados numéricos da dissertação (unidades SI salvo indicação)",
+ "_note_table25": "U como impresso na Tabela 25; os casos de cases/condensate usam U_eff = 3,42 x U (issue 004, decisão de 2026-10-15)",
  "table13_air_water": {"rho_water": 1000.0, "rho_air": 1.65, "mu_water": 1e-3, "mu_air": 1.8e-5, "sigma": 0.0072},
  "table14_pattern_pipes": {"D": 0.025, "roughness": 0.00153, "angle_rad": {"horizontal": 0.0, "vertical": 1.5707963267948966},
                            "v_SL_range": [0.1, 50.0], "v_SG_range": [0.1, 500.0]},

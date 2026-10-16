@@ -43,7 +43,10 @@ def test_condensate_pressure_and_dew_point_against_figures(components_db, fluids
         # de ser o orvalho do nosso flash à pressão local a 2,5 °C (termodinâmica concordante,
         # independentemente do achado térmico da issue 004)
         xd, yd = fig40[s]
-        if np.any(yd < 0.9995):
+        # a série 5 (pontilhada, 21 pontos a 0,97–0,98 entre 4,8 e 7 km, onde a tese ainda está a 42 °C)
+        # está mal digitalizada nas Figuras 39–40 e fica fora das verificações de orvalho, início da
+        # condensação e perfil de temperatura
+        if k != 5 and np.any(yd < 0.9995):
             x_cond = float(xd[yd < 0.9995][0])
             T_cond_fig = float(np.interp(x_cond, *fig39[s])) + 273.15
             P_cond_fig = float(np.interp(x_cond, *fig38[s])) * 1e5
@@ -54,6 +57,18 @@ def test_condensate_pressure_and_dew_point_against_figures(components_db, fluids
                 lo, hi = (mid, hi) if b < 1.0 else (lo, mid)
             T_dew = 0.5 * (lo + hi)
             assert abs(T_dew - T_cond_fig) < 2.5, (k, T_dew - 273.15, T_cond_fig - 273.15)
+            # início da condensação: com U_eff = 3,42 U (issue 004) a menos de 1,5 km do da dissertação
+            # (no caso 2 o gás arrefece ~3 K/km perto do orvalho: 1 °C de orvalho vale ~300 m, e a
+            # série 2 da Figura 40 é pontilhada e mal resolvida)
+            x_cond_run = float(r.x[r["w_G"] < 0.9995][0])
+            assert abs(x_cond_run - x_cond) < 1500.0, (k, x_cond_run, x_cond)
+        # perfil de temperatura: com U_eff = 3,42 U o cmfsim segue a Figura 39 a 0,5 °C (rms)
+        if k != 5:
+            xt, yt = fig39[s]
+            o = np.argsort(xt)
+            kk = (r.x >= xt.min()) & (r.x <= xt.max())
+            dev = np.interp(r.x[kk], xt[o], yt[o]) - (r.T[kk] - 273.15)
+            assert np.sqrt(np.mean(dev**2)) < 0.5, (k, float(np.sqrt(np.mean(dev**2))))
 
 
 DP_RUNS = ROOT / "runs" / "dp_comparison"

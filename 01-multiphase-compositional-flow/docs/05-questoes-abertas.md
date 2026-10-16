@@ -43,12 +43,12 @@ estudo numérico, cada decisão registada como issue.*
 
 | n.º | item | onde | se não houver resposta |
 |---|---|---|---|
-| B1 | coeficientes A–D do Cp de gás ideal do pseudocomponente C7+ | Tabela 8 só tem os puros; Tabela 20 dá H_form, T_b, T_c, P_c, ω, MW 560 g/mol, ρ 950 kg/m³ | estimar por Lee–Kesler ou Kesler–Lee a partir de T_b e densidade; registar como issue |
+| B1 | coeficientes A–D do Cp de gás ideal do pseudocomponente C7+ | Tabela 8 só tem os puros; Tabela 20 dá H_form, T_b, T_c, P_c, ω, MW 560 g/mol, ρ 950 kg/m³ | estimar por Lee–Kesler ou Kesler–Lee a partir de T_b e densidade; registar como issue. Feito em 2026-10-15: Kesler–Lee com K_W = 12,08 dá Cp/R = 0,733 + 0,38776 T − 1,521e-4 T², 8 % abaixo da extrapolação da issue 001, efeito ≤ 1 °C na §5.5; não adotado |
 | B2 | parâmetros de interação binária k_ij | não dados (eq. 112) | zero |
 | B3 | número de carbonos efetivo (Allan & Teja) para CO₂, N₂, H₂S e C7+ | §2.5.2 só define para n-alcanos | correlacionar com MW; registar |
 | B4 | ΔP e ΔT das derivadas numéricas (169–170) e o lado (para a frente ou para trás) | não ditos; Figura 10 diz P + dP | 1 kPa e 0,01 K; estudo de sensibilidade |
 | B5 | número de pontos n e tolerâncias usados nos resultados de 5.4 e 5.5 pelo método 3.2 | só 12/30/78 em 5.8 | estudo de malha; comparar os três com o Apêndice A |
-| B6 | base da «fração vaporizada» em (25): mássica, molar ou volumétrica | lista de símbolos diz volumétrica; a dimensão exige mássica | mássica; opção para as outras |
+| B6 | base da «fração vaporizada» em (25): mássica, molar ou volumétrica | lista de símbolos diz volumétrica; a dimensão exige mássica | mássica; opção para as outras. A Figura 40 (§5.6) é **molar**: com U_eff o cmfsim segue-a a 0,004 em β, contra 0,02 em massa e 0,015 em volume (2026-10-15, issue 004) |
 | B7 | forma efetiva no código de (29), (30)/(160), (46), (54), (84), (89), (126), (147) | gralhas listadas em [03](03-avaliacao-e-interpretacao.md) | cada uma com as duas formas como opção; decidir pelo Apêndice A |
 | B8 | estimativa inicial do método 3.2 | «necessária em todos os pontos» | perfil plano em P e T com vazões por fase do flash de entrada; opção `march_noslip` |
 | B9 | unidades de η_L, A, B, C em Allan & Teja (141) | não ditas | consultar o artigo de 1991 |
@@ -58,6 +58,7 @@ estudo numérico, cada decisão registada como issue.*
 | B13 | como o flash foi «desabilitado» no teste de 5 s → 0,5 s | p. 158 | propriedades de fase única congeladas |
 | B14 | T_amb do poço (40 °C) constante ou gradiente geotérmico | Tabela 21 | constante |
 | B15 | fator de atrito no modelo de não escorregamento (mistura homogénea: Churchill com ρ_M e μ_M?) | não dito | Churchill com propriedades da mistura ponderadas por volume |
+| B16 | valores de U da Tabela 25 (§5.6) | os perfis da Figura 39 exigem 3,42× os U impressos, com o mesmo fator nos seis casos; a §5.5 não precisa de fator | **decidido (2026-10-15)**: erro de apresentação de U; casos com U_eff = 3,42 × U (`U_FACTOR` em `generators/condensate.py`, issue 004); pedir ao autor os ficheiros de entrada |
 
 ## C. Pontos a confirmar nos resultados
 

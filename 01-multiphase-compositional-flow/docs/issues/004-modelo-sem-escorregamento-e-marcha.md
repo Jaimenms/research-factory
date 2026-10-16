@@ -4,7 +4,7 @@
 |---|---|
 | tipo | feature / hipótese / estudo |
 | área | modelo de não escorregamento (§2.2.4, §3.1), integrador em x (§3.1.6) |
-| estado | feito (2026-10-15); achado térmico em aberto |
+| estado | feito (2026-10-15); achado térmico resolvido no mesmo dia: U_eff = 3,42 × U da Tabela 25 (decisão do dono) |
 | onde | `cmfsim/models/noslip.py`, `cmfsim/solvers/rk45.py`, `cmfsim/pipe.py`, `cmfsim/simulation.py`, `cases/condensate/`, `batches/dissertation.json` |
 | dados | §5.6 (Tabelas 23–25); Figuras 38–40 digitalizadas (`references/figures/data/fig_38..40.json`) |
 
@@ -31,7 +31,9 @@ diferenças (B4).
 - **Casos e lote**: `generators/condensate.py` → `cases/condensate/` (base + 6 variantes por
   `$extends`), `batches/dissertation.json`.
 
-## Achados contra as Figuras 38–40 (caso 2: 60 °C, U = 3 W/m²K)
+## Achados contra as Figuras 38–40 com os U impressos (caso 2: 60 °C, U = 3 W/m²K)
+
+*Secção histórica: números com os U da Tabela 25 tal como impressos. A resolução está mais abaixo.*
 
 | grandeza | dissertação (digitalizada) | cmfsim | nota |
 |---|---|---|---|
@@ -52,7 +54,7 @@ fatores do integral. Sem código nem autor não se resolve; fica como opção fu
 posição em que a condensação começa é consequência direta deste achado (a temperatura em que
 começa, não).
 
-### Hipótese testada: Cp de gás ideal avaliado com T em °C
+### Hipótese testada e superada: Cp de gás ideal avaliado com T em °C
 
 Se o polinómio Cp/R = A + B T + C T² for avaliado com T em °C (erro de unidade plausível num
 código que recebe °C nas tabelas), o cp da mistura a 45 °C cai de ≈ 2050 para ≈ 800 J/(kg K),
@@ -84,6 +86,51 @@ como a dissertação relata para o seu modelo no-slip. Logo a equação de energ
 fecho estão certos e a discrepância térmica fica **isolada na secção 5.6** (entradas do gasoduto
 diferentes das Tabelas 24–25, ou outra forma de Q_w nesse caso); a hipótese dos °C fica como
 curiosidade, não como correção.
+
+## Resolução do achado térmico (2026-10-15): um só fator no termo de perda de calor
+
+**Método.** Aos perfis digitalizados da Figura 39 ajustou-se, no troço monofásico (T > 34,5 °C), a lei
+dT/dx = −a (T − T_amb) − b. Resultado: exponenciais puras (desvio 0,01–0,09 °C), b nulo, e a/U igual nos
+seis casos (7,5–8,2e-5 m⁻¹ por W/m²K, com 60 ou 80 °C na entrada). O erro é, portanto, um fator
+multiplicativo constante no termo U π D (T − T_amb) / (m cp), sem termo aditivo e sem dependência da
+temperatura; a razão para o cmfsim foi 3,25 ± 0,07 no ajuste e 3,42 na varredura direta.
+
+| U × k no cmfsim | rms contra a Fig. 39, casos 1 / 2 / 3 / 4 / 6 [°C] | média do desvio |
+|---|---|---|
+| 1,00 | 6,5 / 11,5 / 11,7 / 10,6 / 18,8 | — |
+| 3,14 (π) | 0,60 / 0,91 / 0,77 / 0,99 / 1,18 | tese mais fria |
+| 3,28 (1/D) | 0,27 / 0,52 / 0,40 / 0,46 / 0,62 | −0,2 a −0,6 |
+| **3,42** | **0,06 / 0,27 / 0,13 / 0,06 / 0,20** | ≈ 0 |
+| 3,60 | 0,47 / 0,54 / 0,42 / 0,71 / 0,68 | +0,4 a +0,7 |
+
+O caso 5 (série pontilhada, mal digitalizada) ficou de fora. Com U × 3,42 a pressão de saída da Figura 38
+bate a 0,04 bar nos cinco casos (69,039 contra 69,039 bar no caso 1) e o início da condensação
+(critério 0,9995) fica a 0,3–1,1 km do da tese (5800/6948, 3000/3319, 3900/4292 m nos casos 2, 3, 6; no
+caso 2 o gás arrefece 1,5 K/km perto do orvalho e a série da Figura 40 é pontilhada). A «fração
+vaporizada» da Figura 40 é a molar: no troço bifásico o cmfsim segue-a a 0,004 (β), contra 0,02 em base
+mássica e 0,015 em volumétrica (B6 de docs/05 respondida para a figura).
+
+**Hipóteses excluídas.** Cp do C7+ (o fluido da Tabela 23 não o tem); termo de expansão ou cinético
+(exigiria b ≠ 0); Cp em °C sozinho (fator 1,8, rms 4–9 °C); entalpia ideal sem o fator R (ordem certa,
+forma errada: rms até 2,5 °C, porque a parte residual varia ao longo do tubo); diâmetro externo no termo
+térmico (a eq. (100) define D como interno e o no-slip da §5.5 só fecha com D_in: rms 0,65 °C contra 8,1
+com o D_ext da Tabela 21 e 20,5 com o fator 3,42); erro no código da energia (a §5.5 usa o mesmo modelo
+sem fator nenhum). Resta um erro de entrada ou de apresentação específico da §5.6: U, m ou D no termo
+térmico. Os candidatos redondos mais próximos, 1/D = 3,28 e π = 3,14, ficam 4 % e 8 % abaixo do ótimo.
+
+**Decisão do dono.** Tratar como erro de apresentação de U na Tabela 25: os casos usam U_eff = 3,42 × U
+(`generators/condensate.py`, constante `U_FACTOR`; `meta.U_table25` e `meta.U_factor` guardam a
+origem). Lote `batches/dissertation.json` recorrido; `nb_5_6_condensate` mostra o ajuste exponencial e
+as figuras; teste noturno com rms(T) < 0,5 °C e início da condensação a < 1 km. A hipótese dos °C fica
+superada (a opção `cp_temperature` continua disponível, default `kelvin`; o lote
+`batches/dissertation_celsius.json` deixa de ser usado pelo notebook). A série 5 das Figuras 39–40
+(pontilhada, segmentada por tonalidade) está mal digitalizada e fica fora das verificações.
+
+**O que fica por explicar.** A Tabela 26 (composições na saída do caso 2) implica, pelo balanço material
+por componente, 4–7 % molar de líquido, contra 1,8 % na Figura 40 e 1,4 % no cmfsim, e um líquido
+com 46 % de C1 contra 31 % no cmfsim; a tabela é internamente inconsistente com a figura e não serve de
+prova fina do flash. Perguntar ao autor pelos
+ficheiros de entrada da §5.6 continua a ser a única forma de identificar o mecanismo do fator.
 
 ## Benefício
 

@@ -61,8 +61,9 @@ make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (buil
 Fases 0–4 feitas (issues 001–005): termodinâmica validada contra `thermo`, fechamentos e mapas de
 padrão, marcha de não escorregamento com integrador próprio, modelo mecanicista por diferenças
 finitas com Newton (backend de produção: JAX). Em aberto: comparação com o Apêndice A (lote
-`batches/dp_comparison.json`), achado dos perfis térmicos da dissertação (issue 004), `vmap`
-sobre casos, modelo substituto (adiado).
+`batches/dp_comparison.json`), `vmap`
+sobre casos, modelo substituto (adiado). Os perfis térmicos da §5.6 ficaram explicados por um só fator
+3,42 em U, tratado como erro de apresentação da Tabela 25 (issue 004; casos com U_eff).
 
 ## Armadilhas conhecidas
 
