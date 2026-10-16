@@ -13,8 +13,8 @@ geração de modelos substitutos* (Gustavo Alves de Carvalho, UERJ/IQ, 2022; ori
 André L. H. Costa, Giovani C. Nunes e Jaime N. M. de Souza): simulador de regime permanente de
 escoamento gás–líquido em tubulações com termodinâmica composicional (Peng–Robinson + flash),
 modelo de não escorregamento (PVI em x) e modelo mecanicista com escorregamento (diferenças
-finitas + Newton). Foco atual: capítulo 3 e as suas validações; o modelo substituto (cap. 4,
-§5.7) vem depois e o desempenho (jit/vmap) é desenhado desde já a pensar nisso.
+finitas + Newton) e modelo substituto por redes neuronais (cap. 4, §5.7) em `surrogate/`, fora do
+simulador, alimentado por `march_many` (jit + vmap).
 
 ## Mapa do repositório
 
@@ -26,6 +26,8 @@ finitas + Newton). Foco atual: capítulo 3 e as suas validações; o modelo subs
 | `cases/`, `generators/`, `batches/`, `runs/` | casos JSON, geradores paramétricos, lotes, corridas (fora do git). |
 | `tests/` | rotina (`uv run pytest`, ~4 min) e noturna (`-m nightly`, lê `runs/`); `reference` = precisa da biblioteca `thermo` (oráculo). |
 | `notebooks_src/thesis/`, `notebooks/` | fontes `# %%` e notebooks executados, um por secção do capítulo 5; apoio em `dissertation/notebook_utils.py`; figuras em `notebooks/figs/`. |
+| `surrogate/` | modelo substituto (§5.7), fora do simulador: `sampling` (hipercubo latino), `dataset` (massa de dados por `march_many`), `model`/`train` (MLP + Adam em JAX), `grid`, `predict` (encadeamento), `pipeline` (tudo num processo). |
+| `models/` | modelos empíricos treinados (`surrogate/{well,line,riser}.json`, com métricas e proveniência em `meta`). |
 | `tools/` | `make_nb.py` (fontes → notebooks), `new_paper.py` (artigo novo a partir de `papers/_template`). |
 | `papers/` | artigos para revistas, um por pasta `NN-<slug>/` (LaTeX Elsevier CAS, `make` com tectonic ou latexmk, figuras geradas por código a partir de `runs/`); escolha da revista e guia de autores em `papers/00-escolha-da-revista.md`; regras em `papers/README.md`. |
 | `docs/` | o estudo (README + 01–06), `issues/NNN-*.md` + `INDEX.md`. |
@@ -37,7 +39,8 @@ uv sync
 uv run pytest                                  # rotina
 uv run pytest -m nightly                       # noturna
 uv run black --check cmfsim tests tools generators dissertation
-uv run python -m dissertation.extract          # Apêndice A -> CSV
+uv run python -m dissertation.extract          # Apêndices A, B e C -> CSV
+uv run python -m surrogate.pipeline            # §5.7: massa de dados, grelha e modelos -> runs/surrogate, models/surrogate
 make -C papers/01-compositional-steady-state   # figuras + PDF do artigo 1 (build/main.pdf)
 ```
 

@@ -23,7 +23,10 @@ uv run cmfsim batch batches/dissertation.json                  # lote §5.6 -> r
 uv run python -m generators.dp_comparison && uv run cmfsim batch batches/dp_comparison.json   # §5.4: 400 corridas -> runs/dp_comparison
 uv run python notebooks_src/thesis/nb_5_6_condensate.py        # comparação com as Figuras 38–40 (lê runs/)
 uv run python notebooks_src/thesis/nb_5_4_dp_comparison.py     # comparação com o Apêndice A
-uv run python -m dissertation.extract                          # regenera os CSV do Apêndice A a partir do PDF
+uv run python -m dissertation.extract                          # regenera os CSV dos Apêndices A, B e C a partir do PDF
+uv run python -m generators.surrogate                          # §5.7: casos dos três trechos e do sistema com o fluido da Tabela 6
+uv run python -m surrogate.pipeline                            # §5.7: massa de dados (march_many), grelha de 135 redes e modelos finais -> runs/surrogate, models/surrogate
+uv run python -m surrogate.predict models/surrogate/well.json models/surrogate/line.json models/surrogate/riser.json --P 170 --T 353.15 --m 20
 make -C papers/01-compositional-steady-state                   # artigo 1: figuras (de runs/) + PDF em build/main.pdf
 ```
 
@@ -42,9 +45,13 @@ reproduzem todas as figuras e tabelas da secção com o cmfsim sobreposto.
 | `nb_5_4_dp_comparison` | 5.4 | Figuras 24–30, Tabelas 15–18, Apêndice A (desvios por modelo) | `batches/dp_comparison.json` |
 | `nb_5_5_offshore` | 5.5 | Figuras 31–37, Tabelas 19–22 | `batches/dissertation.json` (offshore) |
 | `nb_5_6_condensate` | 5.6 | Figuras 38–40, Tabelas 23–26, ajuste exponencial dos perfis térmicos (U_eff = 3,42 × U) | `batches/dissertation.json` |
+| `nb_5_7_surrogate` | 5.7 | Tabelas 27–33, Figuras 41–58, Apêndices B e C (amostras do autor simuladas pelo cmfsim; grelha de hiperparâmetros) | `surrogate.pipeline` (`runs/surrogate/`, `models/surrogate/`) |
 | `nb_5_8_performance` | 5.8 | Tabelas 34–35, Figura 59 | `batches/performance.json` |
 
-O 5.7 (modelo substituto) vem com o capítulo 4, adiado.
+O modelo substituto (capítulo 4, §5.7) vive em [surrogate/](surrogate/), fora do simulador: amostragem por
+hipercubo latino, massa de dados gerada por `march_many` (uma compilação, `vmap` sobre as amostras),
+rede multicamada com Adam em JAX, busca em grelha e predição encadeada poço → linha → riser; os modelos
+empíricos treinados ficam em [models/surrogate/](models/surrogate/) (JSON, carregados por `surrogate.model.MLP.load`).
 
 Um caso é um ficheiro JSON `cmfsim-case/1` autocontido (fluido com as propriedades dos componentes,
 tubo único com perfil axial, condições de entrada, modelo, solver); variantes herdam com `$extends`
@@ -65,7 +72,8 @@ autores estão em [papers/00-escolha-da-revista.md](papers/00-escolha-da-revista
 | 3 | modelo de não escorregamento + marcha em x (integrador próprio); caso 5.6 contra as Figuras 38–40 | feito (issue 004; perfis térmicos da §5.6 reproduzidos com U_eff = 3,42 × U da Tabela 25) |
 | 4 | modelo mecanicista com escorregamento + diferenças finitas + Newton com Jacobiana colorida; consistência com a marcha; lote dos 200 casos do Apêndice A (`batches/dp_comparison.json`) | feito (issue 005); comparação com o Apêndice A em curso |
 | 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave); parâmetros como argumentos (uma compilação por estrutura) e arranque quente do flash ao longo de x (issues 006–007) feitos | em curso |
-| 6 | notebooks de reprodução por secção do capítulo 5 (5.1–5.6, 5.8), goldens, síntese | notebooks feitos; goldens de texto por fazer |
+| 6 | notebooks de reprodução por secção do capítulo 5 (5.1–5.8), goldens, síntese | notebooks feitos; goldens de texto por fazer |
+| 7 | modelo substituto (cap. 4, §5.7): `surrogate/` (amostragem, massa de dados por `march_many`, MLP + Adam em JAX, grelha, encadeamento), casos e modelos treinados, notebook 5.7 | feito (issue 008) |
 
 ## Licença
 

@@ -188,7 +188,11 @@ paralelo com a 4 (as derivadas por AD servem logo ao método 3.1).
 | `energy.kinetic` | `false` | `true` | termo cinético |
 | `model.mass_split` | `ode` (eq. 25 discretizada) | `algebraic` (m_G = m·w_G; permite `march` com `mechanistic`) | marcha com escorregamento |
 
-## O que fica adiado e como o plano o prepara
+## O que ficou adiado e como o plano o preparou
+
+*Feito em 2026-10-15 (issue 008): `surrogate/` fora do simulador, com `march_many` a gerar a massa de dados,
+rede e Adam em JAX, grelha de 135 redes e notebook 5.7; os Apêndices B e C extraídos para CSV servem de
+comparação direta.* O texto original do plano:
 
 Capítulo 4 e secção 5.7 (modelo substituto) e apêndices B–C. O plano deixa tudo pronto:
 `vmap` sobre `simulate` gera as 300 amostras por trecho (Tabelas 27–29) em segundos; cada

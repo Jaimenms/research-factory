@@ -1,0 +1,184 @@
+{
+ "_source": "dissertação §5.7 (Tabelas 27–33) e capítulo 4: modelo substituto do sistema offshore da §5.5 por trecho, fluido da Tabela 6, modelo de não escorregamento; 300 amostras por trecho por hipercubo latino (SMT), 70 % treino / 30 % teste, redes multicamada (PyTorch) com Adam e erro quadrático médio, grelha de 135 configurações",
+ "ranges": {
+  "well": {
+   "_table": 27,
+   "P_in_bar": [
+    145.0,
+    185.0
+   ],
+   "T_in_C": [
+    60.0,
+    100.0
+   ],
+   "m_kg_s": [
+    2.0,
+    25.0
+   ]
+  },
+  "line": {
+   "_table": 28,
+   "P_in_bar": [
+    60.0,
+    100.0
+   ],
+   "T_in_C": [
+    50.0,
+    90.0
+   ],
+   "m_kg_s": [
+    2.0,
+    25.0
+   ]
+  },
+  "riser": {
+   "_table": 29,
+   "P_in_bar": [
+    40.0,
+    80.0
+   ],
+   "T_in_C": [
+    30.0,
+    70.0
+   ],
+   "m_kg_s": [
+    2.0,
+    25.0
+   ]
+  }
+ },
+ "n_samples": 300,
+ "train_fraction": 0.7,
+ "grid": {
+  "layers": [
+   1,
+   2,
+   3
+  ],
+  "activation": [
+   "relu",
+   "sigmoid",
+   "tanh"
+  ],
+  "neurons": [
+   5,
+   10,
+   15,
+   20,
+   25
+  ],
+  "learning_rate": [
+   0.1,
+   0.01,
+   0.001
+  ],
+  "_order": "caso = ((i_neurons * 3 + i_lr) * 3 + i_activation) * 3 + i_layers, como no Apêndice C"
+ },
+ "table30_all_segments_above_0_9": [
+  {
+   "case": 42,
+   "neurons": 10,
+   "learning_rate": 0.01,
+   "activation": "tanh",
+   "layers": 1,
+   "r2_P": 0.98,
+   "r2_T": 0.93
+  },
+  {
+   "case": 90,
+   "neurons": 20,
+   "learning_rate": 0.01,
+   "activation": "relu",
+   "layers": 1,
+   "r2_P": 0.98,
+   "r2_T": 0.96
+  },
+  {
+   "case": 91,
+   "neurons": 20,
+   "learning_rate": 0.01,
+   "activation": "relu",
+   "layers": 2,
+   "r2_P": 0.98,
+   "r2_T": 0.93
+  },
+  {
+   "case": 98,
+   "neurons": 20,
+   "learning_rate": 0.01,
+   "activation": "tanh",
+   "layers": 3,
+   "r2_P": 0.97,
+   "r2_T": 0.93
+  },
+  {
+   "case": 117,
+   "neurons": 25,
+   "learning_rate": 0.01,
+   "activation": "relu",
+   "layers": 1,
+   "r2_P": 0.98,
+   "r2_T": 0.93
+  },
+  {
+   "case": 118,
+   "neurons": 25,
+   "learning_rate": 0.01,
+   "activation": "relu",
+   "layers": 2,
+   "r2_P": 0.98,
+   "r2_T": 0.95
+  },
+  {
+   "case": 123,
+   "neurons": 25,
+   "learning_rate": 0.01,
+   "activation": "tanh",
+   "layers": 1,
+   "r2_P": 0.99,
+   "r2_T": 0.93
+  },
+  {
+   "case": 124,
+   "neurons": 25,
+   "learning_rate": 0.01,
+   "activation": "tanh",
+   "layers": 2,
+   "r2_P": 0.98,
+   "r2_T": 0.93
+  }
+ ],
+ "table31_hyperparameters": {
+  "layers": 1,
+  "neurons": 20,
+  "activation": "relu",
+  "learning_rate": 0.01
+ },
+ "table32_r2_test": {
+  "well": {
+   "P": 0.983,
+   "T": 0.936
+  },
+  "line": {
+   "P": 0.98,
+   "T": 0.926
+  },
+  "riser": {
+   "P": 0.963,
+   "T": 0.905
+  }
+ },
+ "table33_mean_percent_error_chain": {
+  "_note": "substituto encadeado poço → linha → riser contra o modelo físico (Figuras 57–58: 170 bar, 80 °C, 20 kg/s na entrada do poço); posições impressas 1500, 7500 e 7750 m",
+  "T": {
+   "1500": 0.3,
+   "7500": 0.3,
+   "7750": 0.6
+  },
+  "P": {
+   "1500": 1.0,
+   "7500": 3.8,
+   "7750": 4.7
+  }
+ }
+}

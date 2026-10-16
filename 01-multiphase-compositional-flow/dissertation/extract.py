@@ -1,5 +1,7 @@
 """Extrai do PDF da dissertação os dados numéricos impressos: o Apêndice A (Tabelas 36 e 37,
-200 perdas de carga) para CSV. Reprodutível: `uv run python -m dissertation.extract`.
+200 perdas de carga), o Apêndice B (Tabelas 38–40, 300 amostras do modelo físico por trecho para o
+substituto) e o Apêndice C (Tabelas 41–43, R² das 135 configurações da grelha por trecho) para CSV.
+Reprodutível: `uv run python -m dissertation.extract`.
 
 Uso: python -m dissertation.extract [--pdf caminho] [--out dissertation/data]
 """
@@ -14,6 +16,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 PDF = HERE.parent / "references" / "tese-gustavo-carvalho.pdf"
 PAGES_APPENDIX_A = range(168, 173)  # páginas impressas 168–172
+PAGES_APPENDIX_B = range(173, 193)  # Tabelas 38–40: poço, linha de escoamento, riser
+PAGES_APPENDIX_C = range(193, 203)  # Tabelas 41–43: grelha de hiperparâmetros por trecho (até à última página)
+SEGMENTS = ("well", "line", "riser")
+ACTIVATIONS = ("relu", "sigmoid", "tanh")
 D_IN = (4, 6, 8, 10)
 P_BAR = (20, 55, 90, 125, 160)
 M_KGS = (2, 4, 6, 8, 10)
@@ -92,14 +98,126 @@ def extract_appendix_a(pdf: Path = PDF, out_dir: Path = HERE / "data"):
     return written
 
 
+def _split_tables(text: str, titles):
+    """Fatias do texto entre títulos consecutivos («Tabela 38», ...)."""
+    idx = [text.index(t) for t in titles]
+    return [text[a:b] for a, b in zip(idx, idx[1:] + [len(text)])]
+
+
+def parse_samples(text: str, n_expected=300, max_gap=5, min_rows=295):
+    """Apêndice B: linhas (caso, P_in bar, T_in K, m kg/s, P_out bar, T_out K) com casos 0..299. A
+    tabela impressa salta alguns números de caso (p. ex. o 253 na Tabela 38), por isso aceita-se o
+    próximo inteiro até `max_gap` à frente; os casos em falta ficam registados."""
+    toks = _tokens(text)
+    rows, i, expected = [], 0, 0
+    while i < len(toks) and expected < n_expected:
+        t = toks[i]
+        if t is not None and "," not in t and expected <= int(_to_float(t)) < expected + max_gap:
+            cand = toks[i : i + 6]
+            if len(cand) == 6 and all(c is not None and ("," in c or k == 0) for k, c in enumerate(cand)):
+                case = int(cand[0])
+                rows.append((case, *[_to_float(c) for c in cand[1:]]))
+                expected = case + 1
+                i += 6
+                continue
+        i += 1
+    if len(rows) < min_rows:
+        raise ValueError(f"Apêndice B: esperadas ~{n_expected} amostras, encontradas {len(rows)}")
+    return rows
+
+
+def extract_appendix_b(pdf: Path = PDF, out_dir: Path = HERE / "data"):
+    text = page_text(pdf, PAGES_APPENDIX_B)
+    chunks = _split_tables(text, ("Tabela 38", "Tabela 39", "Tabela 40"))
+    written = []
+    for seg, chunk in zip(SEGMENTS, chunks):
+        rows = parse_samples(chunk)
+        path = out_dir / f"appendix_b_{seg}.csv"
+        with open(path, "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(("case", "P_in_bar", "T_in_K", "m_kg_s", "P_out_bar", "T_out_K"))
+            w.writerows(rows)
+        written.append(path)
+    return written
+
+
+_WORD = re.compile(r"^(relu|sigmoid|tanh|TRUE|FALSE)$")
+
+
+def _tokens_c(text: str):
+    out = []
+    for line in text.splitlines():
+        s = line.strip()
+        if not s:
+            continue
+        out.append(s if (_NUM.match(s) or _WORD.match(s)) else None)
+    return out
+
+
+def parse_grid(text: str, n_expected=135, max_gap=5, min_rows=130):
+    """Apêndice C: linhas (caso, neurónios, taxa, ativação, camadas, R² P, R² T, soma, ambos > 0,9);
+    tolera números de caso saltados como `parse_samples`."""
+    toks = _tokens_c(text)
+    rows, i, expected = [], 0, 0
+    while i < len(toks) and expected < n_expected:
+        t = toks[i]
+        if t is not None and _NUM.match(t) and "," not in t and expected <= int(t) < expected + max_gap:
+            cand = toks[i : i + 9]
+            if (
+                len(cand) == 9
+                and all(t is not None for t in cand)
+                and cand[3] in ACTIVATIONS
+                and cand[8] in ("TRUE", "FALSE")
+            ):
+                expected = int(cand[0])
+                rows.append(
+                    (
+                        expected,
+                        int(_to_float(cand[1])),
+                        _to_float(cand[2]),
+                        cand[3],
+                        int(_to_float(cand[4])),
+                        _to_float(cand[5]),
+                        _to_float(cand[6]),
+                        _to_float(cand[7]),
+                        cand[8] == "TRUE",
+                    )
+                )
+                expected += 1
+                i += 9
+                continue
+        i += 1
+    if len(rows) < min_rows:
+        raise ValueError(f"Apêndice C: esperadas ~{n_expected} configurações, encontradas {len(rows)}")
+    return rows
+
+
+def extract_appendix_c(pdf: Path = PDF, out_dir: Path = HERE / "data"):
+    text = page_text(pdf, PAGES_APPENDIX_C)
+    chunks = _split_tables(text, ("Tabela 41", "Tabela 42", "Tabela 43"))
+    written = []
+    for seg, chunk in zip(SEGMENTS, chunks):
+        rows = parse_grid(chunk)
+        path = out_dir / f"appendix_c_{seg}.csv"
+        with open(path, "w", newline="") as f:
+            w = csv.writer(f)
+            w.writerow(
+                ("case", "neurons", "learning_rate", "activation", "layers", "r2_P", "r2_T", "r2_sum", "both_above_0_9")
+            )
+            w.writerows(rows)
+        written.append(path)
+    return written
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--pdf", type=Path, default=PDF)
     ap.add_argument("--out", type=Path, default=HERE / "data")
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
-    for p in extract_appendix_a(a.pdf, a.out):
-        print("escrito", p)
+    for fn in (extract_appendix_a, extract_appendix_b, extract_appendix_c):
+        for p in fn(a.pdf, a.out):
+            print("escrito", p)
 
 
 if __name__ == "__main__":
