@@ -36,8 +36,8 @@ reproduzem todas as figuras e tabelas da secção com o cmfsim sobreposto.
 
 | notebook | secção | reproduz | corridas necessárias |
 |---|---|---|---|
-| `nb_5_1_thermo` | 5.1 | Figura 13 (envelope e 159 pontos), Figuras 14–18 (paridades, por quantis), Tabelas 10–11 (R² contra o oráculo `thermo`) | nenhuma (cálculo termodinâmico instantâneo) |
-| `nb_5_2_viscosity_tension` | 5.2 | Figuras 19–21 (quantis), Tabela 12 | nenhuma |
+| `nb_5_1_thermo` | 5.1 | Figura 13 (envelope e 159 pontos), Figuras 14–18 (quantis contra o eixo HYSYS e o eixo da dissertação), Tabelas 10–11 (R² contra o oráculo `thermo`) | nenhuma (cálculo termodinâmico instantâneo) |
+| `nb_5_2_viscosity_tension` | 5.2 | Figuras 19–21 (quantis contra o eixo HYSYS), Tabela 12, regra de mistura de Allan & Teja (issue 008) | nenhuma |
 | `nb_5_3_patterns` | 5.3 | Figuras 22–23 (mapas ar–água ponto a ponto e acerto por classe), Tabelas 13–14, sensibilidade às leituras | nenhuma |
 | `nb_5_4_dp_comparison` | 5.4 | Figuras 24–30, Tabelas 15–18, Apêndice A (desvios por modelo) | `batches/dp_comparison.json` |
 | `nb_5_5_offshore` | 5.5 | Figuras 31–37, Tabelas 19–22 | `batches/dissertation.json` (offshore) |
@@ -64,7 +64,7 @@ autores estão em [papers/00-escolha-da-revista.md](papers/00-escolha-da-revista
 | 2 | padrões e fechamentos | feito (issue 003) |
 | 3 | modelo de não escorregamento + marcha em x (integrador próprio); caso 5.6 contra as Figuras 38–40 | feito (issue 004; perfis térmicos da §5.6 reproduzidos com U_eff = 3,42 × U da Tabela 25) |
 | 4 | modelo mecanicista com escorregamento + diferenças finitas + Newton com Jacobiana colorida; consistência com a marcha; lote dos 200 casos do Apêndice A (`batches/dp_comparison.json`) | feito (issue 005); comparação com o Apêndice A em curso |
-| 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave); parâmetros como argumentos (uma compilação por estrutura) já feito | em curso |
+| 5 | melhorias JAX (AD, `vmap`, marcha com escorregamento, IPE suave); parâmetros como argumentos (uma compilação por estrutura) e arranque quente do flash ao longo de x (issues 006–007) feitos | em curso |
 | 6 | notebooks de reprodução por secção do capítulo 5 (5.1–5.6, 5.8), goldens, síntese | notebooks feitos; goldens de texto por fazer |
 
 ## Licença

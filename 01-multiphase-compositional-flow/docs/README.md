@@ -102,6 +102,9 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
 
 - **Termodinâmica** (fase 1): PR + flash reproduzem a biblioteca `thermo` a 1e-7; o polimento de
   Newton dá derivadas exatas por AD; num estado a `thermo` falha e o cmfsim acerta (issue 002).
+  Contra o eixo HYSYS das paridades digitalizadas (distribuições, não pares): ρ_L, entalpias e
+  fração vaporizada a 1–4 % na mediana, μ_V 0,89, σ 0,83; a viscosidade do líquido fica 3–4×
+  abaixo do HYSYS e da dissertação (regra de mistura de Allan & Teja, issue 008).
 - **Padrões** (fase 2): os mapas ar–água das Figuras 22–23 reproduzem-se a 91 % e 95 % ponto a
   ponto; a dissertação usou o limite de vazio 0,52 de Taitel (omitido no texto), σ = 0,072 e a
   forma de Taitel em (34) (issue 003).
@@ -116,6 +119,7 @@ mesmo dia; o registo vivo está no [README do projeto](../README.md), no
   causas identificadas e resolvidas (issue 005). Apêndice A: vertical com mediana +3 % e 75 % dos
   casos a menos de 10 %; horizontal sistematicamente abaixo (sensível à viscosidade do líquido do
   C7+, hipótese B3 revista para Nc_eff = 20).
-- **Desempenho** (issue 006): 175 ms por marcha compilada, uma compilação por estrutura,
-  `march_many` por `vmap`; o próximo ganho é o arranque quente do flash ao longo de x.
+- **Desempenho** (issues 006–007): uma compilação por estrutura, `march_many` por `vmap`,
+  arranque quente do flash ao longo de x (K do flash anterior; resultado idêntico ao arranque
+  frio); pelo caminho corrigiu-se a bisseção de Rachford–Rice nos extremos do intervalo.
 - **Adiado**: modelo substituto (cap. 4, §5.7); `vmap` eficiente em CPU; grafo de rede.

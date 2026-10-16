@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2] if "__file__" in globals() else Path.cwd()
 sys.path.insert(0, str(ROOT))
 
-from dissertation.notebook_utils import figure, make_fluid, plt, save, table
+from dissertation.notebook_utils import figure, make_fluid, plt, qq_parity, save, table
 
 from cmfsim.thermo import FlashOptions, phase_state
 
@@ -143,34 +143,22 @@ if have_oracle:
 
 # %%
 fig, axes = plt.subplots(2, 3, figsize=(14, 8))
-pairs = [
-    (14, "rho_V", st.rho_V),
-    (15, "rho_L", st.rho_L),
-    (16, "h_V", st.h_V / 1e3),
-    (17, "h_L", st.h_L / 1e3),
-    (18, "beta", st.beta),
-]
-for ax, (n, nm, mine) in zip(axes.ravel(), pairs):
-    f = figure(n)
-    xd, yd = next(iter(f["series"].values()))
-    scale = 1.0
-    if nm in ("h_V", "h_L"):
-        # eixos da dissertação em J/kg ou J/kmol: alinhar pela mediana
-        scale = np.median(xd) / np.median(mine[np.isfinite(mine)])
-    mine_s = np.sort(mine[np.isfinite(mine)] * scale)
-    xd_s = np.sort(xd)
-    q = np.linspace(0, 1, 50)
-    ax.plot(np.quantile(xd_s, q), np.quantile(mine_s, q), "o-", ms=3, label="quantis: dissertação (x) × cmfsim (y)")
-    lo, hi = min(xd_s.min(), mine_s.min()), max(xd_s.max(), mine_s.max())
-    ax.plot([lo, hi], [lo, hi], "k--", lw=0.8)
-    ax.set_title(f"Figura {n} — {f['caption']}" + (f" (escala ×{scale:.3g})" if scale != 1.0 else ""))
-    ax.set_xlabel("dissertação (eixo x da paridade)")
-    ax.set_ylabel("cmfsim")
-    ax.grid(alpha=0.3)
+# eixos das figuras em SI (kg/m³, J/kg, -): sem reescala
+pairs = [(14, st.rho_V), (15, st.rho_L), (16, st.h_V), (17, st.h_L), (18, st.beta)]
+ratios = []
+for ax, (n, mine) in zip(axes.ravel(), pairs):
+    rh, rd = qq_parity(ax, figure(n), mine, T.size)
+    ratios.append((f"Figura {n}", f"{rh:.3f}", f"{rd:.3f}"))
+axes.ravel()[0].legend(fontsize=7)
 axes.ravel()[-1].axis("off")
 fig.tight_layout()
 save(fig, "nb_5_1_fig14_18_qq")
+table(ratios, ["figura", "mediana cmfsim / HYSYS", "mediana cmfsim / dissertação"])
 # %% [markdown]
-# Leitura: os quantis alinham-se na diagonal quando a distribuição dos nossos valores nos 159
-# pontos é a mesma que a dos valores da dissertação (não há correspondência ponto a ponto nas
-# paridades digitalizadas, e os marcadores sobrepostos reduzem o número de pontos lidos).
+# Leitura: a referência é o eixo HYSYS (y) das paridades; o eixo x é a implementação da
+# dissertação. Os quantis alinham-se na diagonal quando a distribuição dos nossos valores nos 159
+# pontos é a mesma que a da figura. Não há correspondência ponto a ponto, e os marcadores
+# sobrepostos nas zonas densas fundem-se na digitalização (número de marcadores no título): a
+# distribuição lida fica enviesada para os valores raros, o que exagera os desvios nas caudas
+# (Figuras 14 e 18, com 60 e 72 marcadores). Só valores emparelhados do HYSYS (decisão A2) dariam
+# R² como as Tabelas 10–11; o R² contra a `thermo` acima é a validação que temos.

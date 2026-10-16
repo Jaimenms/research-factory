@@ -104,6 +104,7 @@ table(
     ],
 )
 
+
 # %% [markdown]
 # ## Ajuste exponencial no troço monofásico: T = T_amb + (T_in − T_amb) exp(−a x)
 #
@@ -251,3 +252,77 @@ if r is not None:
         f"flash às condições da tese (P = {P_d/1e5:.2f} bar, T = {T_d-273.15:.1f} °C): beta = {st_d.beta[0]:.4f}; "
         f"beta molar implícito na Tabela 26 por componente: {', '.join(f'{b:.3f}' for b in beta_tab)}"
     )
+
+# %% [markdown]
+# ## Figura 40 — na dissertação o início da condensação é um salto
+#
+# No PDF as curvas caem na vertical de 1 para ≈ 0,986 em menos de 75 m e só depois descem
+# suavemente (a digitalização é fiel, ver `references/figures/overlay/fig_40.png`). Um salto no
+# orvalho é fisicamente impossível (β − 1 é contínuo) e o nosso início contínuo está validado
+# contra a `thermo`. Abaixo: onde a dissertação salta, para que valor, o que o nosso flash dá nesse
+# ponto, a temperatura local contra o orvalho da PR e a TPD (teste de estabilidade) nesse ponto.
+# Substituições sucessivas sem polimento convergem em 14 iterações em todo o troço, e o orvalho
+# pelo K de Wilson daria bifásico desde a entrada: nenhuma das duas explica o salto; a TPD ≈ −0,01
+# no ponto do salto aponta para uma banda morta no teste de fase do código da dissertação.
+# %%
+from cmfsim.backend import NUMPY
+from cmfsim.thermo.flash import stability_tpd
+
+cs23, z23 = make_fluid("table23_rich_gas")
+
+
+def dew_T(Pa):
+    lo, hi = 273.15, 333.15
+    for _ in range(40):
+        mid = 0.5 * (lo + hi)
+        b = phase_state(np.array([mid]), np.array([Pa]), z23, cs23).beta[0]
+        lo, hi = (mid, hi) if b < 1.0 else (lo, mid)
+    return 0.5 * (lo + hi)
+
+
+rows = []
+for c in t25:
+    k = c["case"]
+    s = str(k)
+    r = runs.get(f"condensate_5_6_case{k}")
+    if not r or s not in figs[40]["series"] or k == 5:
+        continue
+    xd, yd = figs[40]["series"][s]
+    ii = np.where(yd < 0.9995)[0]
+    if ii.size == 0:
+        rows.append((k, "—", "—", "—", "—", "—", "—", "—"))
+        continue
+    i = int(ii[0])
+    j = i
+    while j + 1 < len(xd) and (yd[j] - yd[j + 1]) / max(xd[j + 1] - xd[j], 1e-9) > 2e-5:
+        j += 1
+    bm = beta_molar(r)
+    x_jump, b_end = xd[i], yd[j]
+    T_j, P_j = np.interp(x_jump, r.x, r.T), np.interp(x_jump, r.x, r.P)
+    tpd, _ = stability_tpd(np.array([T_j]), np.array([P_j]), z23[None, :], cs23, FlashOptions(), NUMPY)
+    x_ours = r.x[bm < 0.9999][0] if np.any(bm < 0.9999) else np.nan
+    rows.append(
+        (
+            k,
+            f"{x_jump:.0f}–{xd[j]:.0f}",
+            f"{b_end:.4f}",
+            f"{np.interp(x_jump, r.x, bm):.4f}",
+            f"{T_j - 273.15:.1f}",
+            f"{dew_T(P_j) - 273.15:.1f}",
+            f"{tpd[0]:+.1e}",
+            f"{x_ours:.0f}",
+        )
+    )
+table(
+    rows,
+    [
+        "caso",
+        "salto da tese [m]",
+        "β depois do salto",
+        "β cmfsim nesse x",
+        "T no salto [°C]",
+        "orvalho PR [°C]",
+        "TPD no salto",
+        "x_cond cmfsim [m]",
+    ],
+)

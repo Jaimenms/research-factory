@@ -90,3 +90,38 @@ def table(rows, headers, fmt=None):
             f = fmt.get(h)
             cells.append(f.format(v) if f and v is not None and not (isinstance(v, float) and np.isnan(v)) else str(v))
         print("| " + " | ".join(cells) + " |")
+
+
+def qq_parity(ax, fig_data, mine, n_points, unit_scale=1.0, q=50):
+    """Q–Q dos nossos valores contra os dois eixos de uma paridade digitalizada «Implementado vs
+    HYSYS» (Figuras 14–21): y = HYSYS (referência) a cheio, x = implementação da dissertação a
+    fino. As distribuições não são emparelhadas (não se sabe a que (P, T) corresponde cada
+    marcador) e os marcadores sobrepostos nas zonas densas fundem-se na digitalização, pelo que
+    o número de marcadores (`n`) fica no título: quanto menor em relação a `n_points`, mais
+    enviesada para os valores raros está a distribuição da figura."""
+    import numpy as np
+
+    name, (xd, yd) = next(iter(fig_data["series"].items()))
+    raw = fig_data["raw"]
+    n_mark = raw["series"][0].get("n_markers", xd.size)
+    m = np.sort(np.asarray(mine)[np.isfinite(mine)] * unit_scale)
+    qs = np.linspace(0, 1, q)
+    ax.plot(np.quantile(np.sort(yd), qs), np.quantile(m, qs), "o-", ms=3, label="contra o HYSYS (eixo y)")
+    ax.plot(
+        np.quantile(np.sort(xd), qs),
+        np.quantile(m, qs),
+        "-",
+        lw=0.8,
+        color="gray",
+        label="contra a dissertação (eixo x)",
+    )
+    lo = min(xd.min(), yd.min(), m.min())
+    hi = max(xd.max(), yd.max(), m.max())
+    ax.plot([lo, hi], [lo, hi], "k--", lw=0.8)
+    ax.set_title(
+        f"Figura {raw['figure']} — {fig_data['caption']} ({n_mark} marcadores de {n_points} pontos)", fontsize=9
+    )
+    ax.set_xlabel("quantis da figura digitalizada")
+    ax.set_ylabel("quantis do cmfsim")
+    ax.grid(alpha=0.3)
+    return float(np.median(m) / np.median(yd)), float(np.median(m) / np.median(xd))

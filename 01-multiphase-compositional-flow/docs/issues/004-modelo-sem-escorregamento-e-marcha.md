@@ -132,6 +132,35 @@ com 46 % de C1 contra 31 % no cmfsim; a tabela é internamente inconsistente com
 prova fina do flash. Perguntar ao autor pelos
 ficheiros de entrada da §5.6 continua a ser a única forma de identificar o mecanismo do fator.
 
+## Achados nas Figuras 34 e 40 (2026-10-15, depois da resolução térmica)
+
+Ambas as digitalizações foram reconferidas contra o PDF (`references/figures/overlay/fig_34.png`,
+`fig_40.png`) e são fiéis; os desvios são do modelo, não da leitura.
+
+**Figura 34 (§5.5, holdup).** A curva «Modelo no-slip» da dissertação é 0,85× a nossa λ_L nos três
+troços (0,847 / 0,853 / 0,858) e a mecanicista 0,82× no poço. λ_L só depende do flash, logo a causa é
+termodinâmica e está no C7+ da Tabela 20 (MW 560, ω 1,32, 66 % da massa do líquido). Sensibilidade a
+200 / 4000 / 7000 m (λ_L da dissertação 0,333 / 0,290 / 0,306; cmfsim 0,395 / 0,341 / 0,357): Pc do C7+
+×1,25 dá 0,328 / 0,284 / 0,298; k_ij(C7+, outros) = 0,1 dá 0,347 / 0,301 / 0,313; Tc ×0,95 e ω ×0,8
+quase não mexem. Em alternativa, uma massa específica do líquido de 858 / 841 / 837 kg/m³ (a PR dá
+656 / 664 / 664) reproduz a curva com o nosso flash; a Tabela 20 traz ρ = 950 kg/m³ para o C7+, que
+não usamos em lado nenhum. Hipótese mais plausível: a dissertação não tira ρ_L da EoS (ou corrige-a
+com a densidade de referência, como o HYSYS faz por COSTALD). Fica registada na issue 001 (B); não
+se adota nada sem o autor. O painel de sensibilidade está no `nb_5_5_offshore`.
+
+**Figura 40 (§5.6, fração vaporizada).** No PDF as curvas caem na vertical de 1 para ≈ 0,986 em
+menos de 75 m (casos 2, 3 e 6: 6948, 3319–3393 e 4292–4361 m) e só depois descem suavemente; o
+salto dá-se 1,1–1,6 °C abaixo do orvalho da PR (32,2–32,9 contra 34,3 °C) e sempre para o mesmo
+valor ≈ 1,4 % de líquido; depois do salto as curvas seguem as nossas a ±0,5 % (−0,004 / +0,007 /
++0,005 na saída). Um salto no orvalho é fisicamente impossível (β − 1 é contínuo) e o nosso início
+contínuo está validado contra a `thermo`. Explicações testadas e excluídas: substituições
+sucessivas sem polimento a 1e-12 convergem em 14 iterações em todo o troço (não é falta de
+convergência); o orvalho pelo K de Wilson dá bifásico desde a entrada (não é isso). A TPD do teste
+de estabilidade no ponto do salto é −0,008 a −0,012, consistente com uma banda morta no teste de
+fase do código da dissertação (só deteta a segunda fase com ≈ 1,4 % de líquido). Sem o código não
+se vai mais longe; a tabela está no `nb_5_6_condensate`. Consequência: o «x_cond» da dissertação
+está sistematicamente ~1 km depois do físico, e o teste noturno compara-o com folga de 1,5 km.
+
 ## Benefício
 
 Caso 5.6 reexecutável em segundos, com derivadas exatas, corrida gravada com o caso completo e
